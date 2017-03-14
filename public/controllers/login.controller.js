@@ -19,10 +19,10 @@
 
         function login() {
             auth.login(vm.user).then(
-                function () {
-                    $state.go('main.desejo.list');
+                ()=> {
+                    $state.go('main.feed');
                 },
-                function (data) {
+                (data)=> {
                     console.log(data);
                 });
         }

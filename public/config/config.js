@@ -8,7 +8,7 @@
     function config() {
         return {
             // baseApiUrl: "https://bee-test.herokuapp.com/api"
-            baseApiUrl: "http://localhost:3001/api"
+            baseApiUrl: "http://localhost:3000/api"
         };
     }
 })();

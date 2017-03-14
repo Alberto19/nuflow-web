@@ -25,9 +25,14 @@
                 // Home routes
                 .state('main', {
                     abstract: true,
-                    url: '/main',
+                    url: '',
                     controller: 'LayoutController as vm',
-                    templateUrl: 'views/layouts/idex.html',
+                    templateUrl: 'views/layouts/main.html',
+                })
+                 .state('main.feed', {
+                    url: '/feed',
+                    controller: 'FeedController as vm',
+                    templateUrl: 'views/partials/feed.html',
                 })
 
         }]);
