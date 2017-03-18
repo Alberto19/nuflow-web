@@ -35,8 +35,8 @@ app.use(express.static(__dirname+ '/public'));
 app.get('*', function (req, res) {
     res.sendFile(path.join(__dirname +'/public/views/index.html'));
 });
-
-http.listen('3000', function (err) {
+let PORT = process.env.PORT || 3000
+http.listen(PORT, function (err) {
 	if (err) {
 		console.log(err);
 	} else {
