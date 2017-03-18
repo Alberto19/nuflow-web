@@ -10,7 +10,7 @@
     function FeedController($state, Search) {
         var vm = this;
         vm.locations = null;
-        vm.radius = 9000;
+        vm.radius = 4000;
 
         if (navigator.geolocation) {
             navigator
