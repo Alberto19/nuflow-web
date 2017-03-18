@@ -16,7 +16,7 @@
             $rootScope.$on('$stateChangeStart', (event, next, current)=> {
                 let token = authData.getToken();
 
-                if (!token && next.name != 'login') {
+                if (!token && current.name == '/') {
                     event.preventDefault();
                     $state.go('login');
                 }

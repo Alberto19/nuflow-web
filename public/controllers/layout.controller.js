@@ -20,5 +20,6 @@
         function desejos() {
             $state.go('login');
         }
+       
     }
 })();

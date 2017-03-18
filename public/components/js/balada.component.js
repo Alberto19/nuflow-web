@@ -8,16 +8,24 @@
 
 	angular
 		.module('app')
-		.component('navigation', {
-			templateUrl:'components/html/navigation.component.html',
-			controller: NavigationController,
+		.component('balada', {
+			templateUrl:'components/html/balada.component.html',
+			controller: BaladaController,
 			bindings: {
-				show: '=',
+				name: '=',
+				adress: '=',
+				phone: '=',
+				rating: '=',
+				site: '=',
+				mapsUrl: '=',
+				days: '=',
+				reviews: '=',
+				photos: '=',
 			},
 		});
 
 	//NavigationController.$inject = ['dependency1'];
-	function NavigationController() {
+	function BaladaController() {
 		var $ctrl = this;
 		
 

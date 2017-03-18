@@ -1,0 +1,22 @@
+(function () {
+    'use strict';
+
+    angular
+        .module('app')
+        .factory('Search', Search);
+
+    Search.$inject = ['$http', 'config'];
+
+    function Search($http, config) {
+        var service = {
+            searchLocations: searchLocations,
+        };
+        return service;
+
+        ////////////////
+
+        function searchLocations(location){
+            return $http.post(config.baseApiUrl + '/search/places', location);
+        };
+    }
+})();

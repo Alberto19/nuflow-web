@@ -1,29 +1,19 @@
-<nav class="light-blue darken-2" ng-controller="NavBarController as vm" >
+<nav class="light-blue darken-2">
 	<div class="nav-wrapper ">
-		<a ng-show="!vm.isAuthenticated()" ui-sref="login" class="brand-logo center">Nuflow</a>
-		<a ng-show="vm.isAuthenticated()" ui-sref="home" class="brand-logo center">Nuflow</a>
-		<a ui-sref="#" ng-show="!vm.isAuthenticated()" class="button-collapse" data-activates="nologado" data-sidenav="left" data-menuwidth="200" data-closeonclick="true">
+		<a ui-sref="home" class="brand-logo center">Nuflow</a>
+
+		<a ui-sref="#" class="button-collapse" data-activates="logado" data-sidenav="left" data-menuwidth="200" data-closeonclick="true">
 			<i class="material-icons">menu</i>
 		</a>
-		<a ui-sref="#" ng-show="vm.isAuthenticated()" class="button-collapse" data-activates="logado" data-sidenav="left" data-menuwidth="200" data-closeonclick="true">
-			<i class="material-icons">menu</i>
-		</a>
-		<div >
-			<ul ng-show="vm.isAuthenticated()" class="left hide-on-med-and-down">
-				<li>
-					<button type="button" ui-sref="home" class="btn-large waves-effect waves-light light-blue darken-2 ">
-								<i class="material-icons left">cloud</i> Home
-							</button>
-				</li>
-			</ul>
-			<ul ng-show="vm.isAuthenticated()" class="right hide-on-med-and-down">
+		<div>
+			<ul class="right hide-on-med-and-down">
 				<li>
 					<button type="button" class=" btn-large waves-effect waves-light light-blue darken-2">
 								<i class="material-icons left">grade</i> Favoritos
 							</button>
 				</li>
 				<li>
-					<button type="button" ng-show="vm.isAuthenticated()" data-activates='ShowProfile' data-beloworigin="true" dropdown data-hover="true" class="dropdown-button btn-large waves-effect waves-light light-blue darken-2">
+					<button type="button" data-activates='ShowProfile' data-beloworigin="true" dropdown data-hover="true" class="dropdown-button btn-large waves-effect waves-light light-blue darken-2">
 						<i class="material-icons left">person</i> Profile
 					</button>
 				</li>
@@ -53,7 +43,7 @@
 			</a>
 		</div>
 	</li>
-	<li >
+	<li>
 		<div>
 			<a ui-sref="top" class=" btn-large  waves-effect waves-light light-blue darken-2 ">
 				<i class="material-icons left">grade</i> Favoritos
@@ -70,26 +60,6 @@
 	<li>
 		<div>
 			<a ui-sref="logout" class="blue-text text-darken-2 center"> Logout</a>
-		</div>
-	</li>
-</ul>
-
-<ul id="nologado" class="side-nav white">
-	<li>
-		<div class="userView">
-			<div class="background">
-				<img src="https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcTIBxM7XwYOGN2cGlnQINI_bgEl2OdwBnahwD6OFS-w3-TIEGMSCg">
-			</div>
-			<img class="circle" src="http://imagem.band.com.br/f_353970.jpg">
-			<span class="white-text name">John Doe</span>
-			<span class="white-text email">jdandturk@gmail.com</span>
-		</div>
-	</li>
-	<li>
-		<div>
-			<a ui-sref="home" class="btn-large waves-effect waves-light light-blue darken-2 ">
-				 Login
-			</a>
 		</div>
 	</li>
 </ul>
