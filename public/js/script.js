@@ -79,8 +79,8 @@
 
     function config() {
         return {
-            // baseApiUrl: "https://bee-test.herokuapp.com/api"
-            baseApiUrl: "http://localhost:3000/api"
+            baseApiUrl: "https://nuflow.herokuapp.com/api"
+            // baseApiUrl: "http://localhost:3000/api"
         };
     }
 })();
@@ -396,7 +396,7 @@
     function FeedController($state, Search) {
         var vm = this;
         vm.locations = null;
-        vm.radius = 9000;
+        vm.radius = 4000;
 
         if (navigator.geolocation) {
             navigator
