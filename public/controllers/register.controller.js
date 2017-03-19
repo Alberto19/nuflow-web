@@ -18,10 +18,9 @@
 		function register() {
 			auth.register(vm.user)
 				.then((response) =>{
-					auth.setToken(response);
-				})
-				.catch(()=>{
-					$state.go('register');
+					if(response.status != 500){
+					$state.go('main.feed');
+					}
 				});
 		};
 	}

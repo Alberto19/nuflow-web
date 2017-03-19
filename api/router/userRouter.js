@@ -14,7 +14,7 @@ UserRouter.post('/cadastrar',(req, res)=>{
 
 		});
 	}).catch((err)=>{
-		res.status(500).json("Erro interno");
+		res.status(500).json("Usuario já cadastrado");
 	});
 });
 

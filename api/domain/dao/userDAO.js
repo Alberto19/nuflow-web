@@ -29,8 +29,8 @@ class UserDAO {
 				.catch(err => {
 					banco.Close();
 					defer.reject(err);
-					console.log('Erro: ', err);
 				});
+				banco.Close();
 		});
 		return defer.promise;
 	}
@@ -58,7 +58,7 @@ class UserDAO {
 						banco.Close();
 						defer.reject({
 							status: 404,
-							message: "User doesn't exist"
+							message: "Usuário não existe"
 						});
 					} else if (user) {
 						let validPass = user.comparePassword(usuario.password);
@@ -66,12 +66,12 @@ class UserDAO {
 							banco.Close();
 							defer.reject({
 								status: 401,
-								message: "Invalid Password"
+								message: "Email ou senha incorretos!!!"
 							});
 						} 
+						banco.Close();
 						defer.resolve(user);
 					}
-					banco.Close();
 				});
 		});
 		return defer.promise;

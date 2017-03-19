@@ -16,9 +16,14 @@
 			},
 		});
 
-	//NavigationController.$inject = ['dependency1'];
-	function NavigationController() {
+	NavigationController.$inject = ['auth','$rootScope'];
+	function NavigationController(auth, $rootScope) {
 		var $ctrl = this;
+
+		$ctrl.logout = ()=>{
+			auth.logout();
+			$rootScope.$emit('forbidden');
+		}
 		
 
 		////////////////
@@ -27,4 +32,4 @@
 		$ctrl.$onChanges = function(changesObj) { };
 		$ctrl.$onDestory = function() { };
 	}
-})();
+})(jQuery);

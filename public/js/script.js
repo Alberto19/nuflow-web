@@ -16,7 +16,7 @@
             $rootScope.$on('$stateChangeStart', (event, next, current)=> {
                 let token = authData.getToken();
 
-                if (!token && current.name == '/') {
+                if (!token && next.name != 'login') {
                     event.preventDefault();
                     $state.go('login');
                 }
@@ -79,8 +79,8 @@
 
     function config() {
         return {
-            baseApiUrl: "https://nuflow.herokuapp.com/api"
-            // baseApiUrl: "http://localhost:3000/api"
+            // baseApiUrl: "https://nuflow.herokuapp.com/api"
+            baseApiUrl: "http://localhost:3000/api"
         };
     }
 })();
@@ -109,9 +109,16 @@
             .then((data) =>{
                     var loginData = data.data;
                     authData.parseData(loginData);
+                    return loginData;
                 },
-                 (data)=>{
-                    console.log(data);
+                 (error)=>{
+                      if(error.status == 404){
+                          Materialize.toast(error.data, 3000);
+                     }
+                     if(error.status == 401){
+                         Materialize.toast(error.data, 3000);
+                     }
+                     return error;
                 });
         }
 
@@ -120,8 +127,11 @@
             .then((data)=> {
                     var loginData = data.data;
                     authData.parseData(loginData);
-                },(data)=> {
-                    console.log(data);
+                },(error)=> {
+                    if(error.status == 500){
+                         Materialize.toast(error.data, 3000);
+                         return error;
+                     }
                 });
         }
 
@@ -349,9 +359,14 @@
 			},
 		});
 
-	//NavigationController.$inject = ['dependency1'];
-	function NavigationController() {
+	NavigationController.$inject = ['auth','$rootScope'];
+	function NavigationController(auth, $rootScope) {
 		var $ctrl = this;
+
+		$ctrl.logout = ()=>{
+			auth.logout();
+			$rootScope.$emit('forbidden');
+		}
 		
 
 		////////////////
@@ -360,7 +375,7 @@
 		$ctrl.$onChanges = function(changesObj) { };
 		$ctrl.$onDestory = function() { };
 	}
-})();
+})(jQuery);
 (function () {
 	'use strict';
 	angular
@@ -461,9 +476,9 @@
 
     function LoginController($state, auth) {
         var vm = this;
-        vm.user ={
-            email:null,
-            password:null
+        vm.user = {
+            email: null,
+            password: null
         }
 
         vm.login = login;
@@ -471,16 +486,14 @@
 
         function login() {
             auth.login(vm.user).then(
-                ()=> {
-                    $state.go('main.feed');
-                },
-                (data)=> {
-                    console.log(data);
+                (result) => {
+                    if(result.status != 401 && result.status != 404){
+                    $state.go('main.feed');    
+                    }
                 });
         }
     }
 })();
-
 (function () {
 	'use strict';
 
@@ -501,10 +514,9 @@
 		function register() {
 			auth.register(vm.user)
 				.then((response) =>{
-					auth.setToken(response);
-				})
-				.catch(()=>{
-					$state.go('register');
+					if(response.status != 500){
+					$state.go('main.feed');
+					}
 				});
 		};
 	}

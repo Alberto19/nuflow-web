@@ -22,9 +22,16 @@
             .then((data) =>{
                     var loginData = data.data;
                     authData.parseData(loginData);
+                    return loginData;
                 },
-                 (data)=>{
-                    console.log(data);
+                 (error)=>{
+                      if(error.status == 404){
+                          Materialize.toast(error.data, 3000);
+                     }
+                     if(error.status == 401){
+                         Materialize.toast(error.data, 3000);
+                     }
+                     return error;
                 });
         }
 
@@ -33,8 +40,11 @@
             .then((data)=> {
                     var loginData = data.data;
                     authData.parseData(loginData);
-                },(data)=> {
-                    console.log(data);
+                },(error)=> {
+                    if(error.status == 500){
+                         Materialize.toast(error.data, 3000);
+                         return error;
+                     }
                 });
         }
 
