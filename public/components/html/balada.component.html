@@ -1,37 +1,35 @@
-
-	<div class="card horizontal">
-		<div class="card-image" >
-			<img  materialboxed class="materialboxed responsive-img" width="650" ng-src="{{$ctrl.photos[0] || '../../libs/img/location.jpg' }}">	
+<div class="card horizontal">
+	<div class="card-image">
+		<img materialboxed class="materialboxed responsive-img" width="650" ng-src="{{$ctrl.photos[0] || '../../libs/img/location.jpg' }}">
+	</div>
+	<div class="card-stacked">
+		<div class="card-content">
+			<span class="card-title light-blue-text">{{$ctrl.name}}</span>
+			<p>{{$ctrl.mapsUrl}}</p>
+			<p>{{$ctrl.adress}}</p>
+			<p>{{$ctrl.phone}}</p>
+			<p>{{$ctrl.rating}}</p>
+			<p>{{$ctrl.site}}</p>
 		</div>
-		<div class="card-stacked">
-			<div class="card-content">
-				<span class="card-title light-blue-text">{{$ctrl.name}}</span>
-				<p>{{$ctrl.mapsUrl}}</p>
-				<p>{{$ctrl.adress}}</p>
-				<p>{{$ctrl.phone}}</p>
-				<p>{{$ctrl.rating}}</p>
-				<p>{{$ctrl.site}}</p>
-			</div>
-			<div class="card-action">
-				<a ng-href="{{$ctrl.mapsUrl}}"> <i class="material-icons">maps</i></a>
-				 <a data-target='demoModal' modal><i class=" material-icons">comment</i></a>
-				
-			</div>
+		<div class="card-action">
+			<a ng-href="{{$ctrl.mapsUrl}}"> <i class="material-icons">maps</i></a>
+			<a data-target='demoModal' modal><i class=" material-icons">comment</i></a>
+
 		</div>
 	</div>
+</div>
 
 <!-- Modal Structure -->
 <div id="demoModal" class="modal modal-fixed-footer">
-    <div class="modal-content">
-        <h4>Comentarios</h4>
-        <div ng-repeat="review in $ctrl.reviews">
-					<p>Nome:{{review.author_name}}</p>
-					<p>message:</p>
-					<p>{{review.message}}</p>
-				</div>
-    </div>
-    <div class="modal-footer">
-			
-			<button class="modal-action waves-effect waves-green btn-flat">Comentar</button>
-    </div>
+	<div class="modal-content">
+		<h4>Comentarios</h4>
+		<div ng-repeat="review in $ctrl.reviews">
+			<p>Nome:{{review.author_name}}</p>
+			<p>message:</p>
+			<p>{{review.message}}</p>
+		</div>
+	</div>
+	<div class="modal-footer">
+		<button class="modal-action waves-effect waves-green btn-flat">Comentar</button>
+	</div>
 </div>
