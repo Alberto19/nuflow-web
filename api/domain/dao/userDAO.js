@@ -14,7 +14,7 @@ class UserDAO {
 			banco.Close();
 		});
 
-		con.once('open', ()=> {
+		con.once('open', () => {
 			let saveUser = new UserModel({
 				email: usuario.email,
 				password: usuario.password,
@@ -30,7 +30,7 @@ class UserDAO {
 					banco.Close();
 					defer.reject(err);
 				});
-				banco.Close();
+			banco.Close();
 		});
 		return defer.promise;
 	}
@@ -41,7 +41,7 @@ class UserDAO {
 		con.on('error', () => {
 			banco.Close();
 		});
-		con.once('open', ()=>{
+		con.once('open', () => {
 			UserModel
 				.findOne({
 					email: usuario.email
@@ -68,7 +68,7 @@ class UserDAO {
 								status: 401,
 								message: "Email ou senha incorretos!!!"
 							});
-						} 
+						}
 						banco.Close();
 						defer.resolve(user);
 					}
@@ -76,5 +76,24 @@ class UserDAO {
 		});
 		return defer.promise;
 	}
+
+	find(usuario) {
+		var defer = q.defer();
+		let con = banco.Connect();
+		con.on('error', () => {
+			banco.Close();
+		});
+		con.once('open', () => {
+			UserModel
+				.findOne({
+					email: usuario.email
+				}).then(user=>{
+					banco.Close();
+					defer.resolve(user);
+				});
+		});
+		return defer.promise;
+	}
+
 }
 module.exports = new UserDAO();

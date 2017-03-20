@@ -32,4 +32,12 @@ UserRouter.post('/login', (req, res)=>{
 	});
 });
 
+UserRouter.post('/profile', (req, res)=>{
+	UserDAO.find(req.body).then((result)=>{
+			res.status(200).send(result);
+	}).catch((err)=>{
+		res.status(err.status).json(err.message);
+	});
+});
+
 module.exports = UserRouter;

@@ -1,4 +1,4 @@
-(function() {
+(function($) {
 'use strict';
 
 	// Usage:
@@ -24,6 +24,8 @@
 			auth.logout();
 			$rootScope.$emit('forbidden');
 		}
+
+
 		
 
 		////////////////

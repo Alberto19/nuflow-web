@@ -1,4 +1,4 @@
-(function () {
+(function ($) {
     'use strict';
 
     angular
@@ -36,5 +36,9 @@
         } else {
             alert("Geolocation is not supported by this browser.");
         };
+
+        $(() => {
+            $("#range").ionRangeSlider();
+        });
     }
-})();
+})(jQuery);

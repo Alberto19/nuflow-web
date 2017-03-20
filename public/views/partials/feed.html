@@ -1,11 +1,20 @@
 <div>
-	<search></search>
+	<nav class="white">
+		<div class="row">
+			<div class="col offset-l3 offset-s3 offset-m3 l6 s6 m6">
+				<input type="text" id="search" placeholder="Pesquisar" ng-model="place.nome" class="deep-orange" />
+			</div>
+			<div class="col l3 s2 m3">
+				
+			</div>
+		</div>
+	</nav>
 </div>
 <div class="row">
 	<div class="col offset-l3 offset-m1  l6 m10 s12">
-		<div ng-repeat=" place in vm.locations">
-		<balada photos="place.photos" name="place.name" adress="place.adress" phone="place.phone" rating="place.rating"
-		site="place.site" days="place.days" reviews="place.reviews" photos="place.photos"></balada>
+		<div ng-repeat=" place in vm.locations | filter: place.nome">
+			<balada name="place.name" adress="place.adress" phone="place.phone" rating="place.rating" site="place.site" mapsUrl="place.mapsUrl"
+			    days="place.days" reviews="place.reviews" photos="place.photos"></balada>
 		</div>
 	</div>
 </div>

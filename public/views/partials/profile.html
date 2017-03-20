@@ -6,17 +6,17 @@
         <form method="post" ng-submit="vm.updateProfile()">
           <div class="row">
             <div class="col l12 m12 s12 center">
-            <img class="circle" ng-src="{{vm.user.picture || 'https://placehold.it/100x100'}}">
+            <img class="circle" ng-src="{{vm.user.picture || '../../libs/img/profile.jpg'}}">
             </div>
           </div>
           <div class="row"> </div>
           <div class="input-field ">
-            <label class="control-label"><i class="ion-person"></i> Display Name</label>
-            <input type="text" ng-disabled="true" ng-model="vm.user.displayName" />
+            <label class="control-label"><i class="ion-person"></i>Email</label>
+            <input type="text" ng-disabled="true" ng-model="vm.user.email" />
           </div>
           <div class="input-field ">
-            <label class="control-label"><i class="ion-at"></i> Email Address</label>
-            <input type="email" ng-disabled="true" ng-model="vm.user.email" />
+            <label class="control-label"><i class="ion-at"></i>Data de criação</label>
+            <input type="email" ng-disabled="true" ng-model="vm.user.date" />
           </div>
         </form>
       </div>

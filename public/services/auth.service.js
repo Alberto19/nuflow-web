@@ -18,6 +18,7 @@
 
         ////////////////
         function login(user) {
+            localStorage.setItem('userEmail',user.email);
             return $http.post(config.baseApiUrl + '/user/login',user)
             .then((data) =>{
                     var loginData = data.data;

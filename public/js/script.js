@@ -66,7 +66,16 @@
                     controller: 'FeedController as vm',
                     templateUrl: 'views/partials/feed.html',
                 })
-
+                .state('main.profile', {
+                    url: '/profile',
+                    controller: 'ProfileController as vm',
+                    templateUrl: 'views/partials/profile.html',
+                })
+                .state('main.test', {
+                    url: '/test',
+                    controller: 'TestController as vm',
+                    templateUrl: 'views/partials/test.html',
+                })
         }]);
 })();
 
@@ -105,6 +114,7 @@
 
         ////////////////
         function login(user) {
+            localStorage.setItem('userEmail',user.email);
             return $http.post(config.baseApiUrl + '/user/login',user)
             .then((data) =>{
                     var loginData = data.data;
@@ -246,37 +256,34 @@
 
     angular
         .module('app')
-        .factory('Desejo', Desejo);
+        .factory('Profile', Profile);
 
-    Desejo.$inject = ['$http', 'config'];
+    Profile.$inject = ['$http', 'config'];
 
-    function Desejo($http, config) {
+    function Profile($http, config) {
         var service = {
-            getDesejos: getDesejos,
-            cadastrar:cadastrar,
-            getDesejo:getDesejo,
-            editar:editar,
-            deletar:deletar
+            getProfile: getProfile,
+            updateProfile:updateProfile
         };
 
         return service;
 
         ////////////////
-        function getDesejos() {
-            return $http.get(config.baseApiUrl + '/desejo');
+        function getProfile(email) {
+            return $http.post(config.baseApiUrl + '/user/profile', email);
         };
-        function cadastrar(desejo){
-            return $http.post(config.baseApiUrl + '/desejo/create', desejo);
+        function updateProfile(Profile){
+            return $http.post(config.baseApiUrl + '/Profile/create', Profile);
         };
-        function getDesejo(desejo) {
-            return $http.get(config.baseApiUrl + '/desejo/edit/' + desejo);
-        }
-        function editar(desejo) {
-            return $http.post(config.baseApiUrl + '/desejo/editar/', desejo);
-        }
-        function deletar(desejo) {
-            return $http.post(config.baseApiUrl + '/desejo/delete/' + desejo);
-        }
+        // function getProfile(Profile) {
+        //     return $http.get(config.baseApiUrl + '/Profile/edit/' + Profile);
+        // }
+        // function editar(Profile) {
+        //     return $http.post(config.baseApiUrl + '/Profile/editar/', Profile);
+        // }
+        // function deletar(Profile) {
+        //     return $http.post(config.baseApiUrl + '/Profile/delete/' + Profile);
+        // }
     }
 })();
 
@@ -341,7 +348,7 @@
 		$ctrl.$onDestory = function() { };
 	}
 })();
-(function() {
+(function($) {
 'use strict';
 
 	// Usage:
@@ -367,6 +374,8 @@
 			auth.logout();
 			$rootScope.$emit('forbidden');
 		}
+
+
 		
 
 		////////////////
@@ -376,30 +385,7 @@
 		$ctrl.$onDestory = function() { };
 	}
 })(jQuery);
-(function () {
-	'use strict';
-	angular
-		.module('app')
-		.component('search', {
-			templateUrl: 'components/html/search.component.html',
-			controller: SearchController,
-			bindings: {
-				Binding: '=',
-			},
-		});
-
-	function SearchController() {
-		var $ctrl = this;
-
-
-		////////////////
-
-		$ctrl.$onInit = function () {};
-		$ctrl.$onChanges = function (changesObj) {};
-		$ctrl.$onDestory = function () {};
-	}
-})();
-(function () {
+(function ($) {
     'use strict';
 
     angular
@@ -437,8 +423,12 @@
         } else {
             alert("Geolocation is not supported by this browser.");
         };
+
+        $(() => {
+            $("#range").ionRangeSlider();
+        });
     }
-})();
+})(jQuery);
 (function () {
     'use strict';
 
@@ -495,6 +485,37 @@
     }
 })();
 (function () {
+    'use strict';
+
+    angular
+        .module('app')
+        .controller('ProfileController', ProfileController);
+
+    ProfileController.$inject = ['$state', 'Profile'];
+
+    function ProfileController($state, Profile) {
+        var vm = this;
+		vm.user = {
+			email: null,
+			date: null,
+		}
+
+		vm.getProfile = getProfile;
+
+		 getProfile();
+		function getProfile(){
+			let email = {
+				email: localStorage.getItem('userEmail')
+			};
+			Profile.getProfile(email).then(user=>{
+				vm.user.email = user.data.email;
+				vm.user.date = user.data.dateCreate;
+			})
+		}
+
+    }
+})();
+(function () {
 	'use strict';
 
 	angular
@@ -521,4 +542,30 @@
 		};
 	}
 })();
+(function ($) {
+    'use strict';
+
+    angular
+        .module('app')
+        .controller('TestController', TestController);
+
+    TestController.$inject = [];
+
+    function TestController() {
+        var vm = this;
+
+	$('#exampleModal').on('show.bs.modal', function (event) {
+  var button = $(event.relatedTarget) // Button that triggered the modal
+  var recipient = button.data('whatever') // Extract info from data-* attributes
+  // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
+  // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
+  var modal = $(this)
+  modal.find('.modal-title').text('New message to ' + recipient)
+  modal.find('.modal-body input').val(recipient)
+})
+
+    }
+})(jQuery);
+
+
 //# sourceMappingURL=script.js.map

@@ -34,6 +34,15 @@
                     controller: 'FeedController as vm',
                     templateUrl: 'views/partials/feed.html',
                 })
-
+                .state('main.profile', {
+                    url: '/profile',
+                    controller: 'ProfileController as vm',
+                    templateUrl: 'views/partials/profile.html',
+                })
+                .state('main.test', {
+                    url: '/test',
+                    controller: 'TestController as vm',
+                    templateUrl: 'views/partials/test.html',
+                })
         }]);
 })();
