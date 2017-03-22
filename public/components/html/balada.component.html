@@ -8,8 +8,8 @@
 			<p>{{$ctrl.mapsUrl}}</p>
 			<p>{{$ctrl.adress}}</p>
 			<p>{{$ctrl.phone}}</p>
-			<p>{{$ctrl.rating}}</p>
 			<p>{{$ctrl.site}}</p>
+			<p star-rating ng-model="$ctrl.rating" max="5" ></p>
 		</div>
 		<div class="card-action">
 			<a ng-href="{{$ctrl.mapsUrl}}"> <i class="material-icons">maps</i></a>
@@ -23,10 +23,17 @@
 <div id="demoModal" class="modal modal-fixed-footer">
 	<div class="modal-content">
 		<h4>Comentarios</h4>
-		<div ng-repeat="review in $ctrl.reviews">
-			<p>Nome:{{review.author_name}}</p>
-			<p>message:</p>
-			<p>{{review.message}}</p>
+		<div>
+			<ul class="collapsible popout" data-collapsible="accordion" watch>
+				<li ng-repeat="review in $ctrl.reviews">
+					<div class="collapsible-header" ><i class="material-icons">assignment_ind</i> {{review.author_name}}</div>
+					<div class="collapsible-body">
+						<p>{{review.message}}</p>
+						<p star-rating ng-model="review.rating" max="5" ></p>
+
+					</div>
+				</li>
+			</ul>
 		</div>
 	</div>
 	<div class="modal-footer">

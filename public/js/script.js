@@ -88,8 +88,8 @@
 
     function config() {
         return {
-            baseApiUrl: "https://nuflow.herokuapp.com/api"
-            // baseApiUrl: "http://localhost:3000/api"
+            // baseApiUrl: "https://nuflow.herokuapp.com/api"
+            baseApiUrl: "http://localhost:3000/api"
         };
     }
 })();
@@ -334,19 +334,63 @@
 				reviews: '=',
 				photos: '=',
 			},
-		});
+		}).directive('starRating', starRating);
 
 	//NavigationController.$inject = ['dependency1'];
 	function BaladaController() {
 		var $ctrl = this;
+			$ctrl.isReadonly = true;
 		
-
 		////////////////
 
 		$ctrl.$onInit = function() { };
 		$ctrl.$onChanges = function(changesObj) { };
 		$ctrl.$onDestory = function() { };
 	}
+
+	  function starRating() {
+    return {
+      restrict: 'EA',
+      template:
+        `<ul class="star-rating" ng-class="{readonly: readonly}">
+          <li ng-repeat="star in stars" class="star" ng-class="{filled: star.filled}" ng-click="toggle($index)">
+            <i class="material-icons">stars</i>
+          </li>
+        </ul>`,
+      scope: {
+        ratingValue: '=ngModel',
+        max: '=?', // optional (default is 5)
+        onRatingSelect: '&?',
+        readonly: '=?'
+      },
+      link: function(scope, element, attributes) {
+        if (scope.max == undefined) {
+          scope.max = 5;
+        }
+        function updateStars() {
+          scope.stars = [];
+          for (var i = 0; i < scope.max; i++) {
+            scope.stars.push({
+              filled: i < scope.ratingValue
+            });
+          }
+        };
+        scope.toggle = function(index) {
+          if (scope.readonly == undefined || scope.readonly === false){
+            scope.ratingValue = index + 1;
+            scope.onRatingSelect({
+              rating: index + 1
+            });
+          }
+        };
+        scope.$watch('ratingValue', function(oldValue, newValue) {
+          if (newValue) {
+            updateStars();
+          }
+        });
+      }
+    };
+  }
 })();
 (function($) {
 'use strict';
@@ -552,15 +596,7 @@
     function TestController() {
         var vm = this;
 
-	$('#exampleModal').on('show.bs.modal', function (event) {
-  var button = $(event.relatedTarget) // Button that triggered the modal
-  var recipient = button.data('whatever') // Extract info from data-* attributes
-  // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
-  // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
-  var modal = $(this)
-  modal.find('.modal-title').text('New message to ' + recipient)
-  modal.find('.modal-body input').val(recipient)
-})
+
 
     }
 })(jQuery);
