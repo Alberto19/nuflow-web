@@ -16,16 +16,19 @@
             $rootScope.$on('$stateChangeStart', (event, next, current)=> {
                 let token = authData.getToken();
 
-                if (!token && current.name == '/') {
+                var regex = new RegExp("[^(init)]\.[a-zA-Z]+");
+                console.log(next.name.replace(regex, ""));
+
+                if (!token && next.name.replace(regex, next.name) == 'main.*') {
                     event.preventDefault();
-                    $state.go('login');
+                    $state.go('init.login');
                 }
             });
 
             // Global forbidden event
             $rootScope.$on('forbidden', ()=> {
                 // Force redirect to login again
-                $state.go('login');
+                $state.go('init.login');
             });
         }]);
 })();
@@ -42,13 +45,20 @@
             // Login routes
             $stateProvider
                 .state({
-                    name:'login',
+                    abstract: true,
+                    name:'init',
+                    url: '',
+                    templateUrl: 'views/layouts/init.html'
+                })
+            $stateProvider
+                .state({
+                    name:'init.login',
                     url: '/',
                     controller: 'LoginController as vm',
                     templateUrl: 'views/layouts/login.html'
                 })
                 .state({
-                    name:'register',
+                    name:'init.register',
                     url: '/cadastro',
                     controller: 'RegisterController as vm',
                     templateUrl: 'views/layouts/register.html'

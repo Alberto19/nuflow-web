@@ -16,16 +16,19 @@
             $rootScope.$on('$stateChangeStart', (event, next, current)=> {
                 let token = authData.getToken();
 
-                if (!token && current.name == '/') {
+                var regex = new RegExp("[^(init)]\.[a-zA-Z]+");
+                console.log(next.name.replace(regex, ""));
+
+                if (!token && next.name.replace(regex, next.name) == 'main.*') {
                     event.preventDefault();
-                    $state.go('login');
+                    $state.go('init.login');
                 }
             });
 
             // Global forbidden event
             $rootScope.$on('forbidden', ()=> {
                 // Force redirect to login again
-                $state.go('login');
+                $state.go('init.login');
             });
         }]);
 })();

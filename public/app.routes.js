@@ -10,13 +10,20 @@
             // Login routes
             $stateProvider
                 .state({
-                    name:'login',
+                    abstract: true,
+                    name:'init',
+                    url: '',
+                    templateUrl: 'views/layouts/init.html'
+                })
+            $stateProvider
+                .state({
+                    name:'init.login',
                     url: '/',
                     controller: 'LoginController as vm',
                     templateUrl: 'views/layouts/login.html'
                 })
                 .state({
-                    name:'register',
+                    name:'init.register',
                     url: '/cadastro',
                     controller: 'RegisterController as vm',
                     templateUrl: 'views/layouts/register.html'
