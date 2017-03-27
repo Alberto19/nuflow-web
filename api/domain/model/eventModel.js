@@ -9,8 +9,8 @@ const  Schema = mongoose.Schema;
     price:{type: String,require: true},
     description:{type: String, require: true },
     artists:[{type: String}],
-    banner:{type: String,},
-    coordinates: [{longitude:Number,latitude:Number}] 
+    banner:{type: Buffer},
+    checkIn:{type: Boolean}
   });
 
 module.exports = mongoose.model('Event',eventSchema);

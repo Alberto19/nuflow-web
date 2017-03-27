@@ -17,7 +17,7 @@
 
         ////////////////
         function getProfile(email) {
-            return $http.post(config.baseApiUrl + '/user/profile', email);
+            return $http.get(config.baseApiUrl + '/user/profile');
         };
         function updateProfile(Profile){
             return $http.post(config.baseApiUrl + '/Profile/create', Profile);

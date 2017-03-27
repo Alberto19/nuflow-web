@@ -11,14 +11,15 @@
 		vm.user = {
 			email: null,
 			password:null,
-			genre:null
+			genre:null,
+			type:'user',
 		};
 		vm.register = register;
 
 		function register() {
 			auth.register(vm.user)
-				.then((response) =>{
-					if(response.status != 500){
+				.then((status) =>{
+					if(status != 500){
 					$state.go('main.feed');
 					}
 				});

@@ -11,12 +11,20 @@
           </div>
           <div class="row"> </div>
           <div class="input-field ">
+            <label class="control-label">Photo</label>
+            <input type="file" ng-disabled="false" ng-model="vm.user.picture" />
+          </div>
+          <div class="input-field ">
             <label class="control-label"><i class="ion-person"></i>Email</label>
             <input type="text" ng-disabled="true" ng-model="vm.user.email" />
           </div>
           <div class="input-field ">
             <label class="control-label"><i class="ion-at"></i>Data de criação</label>
             <input type="email" ng-disabled="true" ng-model="vm.user.date" />
+          </div>
+          <div class="input-field ">
+            <label class="control-label"><i class="ion-at"></i>Sexo</label>
+            <input type="text" ng-disabled="true" ng-model="vm.user.genre" />
           </div>
         </form>
       </div>

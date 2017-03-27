@@ -18,7 +18,6 @@
 
         ////////////////
         function login(user) {
-            localStorage.setItem('userEmail',user.email);
             return $http.post(config.baseApiUrl + '/user/login',user)
             .then((data) =>{
                     var loginData = data.data;
@@ -41,10 +40,11 @@
             .then((data)=> {
                     var loginData = data.data;
                     authData.parseData(loginData);
+                    return data.status
                 },(error)=> {
                     if(error.status == 500){
                          Materialize.toast(error.data, 3000);
-                         return error;
+                         return error.status;
                      }
                 });
         }

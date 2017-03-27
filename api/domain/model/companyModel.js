@@ -9,12 +9,13 @@ const Schema = mongo.Schema;
     phone:{type: String, required: true},
     rating:{type: Number},
     site:{type: String},
-    photos:[],
+    photos:[{type: Buffer}],
     reviews:[],
     location: {type: [Number],index:'2d'},
     mapsUrl:{type:String},
     days:[],
-    uf:{type: String,require: true}
+    uf:{type: String, require: true},
+    drinkPrice:{type: String}
   });
 
 module.exports = mongo.model('Company',companySchema);

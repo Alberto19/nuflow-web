@@ -18,7 +18,9 @@ class UserDAO {
 			let saveUser = new UserModel({
 				email: usuario.email,
 				password: usuario.password,
-				genre: usuario.genre
+				genre: usuario.genre,
+				type: usuario.type,
+				completed: false
 			});
 			saveUser
 				.save()
@@ -30,7 +32,6 @@ class UserDAO {
 					banco.Close();
 					defer.reject(err);
 				});
-			banco.Close();
 		});
 		return defer.promise;
 	}
@@ -46,7 +47,7 @@ class UserDAO {
 				.findOne({
 					email: usuario.email
 				})
-				.select('email password')
+				.select('email password completed')
 				.exec((err, user) => {
 					if (err) {
 						banco.Close();
@@ -77,7 +78,25 @@ class UserDAO {
 		return defer.promise;
 	}
 
-	find(usuario) {
+	find(user) {
+		var defer = q.defer();
+		let con = banco.Connect();
+		con.on('error', () => {
+			banco.Close();
+		});
+		con.once('open', () => {
+			UserModel
+				.findOne({
+					_id: user.id
+				}).then(user=>{
+					banco.Close();
+					defer.resolve(user);
+				});
+		});
+		return defer.promise;
+	}
+
+	updateFirstLogin(usuario){
 		var defer = q.defer();
 		let con = banco.Connect();
 		con.on('error', () => {
@@ -92,6 +111,9 @@ class UserDAO {
 					defer.resolve(user);
 				});
 		});
+
+
+
 		return defer.promise;
 	}
 

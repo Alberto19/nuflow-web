@@ -12,17 +12,18 @@
 		vm.user = {
 			email: null,
 			date: null,
+			genre: null,
+			picture: null
 		}
 
 		vm.getProfile = getProfile;
 
 		 getProfile();
 		function getProfile(){
-			let email = {
-				email: localStorage.getItem('userEmail')
-			};
-			Profile.getProfile(email).then(user=>{
+			Profile.getProfile().then(user=>{
+				debugger;
 				vm.user.email = user.data.email;
+				vm.user.genre = user.data.genre;
 				vm.user.date = user.data.dateCreate;
 			})
 		}

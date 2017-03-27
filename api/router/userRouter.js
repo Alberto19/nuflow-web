@@ -1,5 +1,7 @@
 'use strict'
 let UserRouter = require('express').Router();
+let formidable = require('formidable');
+let authentication = require('../tools/authentication');
 let UserDAO = require('../domain/dao/userDAO');
 let token = require('../tools/token');
 
@@ -23,7 +25,7 @@ UserRouter.post('/login', (req, res)=>{
 		token.createToken(result._doc).then((token)=>{
 			res.status(201).send({
 				token: token,
-				message: 'success'
+				completed: result._doc.completed
 			});
 
 		});
@@ -32,8 +34,8 @@ UserRouter.post('/login', (req, res)=>{
 	});
 });
 
-UserRouter.post('/profile', (req, res)=>{
-	UserDAO.find(req.body).then((result)=>{
+UserRouter.get('/profile',authentication,(req, res)=>{
+	UserDAO.find(req.decoded).then((result)=>{
 			res.status(200).send(result);
 	}).catch((err)=>{
 		res.status(err.status).json(err.message);

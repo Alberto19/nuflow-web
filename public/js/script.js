@@ -124,7 +124,6 @@
 
         ////////////////
         function login(user) {
-            localStorage.setItem('userEmail',user.email);
             return $http.post(config.baseApiUrl + '/user/login',user)
             .then((data) =>{
                     var loginData = data.data;
@@ -147,10 +146,11 @@
             .then((data)=> {
                     var loginData = data.data;
                     authData.parseData(loginData);
+                    return data.status
                 },(error)=> {
                     if(error.status == 500){
                          Materialize.toast(error.data, 3000);
-                         return error;
+                         return error.status;
                      }
                 });
         }
@@ -280,7 +280,7 @@
 
         ////////////////
         function getProfile(email) {
-            return $http.post(config.baseApiUrl + '/user/profile', email);
+            return $http.get(config.baseApiUrl + '/user/profile');
         };
         function updateProfile(Profile){
             return $http.post(config.baseApiUrl + '/Profile/create', Profile);
@@ -556,8 +556,12 @@
         function login() {
             auth.login(vm.user).then(
                 (result) => {
-                    if(result.status != 401 && result.status != 404){
-                    $state.go('main.feed');    
+                    if (result.status != 401 && result.status != 404) {
+                        if (result.completed == false) {
+                            $state.go('main.profile');
+                        } else {
+                            $state.go('main.feed');
+                        }
                     }
                 });
         }
@@ -577,17 +581,18 @@
 		vm.user = {
 			email: null,
 			date: null,
+			genre: null,
+			picture: null
 		}
 
 		vm.getProfile = getProfile;
 
 		 getProfile();
 		function getProfile(){
-			let email = {
-				email: localStorage.getItem('userEmail')
-			};
-			Profile.getProfile(email).then(user=>{
+			Profile.getProfile().then(user=>{
+				debugger;
 				vm.user.email = user.data.email;
+				vm.user.genre = user.data.genre;
 				vm.user.date = user.data.dateCreate;
 			})
 		}
@@ -607,14 +612,15 @@
 		vm.user = {
 			email: null,
 			password:null,
-			genre:null
+			genre:null,
+			type:'user',
 		};
 		vm.register = register;
 
 		function register() {
 			auth.register(vm.user)
-				.then((response) =>{
-					if(response.status != 500){
+				.then((status) =>{
+					if(status != 500){
 					$state.go('main.feed');
 					}
 				});
