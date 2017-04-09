@@ -9,7 +9,8 @@ module.exports = new class Token {
 	createToken(user) {
 		var defer = q.defer();
 			let token = jsonwebtoken.sign({
-				id: user._id
+				id: user._id,
+				type:user.type
 			}, secretKey);
 			defer.resolve(token);
 		return defer.promise;

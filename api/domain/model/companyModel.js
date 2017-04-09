@@ -15,6 +15,7 @@ const Schema = mongo.Schema;
     mapsUrl:{type:String},
     days:[],
     uf:{type: String, require: true},
+    county:{type: String, require: true},
     drinkPrice:{type: String}
   });
 

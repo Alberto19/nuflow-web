@@ -5,23 +5,33 @@
         .module('app')
         .factory('Profile', Profile);
 
-    Profile.$inject = ['$http', 'config'];
+    Profile.$inject = ['$http', 'config', 'Upload'];
 
-    function Profile($http, config) {
+    function Profile($http, config, Upload) {
         var service = {
             getProfile: getProfile,
-            updateProfile:updateProfile
+            updateProfile: updateProfile,
+            uploadPhoto: uploadPhoto
         };
 
         return service;
 
         ////////////////
-        function getProfile(email) {
+        function getProfile() {
             return $http.get(config.baseApiUrl + '/user/profile');
         };
-        function updateProfile(Profile){
-            return $http.post(config.baseApiUrl + '/Profile/create', Profile);
+
+        function updateProfile(profile) {
+            return $http.post(`${config.baseApiUrl}/user/updateProfile`, profile);
         };
+
+        function uploadPhoto(photo){
+            debugger
+            return Upload.upload({
+                url: `${config.baseApiUrl}/user/uploadPhoto`,
+                data: { file: photo }
+            });
+        }
         // function getProfile(Profile) {
         //     return $http.get(config.baseApiUrl + '/Profile/edit/' + Profile);
         // }

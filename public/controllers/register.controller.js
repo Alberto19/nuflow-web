@@ -17,6 +17,9 @@
 		vm.register = register;
 
 		function register() {
+			if(vm.user.genre === null){
+				vm.user.genre = 'masculino';
+			}
 			auth.register(vm.user)
 				.then((status) =>{
 					if(status != 500){

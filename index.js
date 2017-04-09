@@ -1,6 +1,7 @@
 'use strict'
 let express = require('express');
 let app = express();
+let busBodyParser = require('busboy-body-parser');
 let bodyParser = require('body-parser');
 let methodOverride = require('method-override');
 let cors = require('cors');
@@ -11,6 +12,7 @@ let routes = require('./api/router');
 
 let http = require('http').Server(app);
 
+app.use(busBodyParser({ limit: '10mb'}));
 app.use(bodyParser.urlencoded({
 	extended: true
 }));
@@ -19,11 +21,13 @@ app.use(morgan('dev'));
 app.use(cors());
 
 app.use(methodOverride('Access-Control-Allow-Origin', '*'));
-app.use(methodOverride('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept'));
+app.use(methodOverride('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE'));
+app.use(methodOverride('Access-Control-Allow-Headers', 'Content-Type, Authorization'));
 app.use(methodOverride('X-HTTP-Method'));
 app.use(methodOverride('X-HTTP-Method-Override'));
 app.use(methodOverride('X-Method-Override'));
 app.use(methodOverride('_method'));
+
 
 //Api
 app.use('/api',routes);

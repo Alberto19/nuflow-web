@@ -7,19 +7,20 @@ const bcrypt = require('bcrypt-nodejs');
     name: {type: String},
     email:{type: String,unique: true, require: true},
     password:{type: String,require: true},
+    age: {type:Number},
     facebook:{type: String},    
-    picture:{type: Buffer},  
+    picture:{type: String},  
     location: {type: [Number],index:'2d'},
     dateCreate:{type: Date, default: Date.now},
     dateLastLogin: Date,
-    preference:[],
+    preference:[{type: String}],
     favorite:[{
             name: String,
             location: {type: [Number],index:'2d'} 
           }],
     genre: {type: String,require: true},
     completed: {type: Boolean},
-    type: {type: String}
+    type: {type: String},
   });
 
   userSchema.pre('save', function(next){
