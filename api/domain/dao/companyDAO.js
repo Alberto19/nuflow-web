@@ -13,19 +13,13 @@ class CompanyDAO {
 		con.on('error', () => {
 			banco.Close();
 		});
-		con.once('open', function callback() {
+
+		con.once('open', () => {
 			let saveCompany = new CompanyModel({
-				name: company.name,
-				adress: company.adress,
-				phone: company.phone,
-				rating: company.rating,
-				site: company.site,
-				photos: company.photos,
-				reviews: company.reviews,
-				location: company.location,
-				mapsUrl: company.mapsUrl,
-				days: company.days,
-				uf: company.uf
+				email: company.email,
+				password: company.password,
+				type: company.type,
+				completed: false
 			});
 			saveCompany
 				.save()
@@ -34,12 +28,46 @@ class CompanyDAO {
 					defer.resolve(result);
 				})
 				.catch(err => {
+					banco.Close();
 					defer.reject(err);
-					console.log('Erro: ', err);
 				});
 		});
 		return defer.promise;
 	}
+
+	// persist(company) {
+	// 	var defer = q.defer();
+	// 	let con = banco.Connect();
+	// 	con.on('error', () => {
+	// 		banco.Close();
+	// 	});
+	// 	con.once('open', () => {
+	// 		let saveCompany = new CompanyModel({
+	// 			name: company.name,
+	// 			adress: company.adress,
+	// 			phone: company.phone,
+	// 			rating: company.rating,
+	// 			site: company.site,
+	// 			photos: company.photos,
+	// 			reviews: company.reviews,
+	// 			location: company.location,
+	// 			mapsUrl: company.mapsUrl,
+	// 			days: company.days,
+	// 			uf: company.uf
+	// 		});
+	// 		saveCompany
+	// 			.save()
+	// 			.then((result) => {
+	// 				banco.Close();
+	// 				defer.resolve(result);
+	// 			})
+	// 			.catch(err => {
+	// 				defer.reject(err);
+	// 				console.log('Erro: ', err);
+	// 			});
+	// 	});
+	// 	return defer.promise;
+	// }
 
 	persistAll(company) {
 		var defer = q.defer();

@@ -11,6 +11,7 @@
         var service = {
             login: login,
             register: register,
+            registerCompany: registerCompany,
             logout: logout
         };
 
@@ -19,7 +20,7 @@
         ////////////////
         function login(user) {
             return $http.post(`${config.baseApiUrl}/user/login`, user)
-            .then(data => {
+                .then(data => {
                         var loginData = data.data;
                         authData.parseData(loginData);
                         return loginData;
@@ -38,6 +39,18 @@
         function register(user) {
             return $http.post(`${config.baseApiUrl}/user/cadastrar`, user)
                 .then((data) => {
+                    var registerData = data.data;
+                    authData.parseData(registerData);
+                    return data.data;
+                }, (error) => {
+                    return error;
+                });
+        };
+
+        function registerCompany(company) {
+            return $http.post(`${config.baseApiUrl}/company/cadastrar`, company)
+                .then((data) => {
+                    debugger
                     var registerData = data.data;
                     authData.parseData(registerData);
                     return data.data;

@@ -13,7 +13,6 @@ UserRouter.post('/cadastrar', (req, res) => {
 				token: token,
 				message: 'success'
 			});
-
 		});
 	}).catch((err) => {
 		res.status(500).json("Usuario já cadastrado");

@@ -1,0 +1,36 @@
+<nav class="light-blue darken-2">
+  <div class="nav-wrapper ">
+    <a ui-sref="login" class="brand-logo center">Nuflow</a>
+  </div>
+</nav>
+<div class="row" ui-view>
+  <div class="col offset-l3 l6 offset-m3 m6 s12">
+    <div class="card">
+      <div class="row">
+        <div class="col l12 m12 s12 center">
+          <div class="card-content">
+            <h2 class="center">Cadastro de Empresas</h2>
+            <form ng-submit="vm.registerCompany()">
+              <div class="input-field">
+                <input type="email" name="email" ng-model="vm.company.email">
+                <label for="email">Email</label>
+              </div>
+              <div class="input-field">
+                <input type="password" name="password" ng-model="vm.company.password">
+                <label for="password">Password</label>
+              </div>
+              <p class="text-center flow-text">
+                <h6>By clicking on Sign up, you agree to <a href="#">terms & conditions</a> and <a href="#">privacy policy</a></h6>
+              </p>
+              <button type="submit" class="btn-large waves-effect waves-light light-blue darken-2">Cadastrar</button>
+              <br/>
+              <p class="text-center flow-text">
+                <h6>Sua empresa já é cadastrada? <a ui-sref="init.login">Entre agora</a></h6>
+              </p>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

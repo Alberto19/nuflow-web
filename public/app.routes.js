@@ -28,6 +28,12 @@
                     controller: 'RegisterController as vm',
                     templateUrl: 'views/layouts/register.html'
                 })
+                .state({
+                    name:'init.Company',
+                    url: '/cadastroCompany',
+                    controller: 'RegisterCompanyController as vm',
+                    templateUrl: 'views/layouts/registerCompany.html'
+                })
 
                 // Home routes
                 .state('main', {
@@ -45,6 +51,11 @@
                     url: '/profile',
                     controller: 'ProfileController as vm',
                     templateUrl: 'views/partials/profile.html',
+                })
+                .state('main.profileCompany', {
+                    url: '/profileCompany',
+                    controller: 'ProfileCompanyController as vm',
+                    templateUrl: 'views/partials/profileCompany.html',
                 })
                 .state('main.test', {
                     url: '/test',
