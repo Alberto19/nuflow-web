@@ -38,15 +38,15 @@
 			<div class="background">
 				<img src="https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcTIBxM7XwYOGN2cGlnQINI_bgEl2OdwBnahwD6OFS-w3-TIEGMSCg">
 			</div>
-			<img class="circle" src="http://imagem.band.com.br/f_353970.jpg">
-			<span class="white-text name">John Doe</span>
-			<span class="white-text email">jdandturk@gmail.com</span>
+			<img class="circle" ng-src="{{$ctrl.user.picture || '../../libs/img/profile.jpg'}}">
+			<span class="white-text name">{{ $ctrl.user.name }}</span>
+			<span class="white-text email">{{ $ctrl.user.email }}</span>
 		</div>
 	</li>
 	<li>
 		<div>
-			<a ui-sref="home" class="btn-large waves-effect waves-light light-blue darken-2 ">
-				<i class="material-icons left">cloud</i> Home
+			<a ui-sref="main.feed" class="btn-large waves-effect waves-light light-blue darken-2 ">
+				<i class="material-icons left">dashboard</i> Home
 			</a>
 		</div>
 	</li>
@@ -59,7 +59,7 @@
 	</li>
 	<li>
 		<div>
-			<a ui-sref="profile" class=" btn-large  waves-effect waves-light light-blue darken-2 ">
+			<a ui-sref="main.profile" class=" btn-large  waves-effect waves-light light-blue darken-2 ">
 				<i class="material-icons left">person</i> Profile
 			</a>
 		</div>

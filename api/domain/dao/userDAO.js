@@ -91,38 +91,44 @@ class UserDAO {
 				.findOne({
 					_id: user.id
 				}).then(user => {
-					gfs.files.find({
-						filename: user.picture
-					}).toArray((err, files) => {
+					if (user.picture != null) {
 
-						if (files.length === 0) {
-							return res.status(400).send({
-								message: 'File not found'
+						gfs.files.find({
+							filename: user.picture
+						}).toArray((err, files) => {
+
+							if (files.length === 0) {
+								return res.status(400).send({
+									message: 'File not found'
+								});
+							}
+							let data = [];
+							let readstream = gfs.createReadStream({
+								filename: files[0].filename
 							});
-						}
-						let data = [];
-						let readstream = gfs.createReadStream({
-							filename: files[0].filename
-						});
 
-						readstream.on('data', (chunk) => {
-							data.push(chunk);
-						});
+							readstream.on('data', (chunk) => {
+								data.push(chunk);
+							});
 
-						readstream.on('end', () => {
-							data = Buffer.concat(data);
-							let img = 'data:image/png;jpg;base64,' + Buffer(data).toString('base64');
-							user.picture = img;
-							banco.Close();
-							defer.resolve(user);
-							// res.end(img);
-						});
+							readstream.on('end', () => {
+								data = Buffer.concat(data);
+								let img = 'data:image/png;jpg;base64,' + Buffer(data).toString('base64');
+								user.picture = img;
+								banco.Close();
+								defer.resolve(user);
+								// res.end(img);
+							});
 
-						readstream.on('error', (err) => {
-							console.log('An error occurred!', err);
-							throw err;
+							readstream.on('error', (err) => {
+								console.log('An error occurred!', err);
+								throw err;
+							});
 						});
-					});
+					} else {
+						banco.Close();
+						defer.resolve(user);
+					}
 				});
 		});
 		return defer.promise;
@@ -140,6 +146,7 @@ class UserDAO {
 					_id: req.decoded.id
 				}, {
 					$set: {
+						name: req.body.name,
 						age: req.body.age,
 						preference: req.body.preference,
 						location: req.body.location,

@@ -16,7 +16,8 @@
 				picture: null,
 				file: null,
 				age: null,
-				preference: null
+				preference: null,
+				name: null
 			},
 
 			vm.getProfile = getProfile;
@@ -33,6 +34,7 @@
 
 		function getProfile() {
 			Profile.getProfile().then(user => {
+				vm.user.name = user.data.name;
 				vm.user.email = user.data.email;
 				vm.user.genre = user.data.genre;
 				vm.user.age = user.data.age;

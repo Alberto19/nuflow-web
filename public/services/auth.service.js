@@ -18,39 +18,36 @@
 
         ////////////////
         function login(user) {
-            return $http.post(config.baseApiUrl + '/user/login',user)
-            .then((data) =>{
-                    var loginData = data.data;
-                    authData.parseData(loginData);
-                    return loginData;
-                },
-                 (error)=>{
-                      if(error.status == 404){
-                          Materialize.toast(error.data, 3000);
-                     }
-                     if(error.status == 401){
-                         Materialize.toast(error.data, 3000);
-                     }
-                     return error;
-                });
-        }
+            return $http.post(`${config.baseApiUrl}/user/login`, user)
+            .then(data => {
+                        var loginData = data.data;
+                        authData.parseData(loginData);
+                        return loginData;
+                    },
+                    (error) => {
+                        if (error.status == 404) {
+                            Materialize.toast(error.data, 3000);
+                        }
+                        if (error.status == 401) {
+                            Materialize.toast(error.data, 3000);
+                        }
+                        return error;
+                    });
+        };
 
         function register(user) {
-            return $http.post(config.baseApiUrl + '/user/cadastrar', user)
-            .then((data)=> {
-                    var loginData = data.data;
-                    authData.parseData(loginData);
-                    return data.status
-                },(error)=> {
-                    if(error.status == 500){
-                         Materialize.toast(error.data, 3000);
-                         return error.status;
-                     }
+            return $http.post(`${config.baseApiUrl}/user/cadastrar`, user)
+                .then((data) => {
+                    var registerData = data.data;
+                    authData.parseData(registerData);
+                    return data.data;
+                }, (error) => {
+                    return error;
                 });
-        }
+        };
 
         function logout() {
             authData.clearData();
-        }
+        };
     }
 })();

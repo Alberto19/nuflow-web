@@ -1,11 +1,5 @@
 (function($) {
 'use strict';
-
-	// Usage:
-	// 
-	// Creates:
-	// 
-
 	angular
 		.module('app')
 		.component('navigation', {
@@ -16,14 +10,31 @@
 			},
 		});
 
-	NavigationController.$inject = ['auth','$rootScope'];
-	function NavigationController(auth, $rootScope) {
+	NavigationController.$inject = ['auth','$rootScope', 'Profile'];
+	function NavigationController(auth, $rootScope, Profile) {
 		var $ctrl = this;
+		$ctrl.getProfile = getProfile;
+		$ctrl.user = {
+			name: null,
+			email: null,
+			picture: null
+		};
 
 		$ctrl.logout = ()=>{
 			auth.logout();
 			$rootScope.$emit('forbidden');
-		}
+		};
+		// if(localStorage.getItem('token') != null){
+		$ctrl.getProfile();
+		// }
+
+		function getProfile() {
+			Profile.getProfile().then(user => {
+				$ctrl.user.email = user.data.email;
+				$ctrl.user.name = user.data.name;
+				$ctrl.user.picture = user.data.picture;
+			});
+		};
 
 
 		

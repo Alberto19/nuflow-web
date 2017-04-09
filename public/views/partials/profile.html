@@ -15,15 +15,19 @@
             </div>
           </div>
           <div class="input-field ">
-            <label class="control-label"><i class="ion-person"></i>Email</label>
+            <label class="control-label">Email</label>
             <input type="text" ng-disabled="true" ng-model="vm.user.email" />
           </div>
           <div class="input-field ">
-            <label class="control-label"><i class="ion-at"></i>Sexo</label>
+            <label class="control-label">Sexo</label>
             <input type="text" ng-disabled="true" ng-model="vm.user.genre" />
           </div>
           <div class="input-field ">
-            <label class="control-label"><i class="ion-at"></i>Idade</label>
+            <label class="control-label">Nome</label>
+            <input type="text" ng-model="vm.user.name" />
+          </div>
+          <div class="input-field ">
+            <label class="control-label">Idade</label>
             <input type="number" ng-model="vm.user.age" />
           </div>
           <div input-field>
@@ -37,7 +41,7 @@
           </div>
 
           <div class="center">
-            <button type="submit" class="btn-large waves-effect waves-light light-blue darken-2">Atualizar</button>
+            <button type="submit" ng-disabled="!vm.user.age" class="btn waves-effect waves-light light-blue darken-2">Atualizar Cadastro</button>
           </div>
         </form>
       </div>

@@ -26,7 +26,6 @@
         };
 
         function uploadPhoto(photo){
-            debugger
             return Upload.upload({
                 url: `${config.baseApiUrl}/user/uploadPhoto`,
                 data: { file: photo }

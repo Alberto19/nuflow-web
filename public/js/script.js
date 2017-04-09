@@ -125,40 +125,37 @@
 
         ////////////////
         function login(user) {
-            return $http.post(config.baseApiUrl + '/user/login',user)
-            .then((data) =>{
-                    var loginData = data.data;
-                    authData.parseData(loginData);
-                    return loginData;
-                },
-                 (error)=>{
-                      if(error.status == 404){
-                          Materialize.toast(error.data, 3000);
-                     }
-                     if(error.status == 401){
-                         Materialize.toast(error.data, 3000);
-                     }
-                     return error;
-                });
-        }
+            return $http.post(`${config.baseApiUrl}/user/login`, user)
+            .then(data => {
+                        var loginData = data.data;
+                        authData.parseData(loginData);
+                        return loginData;
+                    },
+                    (error) => {
+                        if (error.status == 404) {
+                            Materialize.toast(error.data, 3000);
+                        }
+                        if (error.status == 401) {
+                            Materialize.toast(error.data, 3000);
+                        }
+                        return error;
+                    });
+        };
 
         function register(user) {
-            return $http.post(config.baseApiUrl + '/user/cadastrar', user)
-            .then((data)=> {
-                    var loginData = data.data;
-                    authData.parseData(loginData);
-                    return data.status
-                },(error)=> {
-                    if(error.status == 500){
-                         Materialize.toast(error.data, 3000);
-                         return error.status;
-                     }
+            return $http.post(`${config.baseApiUrl}/user/cadastrar`, user)
+                .then((data) => {
+                    var registerData = data.data;
+                    authData.parseData(registerData);
+                    return data.data;
+                }, (error) => {
+                    return error;
                 });
-        }
+        };
 
         function logout() {
             authData.clearData();
-        }
+        };
     }
 })();
 (function () {
@@ -290,7 +287,6 @@
         };
 
         function uploadPhoto(photo){
-            debugger
             return Upload.upload({
                 url: `${config.baseApiUrl}/user/uploadPhoto`,
                 data: { file: photo }
@@ -440,12 +436,6 @@
 })();
 (function($) {
 'use strict';
-
-	// Usage:
-	// 
-	// Creates:
-	// 
-
 	angular
 		.module('app')
 		.component('navigation', {
@@ -456,14 +446,31 @@
 			},
 		});
 
-	NavigationController.$inject = ['auth','$rootScope'];
-	function NavigationController(auth, $rootScope) {
+	NavigationController.$inject = ['auth','$rootScope', 'Profile'];
+	function NavigationController(auth, $rootScope, Profile) {
 		var $ctrl = this;
+		$ctrl.getProfile = getProfile;
+		$ctrl.user = {
+			name: null,
+			email: null,
+			picture: null
+		};
 
 		$ctrl.logout = ()=>{
 			auth.logout();
 			$rootScope.$emit('forbidden');
-		}
+		};
+		// if(localStorage.getItem('token') != null){
+		$ctrl.getProfile();
+		// }
+
+		function getProfile() {
+			Profile.getProfile().then(user => {
+				$ctrl.user.email = user.data.email;
+				$ctrl.user.name = user.data.name;
+				$ctrl.user.picture = user.data.picture;
+			});
+		};
 
 
 		
@@ -564,8 +571,8 @@
         ////////////////
 
         function login() {
-            auth.login(vm.user).then(
-                (result) => {
+            auth.login(vm.user)
+                .then((result) => {
                     if (result.status != 401 && result.status != 404) {
                         if (result.completed == false) {
                             $state.go('main.profile');
@@ -595,7 +602,8 @@
 				picture: null,
 				file: null,
 				age: null,
-				preference: null
+				preference: null,
+				name: null
 			},
 
 			vm.getProfile = getProfile;
@@ -612,6 +620,7 @@
 
 		function getProfile() {
 			Profile.getProfile().then(user => {
+				vm.user.name = user.data.name;
 				vm.user.email = user.data.email;
 				vm.user.genre = user.data.genre;
 				vm.user.age = user.data.age;
@@ -653,24 +662,27 @@
 		.controller('RegisterController', RegisterController);
 
 	RegisterController.$inject = ['auth', '$state'];
+
 	function RegisterController(auth, $state) {
 		var vm = this;
 		vm.user = {
 			email: null,
-			password:null,
-			genre:null,
-			type:'user',
+			password: null,
+			genre: null,
+			type: 'user',
 		};
 		vm.register = register;
 
 		function register() {
-			if(vm.user.genre === null){
+			if (vm.user.genre === null) {
 				vm.user.genre = 'masculino';
 			}
 			auth.register(vm.user)
-				.then((status) =>{
-					if(status != 500){
-					$state.go('main.feed');
+				.then(result => {
+					if (result.status != 500) {
+						$state.go('main.profile');
+					} else {
+						Materialize.toast(result.data, 3000);
 					}
 				});
 		};

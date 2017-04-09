@@ -20,7 +20,7 @@ UserRouter.post('/cadastrar', (req, res) => {
 	});
 });
 
-UserRouter.post('/login', authentication, (req, res) => {
+UserRouter.post('/login', (req, res) => {
 	UserDAO.findOne(req.body).then((result) => {
 		token.createToken(result._doc).then((token) => {
 			res.status(201).send({
