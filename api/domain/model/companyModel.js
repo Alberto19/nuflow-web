@@ -5,11 +5,11 @@ const bcrypt = require('bcrypt-nodejs');
 
 
   let companySchema = new Schema({
-    name: {type: String,require: true},
+    name: {type: String},
     email:{type: String, unique: true, require: true},
     password:{type: String, require: true},
-    adress:{type: String, required: true},
-    phone:{type: String, required: true},
+    adress:{type: String},
+    phone:{type: String},
     rating:{type: Number},
     site:{type: String},
     photos:[{type: String}],
@@ -17,8 +17,8 @@ const bcrypt = require('bcrypt-nodejs');
     location: {type: [Number],index:'2d'},
     mapsUrl:{type:String},
     days:[{type: String}],
-    uf:{type: String, require: true},
-    county:{type: String, require: true},
+    uf:{type: String},
+    country:{type: String},
     drinkPrice:{type: String},
     completed: {type: Boolean},
     type: {type: String},

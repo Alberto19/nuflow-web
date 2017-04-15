@@ -14,32 +14,46 @@
               <button data-target='photoModal' modal class="btn waves-effect waves-light light-blue darken-2">Atualizar foto</button>
             </div>
           </div>
-          <div class="input-field ">
+          <div class="input-field col s4">
+            <label class="control-label">nome</label>
+            <input type="text"  ng-model="vm.company.name" />
+          </div>
+          <div class="input-field col offset-s4">
             <label class="control-label">Email</label>
             <input type="text" ng-disabled="true" ng-model="vm.company.email" />
           </div>
           <div class="input-field ">
-            <label class="control-label">Sexo</label>
-            <input type="text" ng-disabled="true" ng-model="vm.company.genre" />
+            <label class="control-label">Logradouro</label>
+            <input type="text" ng-model="vm.company.adress" />
           </div>
           <div class="input-field ">
-            <label class="control-label">Nome</label>
-            <input type="text" ng-model="vm.company.name" />
+            <label class="control-label">bairro</label>
+            <input type="text" ng-model="vm.company.country" />
           </div>
           <div class="input-field ">
-            <label class="control-label">Idade</label>
-            <input type="number" ng-model="vm.company.age" />
+            <label class="control-label">estado</label>
+            <input type="text" ng-model="vm.company.uf" />
           </div>
-          <div input-field>
-            <select ng-model="vm.company.preference" material-select multiple watch>
-                <option value="" disabled selected>Exemplo: Rock</option>
-                <option value="rock">Rock</option>
-                <option value="pop">Pop</option>
-                <option value="funk">Funk</option>
-            </select>
-            <label>Gostos Musicais</label>
+          <div class="input-field ">
+            <label class="control-label">telefone</label>
+            <input type="number" ng-pattern="^\d{4}-\d{3}-\d{4}$" ng-model="vm.company.phone" />
           </div>
-
+          <div class="input-field ">
+            <label class="control-label">Dias de funcionamento</label>
+            <input type="text" ng-model="vm.company.days" />
+          </div>
+          <div class="input-field ">
+            <label class="control-label">Media de preço dos drinks da casa</label>
+            <input type="text" ng-model="vm.company.drinkPrice" />
+          </div>
+          <div class="input-field ">
+            <label class="control-label">site</label>
+            <input type="text" ng-model="vm.company.site" />
+          </div>
+          <div class="input-field ">
+            <label class="control-label">Url google Maps</label>
+            <input type="text" ng-model="vm.company.mapsUrl" />
+          </div>
           <div class="center">
             <button type="submit" ng-disabled="!vm.company.age" class="btn waves-effect waves-light light-blue darken-2">Atualizar Cadastro</button>
           </div>

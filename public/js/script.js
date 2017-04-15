@@ -59,6 +59,12 @@
                     templateUrl: 'views/layouts/login.html'
                 })
                 .state({
+                    name:'init.loginCompany',
+                    url: '/company',
+                    controller: 'LoginCompanyController as vm',
+                    templateUrl: 'views/layouts/loginCompany.html'
+                })
+                .state({
                     name:'init.register',
                     url: '/cadastro',
                     controller: 'RegisterController as vm',
@@ -128,6 +134,7 @@
     function auth($http, authData, config) {
         var service = {
             login: login,
+            loginCompany: loginCompany,
             register: register,
             registerCompany: registerCompany,
             logout: logout
@@ -138,6 +145,23 @@
         ////////////////
         function login(user) {
             return $http.post(`${config.baseApiUrl}/user/login`, user)
+                .then(data => {
+                        var loginData = data.data;
+                        authData.parseData(loginData);
+                        return loginData;
+                    },
+                    (error) => {
+                        if (error.status == 404) {
+                            Materialize.toast(error.data, 3000);
+                        }
+                        if (error.status == 401) {
+                            Materialize.toast(error.data, 3000);
+                        }
+                        return error;
+                    });
+        };
+        function loginCompany(company) {
+            return $http.post(`${config.baseApiUrl}/company/login`, company)
                 .then(data => {
                         var loginData = data.data;
                         authData.parseData(loginData);
@@ -166,6 +190,7 @@
         };
 
         function registerCompany(company) {
+            debugger
             return $http.post(`${config.baseApiUrl}/company/cadastrar`, company)
                 .then((data) => {
                     debugger
@@ -505,8 +530,8 @@
 			},
 		});
 
-	NavigationController.$inject = ['auth','$rootScope', 'Profile'];
-	function NavigationController(auth, $rootScope, Profile) {
+	NavigationController.$inject = ['auth','$rootScope', 'Profile', 'ProfileCompany'];
+	function NavigationController(auth, $rootScope, Profile, ProfileCompany) {
 		var $ctrl = this;
 		$ctrl.getProfile = getProfile;
 		$ctrl.user = {
@@ -520,7 +545,7 @@
 			$rootScope.$emit('forbidden');
 		};
 		// if(localStorage.getItem('token') != null){
-		$ctrl.getProfile();
+		// $ctrl.getProfile();
 		// }
 
 		function getProfile() {
@@ -644,6 +669,39 @@
     }
 })();
 (function () {
+    'use strict';
+
+    angular
+        .module('app')
+        .controller('LoginCompanyController', LoginCompanyController);
+
+    LoginCompanyController.$inject = ['$state', 'auth'];
+
+    function LoginCompanyController($state, auth) {
+        var vm = this;
+        vm.company = {
+            email: null,
+            password: null
+        }
+
+        vm.loginCompany = loginCompany;
+        ////////////////
+
+        function loginCompany() {
+            auth.loginCompany(vm.company)
+                .then((result) => {
+                    if (result.status != 401 && result.status != 404) {
+                        if (result.completed == false) {
+                            $state.go('main.profileCompany');
+                        } else {
+                            $state.go('main.feed');
+                        }
+                    }
+                });
+        }
+    }
+})();
+(function () {
 	'use strict';
 
 	angular
@@ -732,7 +790,7 @@
 				location: null,
 				rating: null,
 				mapsUrl: null,
-				county: null,
+				country: null,
 				uf: null,
 				reviews: null,
 				phone: null,
@@ -757,7 +815,7 @@
 				vm.company.location = company.data.location;
 				vm.company.rating = company.data.rating;
 				vm.company.mapsUrl = company.data.mapsUrl;
-				vm.company.county = company.data.county;
+				vm.company.county = company.data.country;
 				vm.company.uf = company.data.uf;
 				vm.company.reviews = company.data.reviews;
 				vm.company.phone = company.data.phone;

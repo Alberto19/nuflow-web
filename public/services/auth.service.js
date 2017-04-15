@@ -10,6 +10,7 @@
     function auth($http, authData, config) {
         var service = {
             login: login,
+            loginCompany: loginCompany,
             register: register,
             registerCompany: registerCompany,
             logout: logout
@@ -20,6 +21,23 @@
         ////////////////
         function login(user) {
             return $http.post(`${config.baseApiUrl}/user/login`, user)
+                .then(data => {
+                        var loginData = data.data;
+                        authData.parseData(loginData);
+                        return loginData;
+                    },
+                    (error) => {
+                        if (error.status == 404) {
+                            Materialize.toast(error.data, 3000);
+                        }
+                        if (error.status == 401) {
+                            Materialize.toast(error.data, 3000);
+                        }
+                        return error;
+                    });
+        };
+        function loginCompany(company) {
+            return $http.post(`${config.baseApiUrl}/company/login`, company)
                 .then(data => {
                         var loginData = data.data;
                         authData.parseData(loginData);
@@ -48,6 +66,7 @@
         };
 
         function registerCompany(company) {
+            debugger
             return $http.post(`${config.baseApiUrl}/company/cadastrar`, company)
                 .then((data) => {
                     debugger

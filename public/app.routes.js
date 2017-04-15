@@ -23,6 +23,12 @@
                     templateUrl: 'views/layouts/login.html'
                 })
                 .state({
+                    name:'init.loginCompany',
+                    url: '/company',
+                    controller: 'LoginCompanyController as vm',
+                    templateUrl: 'views/layouts/loginCompany.html'
+                })
+                .state({
                     name:'init.register',
                     url: '/cadastro',
                     controller: 'RegisterController as vm',

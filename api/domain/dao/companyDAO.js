@@ -35,6 +35,48 @@ class CompanyDAO {
 		return defer.promise;
 	}
 
+		findOne(company) {
+		var defer = q.defer();
+		let con = banco.Connect();
+		con.on('error', () => {
+			banco.Close();
+		});
+		con.once('open', () => {
+			CompanyModel
+				.findOne({
+					email: company.email
+				})
+				.select('email password completed')
+				.exec((err, result) => {
+					if (err) {
+						banco.Close();
+						defer.reject({
+							status: 500,
+							message: "Erro ao procurar empresa"
+						});
+					} else if (!result) {
+						banco.Close();
+						defer.reject({
+							status: 404,
+							message: "Empresa não existe"
+						});
+					} else if (result) {
+						let validPass = result.comparePassword(company.password);
+						if (!validPass) {
+							banco.Close();
+							defer.reject({
+								status: 401,
+								message: "Email ou senha incorretos!!!"
+							});
+						}
+						banco.Close();
+						defer.resolve(result);
+					}
+				});
+		});
+		return defer.promise;
+	}
+
 	// persist(company) {
 	// 	var defer = q.defer();
 	// 	let con = banco.Connect();

@@ -17,6 +17,20 @@ CompanyRouter.post('/cadastrar', (req, res) => {
 	});
 });
 
+CompanyRouter.post('/login', (req, res) => {
+	CompanyDAO.findOne(req.body).then((result) => {
+		token.createToken(result._doc).then((token) => {
+			res.status(201).send({
+				token: token,
+				completed: result._doc.completed
+			});
+
+		});
+	}).catch((err) => {
+		res.status(err.status).json(err.message);
+	});
+});
+
 CompanyRouter.post('/createAll', (req, res) => {
 	CompanyDAO.persistAll(req.body).then((result) => {
 		res.status(201).send({

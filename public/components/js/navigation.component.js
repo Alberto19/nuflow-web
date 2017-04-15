@@ -10,8 +10,8 @@
 			},
 		});
 
-	NavigationController.$inject = ['auth','$rootScope', 'Profile'];
-	function NavigationController(auth, $rootScope, Profile) {
+	NavigationController.$inject = ['auth','$rootScope', 'Profile', 'ProfileCompany'];
+	function NavigationController(auth, $rootScope, Profile, ProfileCompany) {
 		var $ctrl = this;
 		$ctrl.getProfile = getProfile;
 		$ctrl.user = {
@@ -25,7 +25,7 @@
 			$rootScope.$emit('forbidden');
 		};
 		// if(localStorage.getItem('token') != null){
-		$ctrl.getProfile();
+		// $ctrl.getProfile();
 		// }
 
 		function getProfile() {

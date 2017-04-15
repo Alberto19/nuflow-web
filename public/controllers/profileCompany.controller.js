@@ -17,7 +17,7 @@
 				location: null,
 				rating: null,
 				mapsUrl: null,
-				county: null,
+				country: null,
 				uf: null,
 				reviews: null,
 				phone: null,
@@ -42,7 +42,7 @@
 				vm.company.location = company.data.location;
 				vm.company.rating = company.data.rating;
 				vm.company.mapsUrl = company.data.mapsUrl;
-				vm.company.county = company.data.county;
+				vm.company.county = company.data.country;
 				vm.company.uf = company.data.uf;
 				vm.company.reviews = company.data.reviews;
 				vm.company.phone = company.data.phone;
