@@ -1,14 +1,47 @@
 'use strict'
 var mongoose = require('mongoose');
 let q = require('q');
-let Grid = require('gridfs-stream');
 let banco = require('../../db/MongoConnection');
+let AuthModel = require('../model/authModel');
 let UserModel = require('../model/userModel');
-Grid.mongo = mongoose.mongo;
 
 class UserDAO {
 
-	persist(usuario) {
+	find(req) {
+		var defer = q.defer();
+		let con = banco.Connect();
+		con.on('error', () => {
+			banco.Close();
+		});
+		con.once('open', () => {
+			var usuario = {};
+			AuthModel.findOne({
+				email: req.decoded.email
+			}).then(auth => {
+				usuario.email = auth._doc.email;
+				usuario.genre = auth._doc.genre;
+				usuario.type = auth._doc.type;
+				usuario.completed = auth._doc.completed;
+				UserModel
+					.findOne({
+						_id: req.decoded.id
+					}).then(user => {
+						banco.Close();
+						if (user != null) {
+							usuario.name = user._doc.name;
+							usuario.age = user._doc.age;
+							usuario.preference = user._doc.preference;
+							usuario.favorite = user._doc.favorite;
+						}
+						defer.resolve(usuario);
+					});
+
+			})
+		});
+		return defer.promise;
+	}
+
+	persist(auth) {
 		var defer = q.defer();
 		let con = banco.Connect();
 		con.on('error', () => {
@@ -16,14 +49,14 @@ class UserDAO {
 		});
 
 		con.once('open', () => {
-			let saveUser = new UserModel({
-				email: usuario.email,
-				password: usuario.password,
-				genre: usuario.genre,
-				type: usuario.type,
+			let saveAuth = new AuthModel({
+				email: auth.email,
+				password: auth.password,
+				genre: auth.genre,
+				type: auth.type,
 				completed: false
 			});
-			saveUser
+			saveAuth
 				.save()
 				.then((result) => {
 					banco.Close();
@@ -37,103 +70,6 @@ class UserDAO {
 		return defer.promise;
 	}
 
-	findOne(usuario) {
-		var defer = q.defer();
-		let con = banco.Connect();
-		con.on('error', () => {
-			banco.Close();
-		});
-		con.once('open', () => {
-			UserModel
-				.findOne({
-					email: usuario.email
-				})
-				.select('email password completed')
-				.exec((err, user) => {
-					if (err) {
-						banco.Close();
-						defer.reject({
-							status: 500,
-							message: "Erro ao procurar usuario"
-						});
-					} else if (!user) {
-						banco.Close();
-						defer.reject({
-							status: 404,
-							message: "Usuário não existe"
-						});
-					} else if (user) {
-						let validPass = user.comparePassword(usuario.password);
-						if (!validPass) {
-							banco.Close();
-							defer.reject({
-								status: 401,
-								message: "Email ou senha incorretos!!!"
-							});
-						}
-						banco.Close();
-						defer.resolve(user);
-					}
-				});
-		});
-		return defer.promise;
-	}
-
-	find(user) {
-		var defer = q.defer();
-		let con = banco.Connect();
-		con.on('error', () => {
-			banco.Close();
-		});
-		con.once('open', () => {
-			let gfs = Grid(con.db);
-			UserModel
-				.findOne({
-					_id: user.id
-				}).then(user => {
-					if (user.picture != null) {
-
-						gfs.files.find({
-							filename: user.picture
-						}).toArray((err, files) => {
-
-							if (files.length === 0) {
-								return res.status(400).send({
-									message: 'File not found'
-								});
-							}
-							let data = [];
-							let readstream = gfs.createReadStream({
-								filename: files[0].filename
-							});
-
-							readstream.on('data', (chunk) => {
-								data.push(chunk);
-							});
-
-							readstream.on('end', () => {
-								data = Buffer.concat(data);
-								let img = 'data:image/png;jpg;base64,' + Buffer(data).toString('base64');
-								user.picture = img;
-								banco.Close();
-								defer.resolve(user);
-								// res.end(img);
-							});
-
-							readstream.on('error', (err) => {
-								console.log('An error occurred!', err);
-								throw err;
-							});
-						});
-					} else {
-						banco.Close();
-						defer.resolve(user);
-					}
-				});
-		});
-		return defer.promise;
-	}
-
 	updateProfile(req) {
 		var defer = q.defer();
 		let con = banco.Connect();
@@ -141,60 +77,50 @@ class UserDAO {
 			banco.Close();
 		});
 		con.once('open', () => {
-			UserModel
-				.update({
-					_id: req.decoded.id
-				}, {
-					$set: {
-						name: req.body.name,
-						age: req.body.age,
-						preference: req.body.preference,
-						location: req.body.location,
-						completed: true
-					}
-				})
+			UserModel.findById(req.decoded.id)
 				.then(user => {
-					banco.Close();
-					defer.resolve();
-				}).catch((err) => {
-					banco.Close();
-					defer.reject(err);
-				});
-		});
-		return defer.promise;
-	}
+					if (user === null) {
+						AuthModel.update({
+							_id: req.decoded.id
+						}, {
+							$set: {
+								completed: true
+							}
+						}).then(auth => {
 
-	uploadPhoto(req) {
-		var defer = q.defer();
-		let con = banco.Connect();
-		con.on('error', () => {
-			banco.Close();
-		});
-		con.once('open', () => {
-			let gfs = Grid(con.db);
-			let photo = req.files.file;
-			let writeStream = gfs.createWriteStream({
-				filename: photo.name,
-				mode: 'w',
-				content_type: photo.mimetype
-			});
+							let saveUser = new UserModel({
+								_id: req.decoded.id,
+								name: req.body.name,
+								age: req.body.age,
+								preference: req.body.preference,
+								location: req.body.location,
+							});
 
-			writeStream.write(photo.data);
-			writeStream.end();
-
-			UserModel
-				.update({
-					_id: req.decoded.id
-				}, {
-					$set: {
-						picture: req.files.file.name
+							saveUser
+								.save()
+								.then(user => {
+									banco.Close();
+									defer.resolve();
+								}).catch((err) => {
+									banco.Close();
+									defer.reject(err);
+								});
+						});
+					} else {
+						UserModel.update({
+							_id: req.decoded.id
+						}, {
+							$set: {
+								name: req.body.name,
+								age: req.body.age,
+								preference: req.body.preference,
+								location: req.body.location,
+							}
+						}).then(user => {
+							banco.Close();
+							defer.resolve();
+						})
 					}
-				}).then(() => {
-					writeStream.on('close', (file) => {
-						banco.Close();
-						defer.resolve();
-					});
-
 				});
 		});
 		return defer.promise;

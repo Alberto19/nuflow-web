@@ -59,19 +59,13 @@
                     templateUrl: 'views/layouts/login.html'
                 })
                 .state({
-                    name:'init.loginCompany',
-                    url: '/company',
-                    controller: 'LoginCompanyController as vm',
-                    templateUrl: 'views/layouts/loginCompany.html'
-                })
-                .state({
-                    name:'init.register',
+                    name:'init.regiterUser',
                     url: '/cadastro',
                     controller: 'RegisterController as vm',
                     templateUrl: 'views/layouts/register.html'
                 })
                 .state({
-                    name:'init.Company',
+                    name:'init.registerCompany',
                     url: '/cadastroCompany',
                     controller: 'RegisterCompanyController as vm',
                     templateUrl: 'views/layouts/registerCompany.html'
@@ -134,36 +128,18 @@
     function auth($http, authData, config) {
         var service = {
             login: login,
-            loginCompany: loginCompany,
             register: register,
-            registerCompany: registerCompany,
+            getPhoto: getPhoto,
             logout: logout
         };
 
         return service;
 
         ////////////////
-        function login(user) {
-            return $http.post(`${config.baseApiUrl}/user/login`, user)
-                .then(data => {
-                        var loginData = data.data;
-                        authData.parseData(loginData);
-                        return loginData;
-                    },
-                    (error) => {
-                        if (error.status == 404) {
-                            Materialize.toast(error.data, 3000);
-                        }
-                        if (error.status == 401) {
-                            Materialize.toast(error.data, 3000);
-                        }
-                        return error;
-                    });
-        };
-        function loginCompany(company) {
-            return $http.post(`${config.baseApiUrl}/company/login`, company)
-                .then(data => {
-                        var loginData = data.data;
+        function login(auth) {
+            return $http.post(`${config.baseApiUrl}/auth/login`, auth)
+                .then(result => {
+                        var loginData = result.data;
                         authData.parseData(loginData);
                         return loginData;
                     },
@@ -179,28 +155,25 @@
         };
 
         function register(user) {
-            return $http.post(`${config.baseApiUrl}/user/cadastrar`, user)
-                .then((data) => {
-                    var registerData = data.data;
+            return $http.post(`${config.baseApiUrl}/auth/cadastrar`, user)
+                .then((result) => {
+                    var registerData = result.data;
                     authData.parseData(registerData);
-                    return data.data;
+                    return result.data;
                 }, (error) => {
                     return error;
                 });
         };
 
-        function registerCompany(company) {
-            debugger
-            return $http.post(`${config.baseApiUrl}/company/cadastrar`, company)
-                .then((data) => {
-                    debugger
-                    var registerData = data.data;
-                    authData.parseData(registerData);
-                    return data.data;
+        function getPhoto() {
+            return $http.get(`${config.baseApiUrl}/auth/photo`)
+                .then((result) => {
+                    return result.data;
                 }, (error) => {
                     return error;
                 });
         };
+
 
         function logout() {
             authData.clearData();
@@ -332,12 +305,13 @@
         };
 
         function updateProfile(profile) {
+            debugger
             return $http.post(`${config.baseApiUrl}/user/updateProfile`, profile);
         };
 
         function uploadPhoto(photo){
             return Upload.upload({
-                url: `${config.baseApiUrl}/user/uploadPhoto`,
+                url: `${config.baseApiUrl}/auth/uploadPhoto`,
                 data: { file: photo }
             });
         }
@@ -646,7 +620,7 @@
 
     function LoginController($state, auth) {
         var vm = this;
-        vm.user = {
+        vm.auth = {
             email: null,
             password: null
         }
@@ -655,46 +629,22 @@
         ////////////////
 
         function login() {
-            auth.login(vm.user)
+            auth.login(vm.auth)
                 .then((result) => {
                     if (result.status != 401 && result.status != 404) {
-                        if (result.completed == false) {
-                            $state.go('main.profile');
-                        } else {
-                            $state.go('main.feed');
-                        }
-                    }
-                });
-        }
-    }
-})();
-(function () {
-    'use strict';
-
-    angular
-        .module('app')
-        .controller('LoginCompanyController', LoginCompanyController);
-
-    LoginCompanyController.$inject = ['$state', 'auth'];
-
-    function LoginCompanyController($state, auth) {
-        var vm = this;
-        vm.company = {
-            email: null,
-            password: null
-        }
-
-        vm.loginCompany = loginCompany;
-        ////////////////
-
-        function loginCompany() {
-            auth.loginCompany(vm.company)
-                .then((result) => {
-                    if (result.status != 401 && result.status != 404) {
-                        if (result.completed == false) {
-                            $state.go('main.profileCompany');
-                        } else {
-                            $state.go('main.feed');
+                        debugger
+                        if(result.auth.type === 'user'){
+                            if (result.auth.completed === false) {
+                                $state.go('main.profile');
+                            } else {
+                                $state.go('main.feed');
+                            }
+                        }else{
+                             if (result.auth.completed === false) {
+                                $state.go('main.profileCompany');
+                            } else {
+                                $state.go('main.feed');
+                            }
                         }
                     }
                 });
@@ -708,9 +658,9 @@
 		.module('app')
 		.controller('ProfileController', ProfileController);
 
-	ProfileController.$inject = ['$state','Profile'];
+	ProfileController.$inject = ['$state', 'Profile', 'auth'];
 
-	function ProfileController($state, Profile) {
+	function ProfileController($state, Profile, auth) {
 		var vm = this;
 		vm.user = {
 				email: null,
@@ -742,7 +692,9 @@
 				vm.user.genre = user.data.genre;
 				vm.user.age = user.data.age;
 				vm.user.preference = user.data.preference;
-				vm.user.picture = user.data.picture;
+				auth.getPhoto().then(photo => {
+					vm.user.picture = photo;
+				});
 			});
 		};
 
@@ -752,8 +704,8 @@
 				vm.user.file = null;
 			}
 			Profile.updateProfile(vm.user).then(() => {
-				Materialize.toast('Cadastro Atualizado com sucesso', 3000);
-					 $state.go('main.feed');
+					Materialize.toast('Cadastro Atualizado com sucesso', 3000);
+					$state.go('main.feed');
 				},
 				(err) => {
 					Materialize.toast('Erro ao Atualizar Cadastro', 3000);
@@ -762,8 +714,8 @@
 
 		function uploadPhoto() {
 			Profile.uploadPhoto(vm.user.file).then(() => {
-				Profile.getProfile().then(user => {
-					vm.user.picture = user.data.picture;
+				auth.getPhoto().then(photo => {
+					vm.user.picture = photo;
 				});
 				Materialize.toast('Imagem Atualizada com sucesso', 3000);
 			});
@@ -875,6 +827,7 @@
 			}
 			auth.register(vm.user)
 				.then(result => {
+					debugger
 					if (result.status != 500) {
 						$state.go('main.profile');
 					} else {
@@ -903,7 +856,7 @@
 		vm.registerCompany = registerCompany;
 
 		function registerCompany() {
-			auth.registerCompany(vm.company)
+			auth.register(vm.company)
 				.then(result => {
 					if (result.status != 500) {
 						$state.go('main.profileCompany');

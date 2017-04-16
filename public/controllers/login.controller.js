@@ -9,7 +9,7 @@
 
     function LoginController($state, auth) {
         var vm = this;
-        vm.user = {
+        vm.auth = {
             email: null,
             password: null
         }
@@ -18,13 +18,22 @@
         ////////////////
 
         function login() {
-            auth.login(vm.user)
+            auth.login(vm.auth)
                 .then((result) => {
                     if (result.status != 401 && result.status != 404) {
-                        if (result.completed == false) {
-                            $state.go('main.profile');
-                        } else {
-                            $state.go('main.feed');
+                        debugger
+                        if(result.auth.type === 'user'){
+                            if (result.auth.completed === false) {
+                                $state.go('main.profile');
+                            } else {
+                                $state.go('main.feed');
+                            }
+                        }else{
+                             if (result.auth.completed === false) {
+                                $state.go('main.profileCompany');
+                            } else {
+                                $state.go('main.feed');
+                            }
                         }
                     }
                 });

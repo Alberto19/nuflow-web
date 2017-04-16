@@ -17,7 +17,7 @@
 		vm.registerCompany = registerCompany;
 
 		function registerCompany() {
-			auth.registerCompany(vm.company)
+			auth.register(vm.company)
 				.then(result => {
 					if (result.status != 500) {
 						$state.go('main.profileCompany');

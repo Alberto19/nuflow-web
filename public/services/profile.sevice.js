@@ -22,12 +22,13 @@
         };
 
         function updateProfile(profile) {
+            debugger
             return $http.post(`${config.baseApiUrl}/user/updateProfile`, profile);
         };
 
         function uploadPhoto(photo){
             return Upload.upload({
-                url: `${config.baseApiUrl}/user/uploadPhoto`,
+                url: `${config.baseApiUrl}/auth/uploadPhoto`,
                 data: { file: photo }
             });
         }

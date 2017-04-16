@@ -6,11 +6,12 @@ let q = require('q');
 
 module.exports = new class Token {
 
-	createToken(user) {
+	createToken(auth) {
 		var defer = q.defer();
 			let token = jsonwebtoken.sign({
-				id: user._id,
-				type:user.type
+				id: auth._id,
+				email: auth.email,
+				type: auth.type
 			}, secretKey);
 			defer.resolve(token);
 		return defer.promise;
