@@ -41,35 +41,6 @@ class UserDAO {
 		return defer.promise;
 	}
 
-	persist(auth) {
-		var defer = q.defer();
-		let con = banco.Connect();
-		con.on('error', () => {
-			banco.Close();
-		});
-
-		con.once('open', () => {
-			let saveAuth = new AuthModel({
-				email: auth.email,
-				password: auth.password,
-				genre: auth.genre,
-				type: auth.type,
-				completed: false
-			});
-			saveAuth
-				.save()
-				.then((result) => {
-					banco.Close();
-					defer.resolve(result);
-				})
-				.catch(err => {
-					banco.Close();
-					defer.reject(err);
-				});
-		});
-		return defer.promise;
-	}
-
 	updateProfile(req) {
 		var defer = q.defer();
 		let con = banco.Connect();

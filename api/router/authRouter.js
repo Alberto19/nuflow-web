@@ -43,6 +43,9 @@ AuthRouter.post('/uploadPhoto', authentication, (req, res) => {
 
 AuthRouter.get('/photo', authentication, (req, res) => {
 	AuthDAO.findPhoto(req.decoded).then((result) => {
+		if (result === null) {
+			res.status(404).send();
+		}
 		res.status(200).send(result);
 	}).catch((err) => {
 		res.status(err.status).json(err.message);

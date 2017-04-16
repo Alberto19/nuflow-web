@@ -96,9 +96,8 @@ class authDAO {
 					}).toArray((err, files) => {
 
 						if (files.length === 0) {
-							return res.status(400).send({
-								message: 'File not found'
-							});
+							banco.Close();
+							return defer.resolve(null);
 						}
 						let data = [];
 						let readstream = gfs.createReadStream({
@@ -119,6 +118,11 @@ class authDAO {
 						readstream.on('error', (err) => {
 							console.log('An error occurred!', err);
 							throw err;
+							banco.Close();
+							defer.reject({
+								status: 500,
+								message: "Erro ao pegar foto da base de dados"
+							});
 						});
 					});
 				});

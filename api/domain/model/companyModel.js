@@ -18,8 +18,6 @@ const bcrypt = require('bcrypt-nodejs');
     uf:{type: String},
     country:{type: String},
     drinkPrice:{type: String},
-    completed: {type: Boolean},
-    type: {type: String},
   });
 
   companySchema.pre('save', function(next){

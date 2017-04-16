@@ -23,7 +23,6 @@
 			}
 			auth.register(vm.user)
 				.then(result => {
-					debugger
 					if (result.status != 500) {
 						$state.go('main.profile');
 					} else {

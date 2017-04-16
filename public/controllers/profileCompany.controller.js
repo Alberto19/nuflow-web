@@ -5,9 +5,9 @@
 		.module('app')
 		.controller('ProfileCompanyController', ProfileCompanyController);
 
-	ProfileCompanyController.$inject = ['$state','ProfileCompany'];
+	ProfileCompanyController.$inject = ['$state','ProfileCompany', 'auth'];
 
-	function ProfileCompanyController($state, ProfileCompany) {
+	function ProfileCompanyController($state, ProfileCompany, auth) {
 		var vm = this;
 		vm.company = {
 				name: null,
@@ -24,22 +24,22 @@
 				days: null,
 				drinkPrice: null,
 				site: null,
-				files: null
+				file: null,
+				picture: null,
 			};
 
 		vm.getProfileCompany = getProfileCompany;
 		vm.updateProfileCompany = updateProfileCompany;
-		vm.uploadCompanyPhotos = uploadCompanyPhotos;
+		vm.uploadPhoto = uploadPhoto;
 
-		// getProfileCompany();
+		getProfileCompany();
 
 		function getProfileCompany() {
 			ProfileCompany.getProfileCompany().then(company => {
 				vm.company.name  = company.data.name;
-				vm.company.email = company.data.email;
+				vm.company.email  = company.data.email;
 				vm.company.photos = company.data.photo;
 				vm.company.adress = company.data.adress;
-				vm.company.location = company.data.location;
 				vm.company.rating = company.data.rating;
 				vm.company.mapsUrl = company.data.mapsUrl;
 				vm.company.county = company.data.country;
@@ -49,14 +49,22 @@
 				vm.company.days = company.data.days;
 				vm.company.drinkPrice = company.data.drinkPrice;
 				vm.company.site = company.data.site;
+
+				auth.getPhoto().then(photo => {
+					if(photo.status != 404){
+					vm.company.picture = photo;
+					}
+				});
 			});
 		};
 
 		function updateProfileCompany() {
-			if (vm.company.photos != null) {
+			if (vm.company.picture != null) {
+				vm.company.picture = null;
 				vm.company.photos = null;
 				vm.company.file = null;
 			}
+			debugger
 			ProfileCompany.updateProfileCompany(vm.company).then(() => {
 				Materialize.toast('Cadastro Atualizado com sucesso', 3000);
 					 $state.go('main.feed');
@@ -66,10 +74,10 @@
 				});
 		};
 
-		function uploadCompanyPhotos() {
-			ProfileCompany.uploadCompanyPhotos(vm.company.files).then(() => {
-				ProfileCompany.getProfileCompany().then(company => {
-					vm.company.photos = company.data.photos;
+		function uploadPhoto() {
+			ProfileCompany.uploadPhoto(vm.company.file).then(() => {
+				auth.getPhoto().then(photo => {
+					vm.company.picture = photo;
 				});
 				Materialize.toast('Imagem Atualizada com sucesso', 3000);
 			});

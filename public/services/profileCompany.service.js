@@ -11,7 +11,7 @@
         var service = {
             getProfileCompany: getProfileCompany,
             updateProfileCompany: updateProfileCompany,
-            uploadCompanyPhotos: uploadCompanyPhotos
+            uploadPhoto: uploadPhoto
         };
 
         return service;
@@ -22,12 +22,13 @@
         };
 
         function updateProfileCompany(ProfileCompany) {
+            debugger
             return $http.post(`${config.baseApiUrl}/company/updateProfileCompany`, ProfileCompany);
         };
 
-        function uploadCompanyPhotos(photo){
+        function uploadPhoto(photo){
             return Upload.upload({
-                url: `${config.baseApiUrl}/company/uploadCompanyPhotos`,
+                url: `${config.baseApiUrl}/auth/uploadPhoto`,
                 data: { file: photo }
             });
         }
