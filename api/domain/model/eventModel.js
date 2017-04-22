@@ -4,13 +4,15 @@ const  Schema = mongoose.Schema;
 
 
   let eventSchema = new Schema({
+    name: {type: Date,require: true},
     type: [{type: String,require: true}],
     dateEvent:{type: Date,require: true},
     price:{type: String,require: true},
     description:{type: String, require: true },
     artists:[{type: String}],
-    banner:{type: Buffer},
-    checkIn:{type: Boolean}
+    banner:{type: String},
+    checkIn:[{type: String}],
+    companyId: {type: String, require: true}
   });
 
 module.exports = mongoose.model('Event',eventSchema);

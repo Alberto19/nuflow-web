@@ -57,6 +57,16 @@
                     controller: 'ProfileCompanyController as vm',
                     templateUrl: 'views/partials/profileCompany.html',
                 })
+                .state('main.event', {
+                    url: '/event',
+                    controller: 'EventController as vm',
+                    templateUrl: 'views/partials/event.html',
+                })
+                .state('main.events', {
+                    url: '/events',
+                    controller: 'AllEventsController as vm',
+                    templateUrl: 'views/partials/allEvents.html',
+                })
                 .state('main.test', {
                     url: '/test',
                     controller: 'TestController as vm',

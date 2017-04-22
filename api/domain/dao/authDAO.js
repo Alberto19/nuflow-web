@@ -1,6 +1,6 @@
 'use strict'
-var mongoose = require('mongoose');
 let q = require('q');
+var mongoose = require('mongoose');
 let Grid = require('gridfs-stream');
 let banco = require('../../db/MongoConnection');
 let AuthModel = require('../model/authModel');
