@@ -20,8 +20,9 @@
         return service;
 
         ////////////////
-        function getEventById() {
-            return $http.get(`${config.baseApiUrl}/event/:id`);
+        function getEventById(eventId) {
+            debugger
+            return $http.get(`${config.baseApiUrl}/event/${eventId}`);
         };
 
         function createEvent(event) {
@@ -33,19 +34,17 @@
         };
 
         function getBanner(eventId) {
-            var defer = $q.defer()
+            var defer = $q.defer();
             debugger
             $http.post(`${config.baseApiUrl}/event/banner`, {
                 id: eventId
             }).then(res => {
-                debugger
                 defer.resolve(res);
             });
             return defer.promise;
         };
 
         function uploadBanner(id, banner) {
-            debugger
             return Upload.upload({
                 url: `${config.baseApiUrl}/event/uploadBanner`,
                 data: {

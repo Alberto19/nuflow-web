@@ -20,7 +20,7 @@
 				name: null
 			},
 
-			vm.getProfile = getProfile;
+		vm.getProfile = getProfile;
 		vm.updateProfile = updateProfile;
 		vm.uploadPhoto = uploadPhoto;
 

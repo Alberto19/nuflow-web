@@ -13,10 +13,12 @@ class MongoConnection extends Connection {
 	Connect() {
 		mongoose.Promise = global.Promise;
 		mongoose.connect(this.GetStringConnection());
+		console.info('Conexao aberta');
 		return mongoose.connection;
 	}
 
 	Close() {
+		console.info('Conexao fechada');
 		return mongoose.connection.db.close();
 	}
 }

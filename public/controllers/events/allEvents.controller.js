@@ -14,30 +14,30 @@
             getEvents();
 
             function getEvents() {
+                var defer = $q.defer();
                 Events.getAllEvents().then(events => {
-                    debugger
                     getBanners(events.data).then(dataEvents => {
-                        debugger
                         vm.events = dataEvents;
+                        defer.resolve(vm.events);
                     })
                 });
+                return defer.promise;
             };
 
             function getBanners(dataEvents) {
                 var events = [];
                 var defer = $q.defer();
-                dataEvents.map(event => {
-                    Events.getBanner(event._id).then(banner => {
-                        debugger
+                // dataEvents.map(event => {
+                    Events.getBanner(dataEvents[0]._id).then(banner => {
                         event.banner = banner.data;
                         defer.resolve(dataEvents);
                     });
-                });
+                // });
             return defer.promise;
             };
 
         function createEvent() {
-            $state.go('main.event');
+            $state.go('main.event.create');
         }
     }
 })();

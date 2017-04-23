@@ -44,12 +44,8 @@
         vm.onSet = function () {};
         vm.onStop = function () {};
 
-        vm.getEvent = getEvent;
         vm.createEvent = createEvent;
-        vm.updateEvent = updateEvent;
         vm.uploadBanner = uploadBanner;
-
-        // getEvent();
 
         function createEvent() {
             Events.createEvent(vm.event).then(event => {
@@ -63,34 +59,6 @@
             });
         }
 
-        function getEvent() {
-            Events.getEvent().then(event => {
-                vm.event.name = event.data.name;
-                vm.event.type = event.data.type;
-                vm.event.dateEvent = event.data.dateEvent;
-                vm.event.price = event.data.price;
-                vm.event.description = event.data.description;
-                vm.event.artists = event.data.artists;
-                vm.event.checkIn = event.data.checkIn;
-                Events.getBanner().then(banner => {
-                    vm.event.banner = banner;
-                });
-            });
-        };
-
-        function updateEvent() {
-            if (vm.event.banner != null) {
-                vm.event.banner = null;
-                vm.event.file = null;
-            }
-            Events.updateEvent(vm.event).then((result) => {
-                    Materialize.toast(result.message, 3000);
-                },
-                (err) => {
-                    Materialize.toast(err.message, 3000);
-                });
-        };
-
         function uploadBanner() {
             Events.uploadBanner(vm.event.id, vm.event.file).then(() => {
                 Events.getBanner(vm.event.id).then(banner => {
@@ -99,6 +67,5 @@
                 Materialize.toast('Banner Atualizado com sucesso', 3000);
             });
         }
-
     }
 })();

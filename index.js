@@ -9,8 +9,7 @@ var path = require('path');
 let mongoose = require('mongoose');
 let morgan = require('morgan');
 let routes = require('./api/router');
-
-let http = require('http').Server(app);
+let banco = require('./api/db/MongoConnection');
 
 app.use(busBodyParser({ limit: '10mb'}));
 app.use(bodyParser.urlencoded({
@@ -40,12 +39,10 @@ app.get('*', function (req, res) {
     res.sendFile(path.join(__dirname +'/public/views/index.html'));
 });
 let PORT = process.env.PORT || 3000
-http.listen(PORT, function (err) {
+app.listen(PORT, function (err) {
 	if (err) {
 		console.log(err);
 	} else {
 		console.log("Listening on port 3000");
 	}
 });
-
-module.exports = app;

@@ -5,6 +5,7 @@ let Grid = require('gridfs-stream');
 let banco = require('../../db/MongoConnection');
 let EventModel = require('../model/eventModel');
 Grid.mongo = mongoose.mongo;
+var con = null;
 
 class EventDAO {
 
@@ -18,6 +19,27 @@ class EventDAO {
             var event = {};
             EventModel.find({
                 companyId: req.decoded.id
+            }).then(events => {
+                banco.Close();
+                defer.resolve(events);
+            }).catch(error => {
+                banco.Close();
+                defer.reject(error);
+            })
+        });
+        return defer.promise;
+    };
+
+    findById(id) {
+        var defer = q.defer();
+        let con = banco.Connect();
+        con.on('error', () => {
+            banco.Close();
+        });
+        con.once('open', () => {
+            var event = {};
+            EventModel.findById({
+                _id: id
             }).then(events => {
                 banco.Close();
                 defer.resolve(events);
@@ -44,8 +66,6 @@ class EventDAO {
                 price: req.body.price,
                 description: req.body.description,
                 artists: req.body.artists,
-                banner: req.body.banner,
-                checkIn: req.body.checkIn,
                 companyId: req.decoded.id
             });
             saveEvent
@@ -94,92 +114,89 @@ class EventDAO {
         return defer.promise;
     };
 
-    	findBanner(req) {
-		var defer = q.defer();
-		let con = banco.Connect();
-		con.on('error', () => {
-			banco.Close();
-		});
-		con.once('open', () => {
-			let gfs = Grid(con.db);
-			EventModel
-            .findById({
-					_id: req.body.id
-				}).then(event => {
-					gfs.files.find({
-						filename: event.banner
-					}).toArray((err, files) => {
+    findBanner(req) {
+        var defer = q.defer();
+        if (con === null) {
+            con = banco.Connect();
+        }
+        con.on('error', () => {
+            banco.Close();
+        });
+        con.once('open', () => {
+            let gfs = Grid(con.db);
+            EventModel
+                .findOne({
+                    _id: req.body.id
+                }).then(event => {
+                    gfs.files.find({
+                        filename: event.banner
+                    }).toArray((err, files) => {
+                        let data = [];
+                        let readstream = gfs.createReadStream({
+                            filename: files[0].filename
+                        });
 
-						if (files.length === 0) {
-							banco.Close();
-							return defer.resolve(null);
-						}
-						let data = [];
-						let readstream = gfs.createReadStream({
-							filename: files[0].filename
-						});
+                        readstream.on('data', (chunk) => {
+                            data.push(chunk);
+                        });
 
-						readstream.on('data', (chunk) => {
-							data.push(chunk);
-						});
+                        readstream.on('end', () => {
+                            data = Buffer.concat(data);
+                            let banner = 'data:image/png;jpg;base64,' + Buffer(data).toString('base64');
+                            banco.Close();
+                            defer.resolve(banner);
+                        });
 
-						readstream.on('end', () => {
-							data = Buffer.concat(data);
-							let banner = 'data:image/png;jpg;base64,' + Buffer(data).toString('base64');
-							banco.Close();
-							defer.resolve(banner);
-						});
+                        readstream.on('error', (err) => {
+                            console.log('An error occurred!', err);
+                            throw err;
+                            banco.Close();
+                            defer.reject({
+                                status: 500,
+                                message: "Erro ao pegar banner da base de dados"
+                            });
+                        });
+                    });
+                });
+        });
+        return defer.promise;
+    }
 
-						readstream.on('error', (err) => {
-							console.log('An error occurred!', err);
-							throw err;
-							banco.Close();
-							defer.reject({
-								status: 500,
-								message: "Erro ao pegar banner da base de dados"
-							});
-						});
-					});
-				});
-		});
-		return defer.promise;
-	}
+    uploadBanner(req) {
+        var defer = q.defer();
+        let con = banco.Connect();
+        con.on('error', () => {
+            banco.Close();
+        });
+        con.once('open', () => {
+            let gfs = Grid(con.db);
+            let banner = req.files.file;
+            let writeStream = gfs.createWriteStream({
+                filename: banner.name,
+                mode: 'w',
+                content_type: banner.mimetype
+            });
 
-	uploadBanner(req) {
-		var defer = q.defer();
-		let con = banco.Connect();
-		con.on('error', () => {
-			banco.Close();
-		});
-		con.once('open', () => {
-			let gfs = Grid(con.db);
-			let banner = req.files.file;
-			let writeStream = gfs.createWriteStream({
-				filename: banner.name,
-				mode: 'w',
-				content_type: banner.mimetype
-			});
+            writeStream.write(banner.data);
+            writeStream.end();
 
-			writeStream.write(banner.data);
-			writeStream.end();
+            EventModel
+                .update({
+                    _id: req.body.id
+                }, {
+                    $set: {
+                        banner: req.files.file.name
+                    }
+                }).then(() => {
+                    writeStream.on('close', (file) => {
+                        banco.Close();
+                        defer.resolve();
+                    });
 
-			EventModel
-				.update({
-					_id: req.body.id
-				}, {
-					$set: {
-						banner: req.files.file.name
-					}
-				}).then(() => {
-					writeStream.on('close', (file) => {
-						banco.Close();
-						defer.resolve();
-					});
-
-				});
-		});
-		return defer.promise;
-	}
+                });
+        });
+        return defer.promise;
+    }
 }
 
 module.exports = new EventDAO();

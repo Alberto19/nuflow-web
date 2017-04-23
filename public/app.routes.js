@@ -47,25 +47,37 @@
                     controller: 'FeedController as vm',
                     templateUrl: 'views/partials/feed.html',
                 })
+                //Rota perfil usuario
                 .state('main.profile', {
                     url: '/profile',
                     controller: 'ProfileController as vm',
                     templateUrl: 'views/partials/profile.html',
                 })
+                //Rota perfil Company
                 .state('main.profileCompany', {
                     url: '/profileCompany',
                     controller: 'ProfileCompanyController as vm',
                     templateUrl: 'views/partials/profileCompany.html',
                 })
+                //rotas de evento
                 .state('main.event', {
-                    url: '/event',
-                    controller: 'EventController as vm',
-                    templateUrl: 'views/partials/event.html',
+                    url: '^/event',
+                    template: '<ui-view/>',
                 })
-                .state('main.events', {
-                    url: '/events',
+                .state('main.event.list',{
+                    url: '/list',
                     controller: 'AllEventsController as vm',
-                    templateUrl: 'views/partials/allEvents.html',
+                    templateUrl: 'views/partials/event/allEvents.html',
+                })
+                .state('main.event.edit', {
+                    url: '/edit/:eventId',
+                    controller: 'EventEditController as vm',
+                    templateUrl: 'views/partials/event/editEvent.html',
+                })
+                .state('main.event.create', {
+                    url: '/create',
+                    controller: 'EventController as vm',
+                    templateUrl: 'views/partials/event/event.html',
                 })
                 .state('main.test', {
                     url: '/test',
