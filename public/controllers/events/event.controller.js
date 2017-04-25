@@ -44,11 +44,11 @@
         vm.onSet = function () {};
         vm.onStop = function () {};
 
-        vm.createEvent = createEvent;
+        vm.post = post;
         vm.uploadBanner = uploadBanner;
 
-        function createEvent() {
-            Events.createEvent(vm.event).then(event => {
+        function post() {
+            Events.post(vm.event).then(event => {
                 if (event.data.token === null) {
                     $state.go('main.event');
                 } else {
@@ -61,10 +61,7 @@
 
         function uploadBanner() {
             Events.uploadBanner(vm.event.id, vm.event.file).then(() => {
-                Events.getBanner(vm.event.id).then(banner => {
-                    vm.event.banner = banner.data;
-                });
-                Materialize.toast('Banner Atualizado com sucesso', 3000);
+                Materialize.toast('Banner Enviado com sucesso', 3000);
             });
         }
     }

@@ -2,8 +2,8 @@
     <div class="col offset-l2 offset-m1 l8 m10 s12">
         <div class="card">
             <div class="card-content" style="padding: 10px 20px">
-                <input  type="text" style="width: 70%;" placeholder="Procurar eventos"/>
-                <button type="button" ng-click="vm.createEvent()" style="margin-top: 12px;" class="btn waves-effect waves-light light-blue darken-2">Criar Evento</button>
+                <input type="text" style="width: 70%;" placeholder="Procurar eventos" />
+                <button type="button" ng-click="vm.post()" style="margin-top: 12px;" class="btn waves-effect waves-light light-blue darken-2">Criar Evento</button>
             </div>
         </div>
     </div>
@@ -17,21 +17,26 @@
                     <img materialboxed class="materialboxed responsive-img" width="650" height="180px" ng-src="{{item.banner || '../../libs/img/padrao.png' }}">
                 </div>
                 <div class="card-stacked">
-                    <div class="card-content">
-                        <a ui-sref="main.event.edit({ eventId: '{{item._id}}' })">Editar</a>
-                        <span class="card-title light-blue-text">{{item.name}}</span>
-                        <p>Tipo de Evento: 
-                            <span ng-repeat="type in item.type">
+                    <div class="card-content" style="padding: 0">
+                        <div class="col l8">
+                            <span class="card-title light-blue-text">{{item.name}}</span>
+                            <p>Tipo de Evento:
+                                <span ng-repeat="type in item.type">
                                 {{type}}
                             </span>
-                        </p>
-                        <p>Data do evento: {{item.dateEvent}}</p>
-                        <p>Descrição: {{item.description}}</p>
-                        <p>Artistas: 
-                            <span ng-repeat="artist in item.artists">
+                            </p>
+                            <p>Data do evento: {{item.dateEvent}}</p>
+                            <p>Descrição: {{item.description}}</p>
+                            <p>Artistas:
+                                <span ng-repeat="artist in item.artists">
                                 {{artist}}
-                            </span> 
-                        </p>
+                            </span>
+                            </p>
+                        </div>
+                        <div class="col l4" style="display:block;padding: 0px;padding-top: 42px;">
+                            <a class="eventButton" ui-sref="main.event.edit({ eventId: '{{item._id}}' })">Editar</a>
+                            <a class="eventButton" ui-sref="main.event.delete({ eventId: '{{item._id}}' })">Deletar</a>
+                        </div>
                     </div>
                 </div>
             </div>

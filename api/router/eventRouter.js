@@ -1,27 +1,10 @@
 'use strict'
 let EventRouter = require('express').Router();
 let fs = require('fs');
-let authentication = require('../tools/authentication');
 let EventDAO = require('../domain/dao/eventDAO');
 let token = require('../tools/token');
-let banco = require('../db/MongoConnection');
 
-EventRouter.get('/', authentication, (req, res) => {
-	EventDAO.findAll(req).then((result) => {
-		if (result === null) {
-			res.status(404).send({
-				message: 'Nenhum evento Encontrado'
-			});
-		}
-		res.status(200).send(result);
-	}).catch((err) => {
-		res.status(500).json({
-			message: 'Erro ao buscar eventos'
-		});
-	});
-});
-
-EventRouter.get('/:eventId', authentication, (req, res) => {
+EventRouter.get('/:eventId', (req, res) => {
 	EventDAO.findById(req.params.eventId).then((result) => {
 		if (result === null) {
 			res.status(404).send({
@@ -36,7 +19,22 @@ EventRouter.get('/:eventId', authentication, (req, res) => {
 	});
 });
 
-EventRouter.post('/', authentication, (req, res) => {
+EventRouter.get('/', (req, res) => {
+	EventDAO.findAll(req).then((result) => {
+		if (result === null) {
+			res.status(404).send({
+				message: 'Nenhum evento Encontrado'
+			});
+		}
+		res.status(200).send(result);
+	}).catch((err) => {
+		res.status(500).json({
+			message: 'Erro ao buscar eventos'
+		});
+	});
+});
+
+EventRouter.post('/', (req, res) => {
 	EventDAO.persist(req).then((result) => {
 		res.status(201).send({
 			eventId: result._doc._id
@@ -48,7 +46,7 @@ EventRouter.post('/', authentication, (req, res) => {
 	});
 });
 
-EventRouter.put('/update', (req, res) => {
+EventRouter.put('/', (req, res) => {
 	EventDAO.update(req).then((result) => {
 		res.status(200).send({
 			message: "Evento Atualizado com sucesso",
@@ -60,7 +58,7 @@ EventRouter.put('/update', (req, res) => {
 	});
 });
 
-EventRouter.post('/uploadBanner', authentication, (req, res) => {
+EventRouter.post('/uploadBanner', (req, res) => {
 	EventDAO.uploadBanner(req).then((result) => {
 		res.status(200).send(result);
 	}).catch((err) => {
@@ -70,7 +68,7 @@ EventRouter.post('/uploadBanner', authentication, (req, res) => {
 	});
 });
 
-EventRouter.post('/banner', authentication, (req, res) => {
+EventRouter.post('/banner', (req, res) => {
 	EventDAO.findBanner(req).then((result) => {
 		if (result === null) {
 			res.status(404).send();

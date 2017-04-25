@@ -5,43 +5,38 @@
         .module('app')
         .factory('Events', Events);
 
-    Events.$inject = ['$http', 'config', 'Upload', '$q'];
+    Events.$inject = ['$http', 'config', 'Upload'];
 
-    function Events($http, config, Upload, $q) {
+    function Events($http, config, Upload) {
         var service = {
-            getEventById: getEventById,
-            createEvent: createEvent,
-            updateEvent: updateEvent,
+            getById: getById,
+            getAll: getAll,
+            post: post,
+            put:put,
             uploadBanner: uploadBanner,
             getBanner: getBanner,
-            getAllEvents: getAllEvents,
         };
 
         return service;
 
-        ////////////////
-        function getEventById(eventId) {
-            debugger
+        function getById(eventId) {
             return $http.get(`${config.baseApiUrl}/event/${eventId}`);
         };
 
-        function createEvent(event) {
+        function getAll() {
+            return $http.get(`${config.baseApiUrl}/event`);
+        };
+
+        function post(event) {
             return $http.post(`${config.baseApiUrl}/event`, event);
         };
 
-        function updateEvent(event) {
-            return $http.put(`${config.baseApiUrl}/event/update`, event);
+        function put(id, event){
+            return $http.put(`${config.baseApiUrl}/event`, {id, event});
         };
 
         function getBanner(eventId) {
-            var defer = $q.defer();
-            debugger
-            $http.post(`${config.baseApiUrl}/event/banner`, {
-                id: eventId
-            }).then(res => {
-                defer.resolve(res);
-            });
-            return defer.promise;
+           return $http.post(`${config.baseApiUrl}/event/banner`, {banner: eventId});
         };
 
         function uploadBanner(id, banner) {
@@ -52,10 +47,6 @@
                     id: id
                 }
             });
-        }
-
-        function getAllEvents() {
-            return $http.get(`${config.baseApiUrl}/event`);
-        }
+        };
     }
 })();

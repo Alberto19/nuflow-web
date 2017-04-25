@@ -1,43 +1,44 @@
 (function () {
-        'use strict';
-        angular
-            .module('app')
-            .controller('AllEventsController', AllEventsController);
+    'use strict';
+    angular
+        .module('app')
+        .controller('AllEventsController', AllEventsController);
 
-        AllEventsController.$inject = ['$state', 'Events', '$q'];
+    AllEventsController.$inject = ['$state', 'Events', '$q'];
 
-        function AllEventsController($state, Events, $q) {
-            var vm = this;
-            vm.events = null;
+    function AllEventsController($state, Events, $q) {
+        var vm = this;
+        vm.events = null;
 
-            vm.createEvent = createEvent;
-            getEvents();
+        vm.post = post;
+        vm.delete = deleted;
+        getAll();
 
-            function getEvents() {
-                var defer = $q.defer();
-                Events.getAllEvents().then(events => {
-                    getBanners(events.data).then(dataEvents => {
-                        vm.events = dataEvents;
-                        defer.resolve(vm.events);
-                    })
+        function getAll() {
+            Events.getAll().then(events => {
+                getBanners(events.data).then(dataEvents => {
+                    vm.events = dataEvents;
                 });
-                return defer.promise;
-            };
+            });
+        };
 
-            function getBanners(dataEvents) {
-                var events = [];
-                var defer = $q.defer();
-                // dataEvents.map(event => {
-                    Events.getBanner(dataEvents[0]._id).then(banner => {
-                        event.banner = banner.data;
-                        defer.resolve(dataEvents);
-                    });
-                // });
+        function getBanners(dataEvents) {
+            var defer = $q.defer();
+            dataEvents.map(event => {
+                Events.getBanner(event.banner).then(banner => {
+                    event.banner = banner.data;
+                });
+                defer.resolve(dataEvents);
+            });
             return defer.promise;
-            };
+        };
 
-        function createEvent() {
+        function post() {
             $state.go('main.event.create');
+        }
+        
+        function deleted(id){
+            alert(id);
         }
     }
 })();

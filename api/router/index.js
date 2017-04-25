@@ -13,7 +13,7 @@ app.use('/auth',authRouter);
 app.use('/user', userRouter);
 app.use('/search',searchRouter);
 app.use('/company',companyRouter);
-app.use('/event', eventRouter);
+app.use('/event', authentication, eventRouter);
 
 module.exports = app;
 

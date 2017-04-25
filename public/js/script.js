@@ -310,43 +310,38 @@
         .module('app')
         .factory('Events', Events);
 
-    Events.$inject = ['$http', 'config', 'Upload', '$q'];
+    Events.$inject = ['$http', 'config', 'Upload'];
 
-    function Events($http, config, Upload, $q) {
+    function Events($http, config, Upload) {
         var service = {
-            getEventById: getEventById,
-            createEvent: createEvent,
-            updateEvent: updateEvent,
+            getById: getById,
+            getAll: getAll,
+            post: post,
+            put:put,
             uploadBanner: uploadBanner,
             getBanner: getBanner,
-            getAllEvents: getAllEvents,
         };
 
         return service;
 
-        ////////////////
-        function getEventById(eventId) {
-            debugger
+        function getById(eventId) {
             return $http.get(`${config.baseApiUrl}/event/${eventId}`);
         };
 
-        function createEvent(event) {
+        function getAll() {
+            return $http.get(`${config.baseApiUrl}/event`);
+        };
+
+        function post(event) {
             return $http.post(`${config.baseApiUrl}/event`, event);
         };
 
-        function updateEvent(event) {
-            return $http.put(`${config.baseApiUrl}/event/update`, event);
+        function put(id, event){
+            return $http.put(`${config.baseApiUrl}/event`, {id, event});
         };
 
         function getBanner(eventId) {
-            var defer = $q.defer();
-            debugger
-            $http.post(`${config.baseApiUrl}/event/banner`, {
-                id: eventId
-            }).then(res => {
-                defer.resolve(res);
-            });
-            return defer.promise;
+           return $http.post(`${config.baseApiUrl}/event/banner`, {banner: eventId});
         };
 
         function uploadBanner(id, banner) {
@@ -357,11 +352,7 @@
                     id: id
                 }
             });
-        }
-
-        function getAllEvents() {
-            return $http.get(`${config.baseApiUrl}/event`);
-        }
+        };
     }
 })();
 (function () {
@@ -977,45 +968,46 @@
 
 
 (function () {
-        'use strict';
-        angular
-            .module('app')
-            .controller('AllEventsController', AllEventsController);
+    'use strict';
+    angular
+        .module('app')
+        .controller('AllEventsController', AllEventsController);
 
-        AllEventsController.$inject = ['$state', 'Events', '$q'];
+    AllEventsController.$inject = ['$state', 'Events', '$q'];
 
-        function AllEventsController($state, Events, $q) {
-            var vm = this;
-            vm.events = null;
+    function AllEventsController($state, Events, $q) {
+        var vm = this;
+        vm.events = null;
 
-            vm.createEvent = createEvent;
-            getEvents();
+        vm.post = post;
+        vm.delete = deleted;
+        getAll();
 
-            function getEvents() {
-                var defer = $q.defer();
-                Events.getAllEvents().then(events => {
-                    getBanners(events.data).then(dataEvents => {
-                        vm.events = dataEvents;
-                        defer.resolve(vm.events);
-                    })
+        function getAll() {
+            Events.getAll().then(events => {
+                getBanners(events.data).then(dataEvents => {
+                    vm.events = dataEvents;
                 });
-                return defer.promise;
-            };
+            });
+        };
 
-            function getBanners(dataEvents) {
-                var events = [];
-                var defer = $q.defer();
-                dataEvents.map(event => {
-                    Events.getBanner(event._id).then(banner => {
-                        event.banner = banner.data;
-                        defer.resolve(dataEvents);
-                    });
+        function getBanners(dataEvents) {
+            var defer = $q.defer();
+            dataEvents.map(event => {
+                Events.getBanner(event.banner).then(banner => {
+                    event.banner = banner.data;
                 });
+                defer.resolve(dataEvents);
+            });
             return defer.promise;
-            };
+        };
 
-        function createEvent() {
+        function post() {
             $state.go('main.event.create');
+        }
+        
+        function deleted(id){
+            alert(id);
         }
     }
 })();
@@ -1065,11 +1057,11 @@
         vm.onSet = function () {};
         vm.onStop = function () {};
 
-        vm.createEvent = createEvent;
+        vm.post = post;
         vm.uploadBanner = uploadBanner;
 
-        function createEvent() {
-            Events.createEvent(vm.event).then(event => {
+        function post() {
+            Events.post(vm.event).then(event => {
                 if (event.data.token === null) {
                     $state.go('main.event');
                 } else {
@@ -1082,10 +1074,7 @@
 
         function uploadBanner() {
             Events.uploadBanner(vm.event.id, vm.event.file).then(() => {
-                Events.getBanner(vm.event.id).then(banner => {
-                    vm.event.banner = banner.data;
-                });
-                Materialize.toast('Banner Atualizado com sucesso', 3000);
+                Materialize.toast('Banner Enviado com sucesso', 3000);
             });
         }
     }
@@ -1134,15 +1123,15 @@
         vm.onSet = function () {};
         vm.onStop = function () {};
 
-        vm.updateEvent = updateEvent;
-        vm.updateBanner = updateBanner;
+        vm.put = put;
+        vm.uploadBanner = uploadBanner;
 
-        getEventById();
+        getById();
 
-        function getEventById() {
+        function getById() {
             debugger
             var eventId = $stateParams.eventId;
-            Events.getEventById(eventId).then(event => {
+            Events.getById(eventId).then(event => {
                 debugger
                 vm.event.name = event.data.name;
                 vm.event.type = event.data.type;
@@ -1150,29 +1139,29 @@
                 vm.event.price = event.data.price;
                 vm.event.description = event.data.description;
                 vm.event.artists = event.data.artists;
-                Events.getBanner(eventId).then(banner => {
-                    debugger
-                    vm.event.banner = banner;
+                Events.getBanner(event.data.banner).then(banner => {
+                    vm.event.banner = banner.data;
                 });
             });
         };
 
-        function updateEvent() {
+        function put() {
             if (vm.event.banner != null) {
                 vm.event.banner = null;
                 vm.event.file = null;
             }
-            Events.updateEvent(vm.event).then((result) => {
+            Events.put($stateParams.eventId, vm.event).then((result) => {
                     Materialize.toast(result.message, 3000);
+                    getById();
                 },
                 (err) => {
                     Materialize.toast(err.message, 3000);
                 });
         };
 
-        function updateBanner() {
-            Events.uploadBanner($stateParams.eventId, vm.event.file).then(() => {
-                Events.getBanner($stateParams.eventId).then(banner => {
+        function uploadBanner() {
+            Events.uploadBanner($stateParams.eventId, vm.event.file).then((eventBanner) => {
+                Events.getBanner(eventBanner.data).then(banner => {
                     vm.event.banner = banner.data;
                 });
                 Materialize.toast('Banner Atualizado com sucesso', 3000);

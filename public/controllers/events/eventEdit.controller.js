@@ -42,15 +42,15 @@
         vm.onSet = function () {};
         vm.onStop = function () {};
 
-        vm.updateEvent = updateEvent;
-        vm.updateBanner = updateBanner;
+        vm.put = put;
+        vm.uploadBanner = uploadBanner;
 
-        getEventById();
+        getById();
 
-        function getEventById() {
+        function getById() {
             debugger
             var eventId = $stateParams.eventId;
-            Events.getEventById(eventId).then(event => {
+            Events.getById(eventId).then(event => {
                 debugger
                 vm.event.name = event.data.name;
                 vm.event.type = event.data.type;
@@ -58,29 +58,29 @@
                 vm.event.price = event.data.price;
                 vm.event.description = event.data.description;
                 vm.event.artists = event.data.artists;
-                Events.getBanner(eventId).then(banner => {
-                    debugger
-                    vm.event.banner = banner;
+                Events.getBanner(event.data.banner).then(banner => {
+                    vm.event.banner = banner.data;
                 });
             });
         };
 
-        function updateEvent() {
+        function put() {
             if (vm.event.banner != null) {
                 vm.event.banner = null;
                 vm.event.file = null;
             }
-            Events.updateEvent(vm.event).then((result) => {
+            Events.put($stateParams.eventId, vm.event).then((result) => {
                     Materialize.toast(result.message, 3000);
+                    getById();
                 },
                 (err) => {
                     Materialize.toast(err.message, 3000);
                 });
         };
 
-        function updateBanner() {
-            Events.uploadBanner($stateParams.eventId, vm.event.file).then(() => {
-                Events.getBanner($stateParams.eventId).then(banner => {
+        function uploadBanner() {
+            Events.uploadBanner($stateParams.eventId, vm.event.file).then((eventBanner) => {
+                Events.getBanner(eventBanner.data).then(banner => {
                     vm.event.banner = banner.data;
                 });
                 Materialize.toast('Banner Atualizado com sucesso', 3000);

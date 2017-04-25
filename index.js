@@ -9,7 +9,9 @@ var path = require('path');
 let mongoose = require('mongoose');
 let morgan = require('morgan');
 let routes = require('./api/router');
-let banco = require('./api/db/MongoConnection');
+let config = require('./api/config');
+// require('./api/db/MongoConnection')(config);
+mongoose.connect(config.database);
 
 app.use(busBodyParser({ limit: '10mb'}));
 app.use(bodyParser.urlencoded({
