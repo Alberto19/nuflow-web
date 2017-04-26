@@ -6,14 +6,14 @@ NavigationRouter.get('/', (req, res) => {
     if(req.decoded.type === 'company'){
         res.status(200).send({
             button: 'Eventos',
-            path: 'main.event.list',
-            profile: 'main.profileCompany'
+            path: "main.event.list",
+            profile: "main.profileCompany"
         });
     }else{
         res.status(200).send({
             button: 'Favoritos',
-            path: 'main.profile',
-            profile: 'main.profile'
+            path: "main.profile",
+            profile: "main.profile"
         });
     }
 });

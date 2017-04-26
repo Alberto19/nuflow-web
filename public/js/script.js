@@ -621,18 +621,13 @@
 			auth.logout();
 			$rootScope.$emit('forbidden');
 		};
-		// if(localStorage.getItem('token') != null){
-		// $ctrl.getProfile();
-		// }
 
-		// function getProfile() {
-		// 	Profile.getProfile().then(user => {
-		// 		$ctrl.user.email = user.data.email;
-		// 		$ctrl.user.name = user.data.name;
-		// 		$ctrl.user.picture = user.data.picture;
-		// 	});
-		// };
-		getNavigation();
+		function getProfile() {
+			auth.getPhoto().then(photo => {
+				debugger
+				$ctrl.user.picture = photo;
+			});
+		};
 		function getNavigation(){
 			Navigation.get().then(nav => {
 				debugger
@@ -645,7 +640,8 @@
 		////////////////
 
 		$ctrl.$onInit = function() { 
-			
+			getProfile();
+			getNavigation();	
 		};
 		$ctrl.$onChanges = function(changesObj) { };
 		$ctrl.$onDestory = function() { };
@@ -1020,11 +1016,14 @@
         getAll();
 
         function getAll() {
+            var defer = $q.defer();
             Events.getAll().then(events => {
                 getBanners(events.data).then(dataEvents => {
                     vm.events = dataEvents;
+                    defer.resolve();
                 });
             });
+            return defer.promise;
         };
 
         function getBanners(dataEvents) {
