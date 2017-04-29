@@ -446,7 +446,6 @@
         };
 
         function updateProfileCompany(ProfileCompany) {
-            debugger
             return $http.post(`${config.baseApiUrl}/company/updateProfileCompany`, ProfileCompany);
         };
 
@@ -601,13 +600,13 @@
 			},
 		});
 
-	NavigationController.$inject = ['auth','$rootScope', 'Navigation'];
-	function NavigationController(auth, $rootScope, Navigation) {
+	NavigationController.$inject = ['$state','auth','$rootScope', 'Navigation'];
+	function NavigationController($state, auth, $rootScope, Navigation) {
 		var $ctrl = this;
 
 		$ctrl.nav = {
 			button: null,
-			path: null,
+			path: '',
 			profile: null
 		};
 
@@ -615,6 +614,12 @@
 			name: null,
 			email: null,
 			picture: null
+		};
+		$ctrl.path = () => {
+			$state.go(`${$ctrl.nav.path}`);
+		};
+		$ctrl.profile = () => {
+			$state.go(`${$ctrl.nav.profile}`);
 		};
 
 		$ctrl.logout = ()=>{
@@ -624,26 +629,23 @@
 
 		function getProfile() {
 			auth.getPhoto().then(photo => {
-				debugger
 				$ctrl.user.picture = photo;
 			});
 		};
+		
 		function getNavigation(){
 			Navigation.get().then(nav => {
-				debugger
 				$ctrl.nav.button = nav.data.button;
 				$ctrl.nav.path = nav.data.path;
 				$ctrl.nav.profile = nav.data.profile;
 			});
 		}
-
-		////////////////
-
 		$ctrl.$onInit = function() { 
 			getProfile();
-			getNavigation();	
+			getNavigation();
 		};
-		$ctrl.$onChanges = function(changesObj) { };
+		$ctrl.$onChanges = function(changesObj) {
+		};
 		$ctrl.$onDestory = function() { };
 	}
 })(jQuery);
@@ -739,7 +741,6 @@
             auth.login(vm.auth)
                 .then((result) => {
                     if (result.status != 401 && result.status != 404) {
-                        debugger
                         if(result.auth.type === 'user'){
                             if (result.auth.completed === false) {
                                 $state.go('main.profile');
@@ -837,28 +838,31 @@
 		.module('app')
 		.controller('ProfileCompanyController', ProfileCompanyController);
 
-	ProfileCompanyController.$inject = ['$state','ProfileCompany', 'auth'];
+	ProfileCompanyController.$inject = ['$state', 'ProfileCompany', 'auth'];
 
 	function ProfileCompanyController($state, ProfileCompany, auth) {
 		var vm = this;
 		vm.company = {
-				name: null,
-				email: null,
-				photos: null,
-				adress: null,
-				location: null,
-				rating: null,
-				mapsUrl: null,
-				country: null,
-				uf: null,
-				reviews: null,
-				phone: null,
-				days: null,
-				drinkPrice: null,
-				site: null,
-				file: null,
-				picture: null,
-			};
+			name: null,
+			email: null,
+			photos: null,
+			adress: null,
+			location: null,
+			rating: null,
+			mapsUrl: null,
+			country: null,
+			uf: null,
+			reviews: null,
+			phone: null,
+			days: null,
+			drinkPrice: null,
+			site: null,
+			file: null,
+			picture: null,
+		};
+
+		vm.uf = ['AC', 'AL', 'AP', 'AM', 'BA', 'CE', 'DF', 'ES', 'GO', 'MA', 'MT', 'MS', 'MG', 'PA',
+		 'PB', 'PR', 'PE', 'PI', 'RJ', 'RN','RS','RO','RR','SC','SP','SE','TO'];
 
 		vm.getProfileCompany = getProfileCompany;
 		vm.updateProfileCompany = updateProfileCompany;
@@ -868,13 +872,13 @@
 
 		function getProfileCompany() {
 			ProfileCompany.getProfileCompany().then(company => {
-				vm.company.name  = company.data.name;
-				vm.company.email  = company.data.email;
+				vm.company.name = company.data.name;
+				vm.company.email = company.data.email;
 				vm.company.photos = company.data.photo;
 				vm.company.adress = company.data.adress;
 				vm.company.rating = company.data.rating;
 				vm.company.mapsUrl = company.data.mapsUrl;
-				vm.company.county = company.data.country;
+				vm.company.country = company.data.country;
 				vm.company.uf = company.data.uf;
 				vm.company.reviews = company.data.reviews;
 				vm.company.phone = company.data.phone;
@@ -883,8 +887,8 @@
 				vm.company.site = company.data.site;
 
 				auth.getPhoto().then(photo => {
-					if(photo.status != 404){
-					vm.company.picture = photo;
+					if (photo.status != 404) {
+						vm.company.picture = photo;
 					}
 				});
 			});
@@ -896,10 +900,9 @@
 				vm.company.photos = null;
 				vm.company.file = null;
 			}
-			debugger
 			ProfileCompany.updateProfileCompany(vm.company).then(() => {
-				Materialize.toast('Cadastro Atualizado com sucesso', 3000);
-					 $state.go('main.feed');
+					Materialize.toast('Cadastro Atualizado com sucesso', 3000);
+					$state.go('main.feed');
 				},
 				(err) => {
 					Materialize.toast('Erro ao Atualizar Cadastro', 3000);
@@ -1016,14 +1019,9 @@
         getAll();
 
         function getAll() {
-            var defer = $q.defer();
             Events.getAll().then(events => {
-                getBanners(events.data).then(dataEvents => {
-                    vm.events = dataEvents;
-                    defer.resolve();
-                });
-            });
-            return defer.promise;
+               return getBanners(events.data);
+            }).then(dataEvents => vm.events = dataEvents);
         };
 
         function getBanners(dataEvents) {

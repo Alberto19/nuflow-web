@@ -21,7 +21,6 @@
             auth.login(vm.auth)
                 .then((result) => {
                     if (result.status != 401 && result.status != 404) {
-                        debugger
                         if(result.auth.type === 'user'){
                             if (result.auth.completed === false) {
                                 $state.go('main.profile');

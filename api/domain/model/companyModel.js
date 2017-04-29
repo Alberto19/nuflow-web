@@ -7,7 +7,7 @@ const bcrypt = require('bcrypt-nodejs');
   let companySchema = new Schema({
     name: {type: String},
     adress:{type: String},
-    phone:{type: String},
+    phone:{type: Number},
     rating:{type: Number},
     site:{type: String},
     photos:[{type: String}],
@@ -17,7 +17,7 @@ const bcrypt = require('bcrypt-nodejs');
     days:[{type: String}],
     uf:{type: String},
     country:{type: String},
-    drinkPrice:{type: String},
+    drinkPrice:{type:Number},
   });
 
   companySchema.pre('save', function(next){

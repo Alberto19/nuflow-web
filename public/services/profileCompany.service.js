@@ -22,7 +22,6 @@
         };
 
         function updateProfileCompany(ProfileCompany) {
-            debugger
             return $http.post(`${config.baseApiUrl}/company/updateProfileCompany`, ProfileCompany);
         };
 

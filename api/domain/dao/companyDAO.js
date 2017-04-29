@@ -58,8 +58,6 @@ class CompanyDAO {
 							location: req.body.location,
 							rating: req.body.rating,
 							site: req.body.site,
-							reviews: req.body.reviews,
-							mapsUrl: req.body.mapsUrl,
 							days: req.body.days,
 							mapsUrl: req.body.mapsUrl,
 							uf: req.body.uf,
@@ -84,15 +82,13 @@ class CompanyDAO {
 							adress: req.body.adress,
 							phone: req.body.phone,
 							location: req.body.location,
-							rating: req.body.rating,
 							site: req.body.site,
 							reviews: req.body.reviews,
-							mapsUrl: req.body.mapsUrl,
 							days: req.body.days,
 							mapsUrl: req.body.mapsUrl,
 							uf: req.body.uf,
 							country: req.body.country,
-							drinkPrice: req.body.drinkPrice,
+							drinkPrice: req.body.drinkPrice
 						}
 					}).then(company => {
 						defer.resolve();

@@ -12,7 +12,7 @@ NavigationRouter.get('/', (req, res) => {
     }else{
         res.status(200).send({
             button: 'Favoritos',
-            path: "main.profile",
+            path: "main.favoritos",
             profile: "main.profile"
         });
     }

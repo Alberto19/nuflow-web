@@ -10,13 +10,13 @@
 			},
 		});
 
-	NavigationController.$inject = ['auth','$rootScope', 'Navigation'];
-	function NavigationController(auth, $rootScope, Navigation) {
+	NavigationController.$inject = ['$state','auth','$rootScope', 'Navigation'];
+	function NavigationController($state, auth, $rootScope, Navigation) {
 		var $ctrl = this;
 
 		$ctrl.nav = {
 			button: null,
-			path: null,
+			path: '',
 			profile: null
 		};
 
@@ -24,6 +24,12 @@
 			name: null,
 			email: null,
 			picture: null
+		};
+		$ctrl.path = () => {
+			$state.go(`${$ctrl.nav.path}`);
+		};
+		$ctrl.profile = () => {
+			$state.go(`${$ctrl.nav.profile}`);
 		};
 
 		$ctrl.logout = ()=>{
@@ -33,26 +39,23 @@
 
 		function getProfile() {
 			auth.getPhoto().then(photo => {
-				debugger
 				$ctrl.user.picture = photo;
 			});
 		};
+		
 		function getNavigation(){
 			Navigation.get().then(nav => {
-				debugger
 				$ctrl.nav.button = nav.data.button;
 				$ctrl.nav.path = nav.data.path;
 				$ctrl.nav.profile = nav.data.profile;
 			});
 		}
-
-		////////////////
-
 		$ctrl.$onInit = function() { 
 			getProfile();
-			getNavigation();	
+			getNavigation();
 		};
-		$ctrl.$onChanges = function(changesObj) { };
+		$ctrl.$onChanges = function(changesObj) {
+		};
 		$ctrl.$onDestory = function() { };
 	}
 })(jQuery);

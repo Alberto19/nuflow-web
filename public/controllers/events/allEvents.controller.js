@@ -15,14 +15,9 @@
         getAll();
 
         function getAll() {
-            var defer = $q.defer();
             Events.getAll().then(events => {
-                getBanners(events.data).then(dataEvents => {
-                    vm.events = dataEvents;
-                    defer.resolve();
-                });
-            });
-            return defer.promise;
+               return getBanners(events.data);
+            }).then(dataEvents => vm.events = dataEvents);
         };
 
         function getBanners(dataEvents) {

@@ -5,28 +5,31 @@
 		.module('app')
 		.controller('ProfileCompanyController', ProfileCompanyController);
 
-	ProfileCompanyController.$inject = ['$state','ProfileCompany', 'auth'];
+	ProfileCompanyController.$inject = ['$state', 'ProfileCompany', 'auth'];
 
 	function ProfileCompanyController($state, ProfileCompany, auth) {
 		var vm = this;
 		vm.company = {
-				name: null,
-				email: null,
-				photos: null,
-				adress: null,
-				location: null,
-				rating: null,
-				mapsUrl: null,
-				country: null,
-				uf: null,
-				reviews: null,
-				phone: null,
-				days: null,
-				drinkPrice: null,
-				site: null,
-				file: null,
-				picture: null,
-			};
+			name: null,
+			email: null,
+			photos: null,
+			adress: null,
+			location: null,
+			rating: null,
+			mapsUrl: null,
+			country: null,
+			uf: null,
+			reviews: null,
+			phone: null,
+			days: null,
+			drinkPrice: null,
+			site: null,
+			file: null,
+			picture: null,
+		};
+
+		vm.uf = ['AC', 'AL', 'AP', 'AM', 'BA', 'CE', 'DF', 'ES', 'GO', 'MA', 'MT', 'MS', 'MG', 'PA',
+		 'PB', 'PR', 'PE', 'PI', 'RJ', 'RN','RS','RO','RR','SC','SP','SE','TO'];
 
 		vm.getProfileCompany = getProfileCompany;
 		vm.updateProfileCompany = updateProfileCompany;
@@ -36,13 +39,13 @@
 
 		function getProfileCompany() {
 			ProfileCompany.getProfileCompany().then(company => {
-				vm.company.name  = company.data.name;
-				vm.company.email  = company.data.email;
+				vm.company.name = company.data.name;
+				vm.company.email = company.data.email;
 				vm.company.photos = company.data.photo;
 				vm.company.adress = company.data.adress;
 				vm.company.rating = company.data.rating;
 				vm.company.mapsUrl = company.data.mapsUrl;
-				vm.company.county = company.data.country;
+				vm.company.country = company.data.country;
 				vm.company.uf = company.data.uf;
 				vm.company.reviews = company.data.reviews;
 				vm.company.phone = company.data.phone;
@@ -51,8 +54,8 @@
 				vm.company.site = company.data.site;
 
 				auth.getPhoto().then(photo => {
-					if(photo.status != 404){
-					vm.company.picture = photo;
+					if (photo.status != 404) {
+						vm.company.picture = photo;
 					}
 				});
 			});
@@ -64,10 +67,9 @@
 				vm.company.photos = null;
 				vm.company.file = null;
 			}
-			debugger
 			ProfileCompany.updateProfileCompany(vm.company).then(() => {
-				Materialize.toast('Cadastro Atualizado com sucesso', 3000);
-					 $state.go('main.feed');
+					Materialize.toast('Cadastro Atualizado com sucesso', 3000);
+					$state.go('main.feed');
 				},
 				(err) => {
 					Materialize.toast('Erro ao Atualizar Cadastro', 3000);

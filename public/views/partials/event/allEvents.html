@@ -2,7 +2,7 @@
     <div class="col offset-l2 offset-m1 l8 m10 s12">
         <div class="card">
             <div class="card-content" style="padding: 10px 20px">
-                <input type="text" style="width: 70%;" placeholder="Procurar eventos" />
+                <input type="text" ng-model="vm.events.item.name" style="width: 70%;" placeholder="Procurar eventos" />
                 <button type="button" ng-click="vm.post()" style="margin-top: 12px;" class="btn waves-effect waves-light light-blue darken-2">Criar Evento</button>
             </div>
         </div>
@@ -11,7 +11,7 @@
 
 <div class="row">
     <div class="col offset-l3 offset-m1  l6 m10 s12">
-        <div ng-repeat="item in vm.events track by $index">
+        <div ng-repeat="item in vm.events | filter: vm.events.item.name track by $index">
             <div class="card horizontal">
                 <div class="card-image">
                     <img materialboxed class="materialboxed responsive-img" width="650" height="180px" ng-src="{{item.banner || '../../libs/img/padrao.png' }}">
