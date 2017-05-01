@@ -32,11 +32,11 @@
             <div class="card-content">
                 <span class="card-title activator flow-text center blue-text text-darken-2">Atualizar Eventos</span>
                 <form ng-submit="vm.put()" enctype="multipart/form-data">
-                 <div class="input-field ">
-                        <label class="control-label ">Nome</label>
+                    <div class="input-field col l6 m6 s6">
+                        <label class="control-label">Nome</label>
                         <input type="text" ng-model="vm.event.name" />
                     </div>
-                    <div class="input-field">
+                    <div class="input-field col l6 m6 s6">
                         <select ng-model="vm.event.type" material-select multiple watch>
                             <option value="" disabled selected>Exemplo: Rock</option>
                             <option value="rock">Rock</option>
@@ -45,24 +45,26 @@
                         </select>
                         <label>Tipo de evento</label>
                     </div>
-                    <label for="inputCreated">Data do evento</label>
-                    <input input-date type="text" name="created" id="inputCreated" ng-model="vm.event.dateEvent" container="" format="dd/mm/yyyy"
-                        months-full="{{ vm.date.month }}" months-short="{{ vm.date.monthShort }}" weekdays-full="{{ vm.date.weekdaysFull }}"
-                        weekdays-short="{{ vm.date.weekdaysShort }}" weekdays-letter="{{ vm.date.weekdaysLetter }}" disable="disable"
-                        vm.date.min="{{ vm.date.minDate }}" vm.date.max="{{ vm.date.maxDate }}" vm.date.today="hoje" first-day="1"
-                        vm.date.clear="limpar" vm.date.close="fechar" select-years="15" on-start="vm.onStart()" on-render="vm.onRender()"
-                        on-open="vm.onOpen()" on-close="vm.onClose()" on-set="vm.onSet()" on-stop="vm.onStop()" />
+                    <div class="input-field col l6 m6 s6">
+                        <label for="inputCreated">Data do evento</label>
+                        <input input-date type="text" name="created" id="inputCreated" ng-model="vm.event.dateEvent" container="" format="dd/mm/yyyy"
+                            months-full="{{ vm.date.month }}" months-short="{{ vm.date.monthShort }}" weekdays-full="{{ vm.date.weekdaysFull }}"
+                            weekdays-short="{{ vm.date.weekdaysShort }}" weekdays-letter="{{ vm.date.weekdaysLetter }}" disable="disable"
+                            vm.date.min="{{ vm.date.minDate }}" vm.date.max="{{ vm.date.maxDate }}" vm.date.today="hoje" first-day="1"
+                            vm.date.clear="limpar" vm.date.close="fechar" select-years="15" on-start="vm.onStart()" on-render="vm.onRender()"
+                            on-open="vm.onOpen()" on-close="vm.onClose()" on-set="vm.onSet()" on-stop="vm.onStop()" />
+                    </div>
 
-                    <div class="input-field ">
-                        <label class="control-label ">Artistas</label>
+                    <div class="input-field col l6 m6 s6">
+                        <label class="control-label">Artistas</label>
                         <input type="text" ng-model="vm.event.artists" />
                     </div>
-                    <div class="input-field">
-                        <textarea class="materialize-textarea" ng-model="vm.event.description"></textarea>
-                        <label>descrição do evento</label>
+                    <div class="input-field col l6 m6 s6">
+                        <label class="control-label">descrição do evento</label>
+                        <input type="text" ng-model="vm.event.description" />
                     </div>
-                    <div class="input-field ">
-                        <label class="control-label ">Preço do evento</label>
+                    <div class="input-field col l6 m6 s6">
+                        <label class="control-label">Preço do evento</label>
                         <input type="number" ng-model="vm.event.price" />
                     </div>
 
@@ -74,4 +76,3 @@
         </div>
     </div>
 </div>
-

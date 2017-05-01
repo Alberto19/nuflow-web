@@ -6,7 +6,7 @@ const  Schema = mongoose.Schema;
   let eventSchema = new Schema({
     name: {type: String, require: true},
     type: [{type: String, require: true}],
-    dateEvent:{type: Date, require: true},
+    dateEvent:{type: String, require: true},
     price:{type:Number, require: true},
     description:{type: String, require: true },
     artists:[{type: String}],

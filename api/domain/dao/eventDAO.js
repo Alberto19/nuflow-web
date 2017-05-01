@@ -65,7 +65,7 @@ class EventDAO {
             $set: {
                 name: req.body.event.name,
                 type: req.body.event.type,
-                dateEvent: req.body.event.dataEvent,
+                dateEvent: req.body.event.dateEvent,
                 price: req.body.event.price,
                 description: req.body.event.description,
                 artists: req.body.event.artists,
