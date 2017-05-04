@@ -9,7 +9,7 @@
 
     function Search($http, config) {
         var service = {
-            searchLocations: searchLocations,
+            searchLocations: searchLocations
         };
         return service;
 

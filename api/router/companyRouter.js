@@ -1,11 +1,9 @@
 'use strict'
 let CompanyRouter = require('express').Router();
 let CompanyDAO = require('../domain/dao/companyDAO');
-let authentication = require('../tools/authentication');
 let token = require('../tools/token');
 
-
-CompanyRouter.get('/ProfileCompany', authentication, (req, res) => {
+CompanyRouter.get('/ProfileCompany', (req, res) => {
 	CompanyDAO.find(req).then((result) => {
 		res.status(200).send(result);
 	}).catch((err) => {
@@ -13,7 +11,7 @@ CompanyRouter.get('/ProfileCompany', authentication, (req, res) => {
 	});
 });
 
-CompanyRouter.post('/updateProfileCompany', authentication, (req, res) => {
+CompanyRouter.post('/updateProfileCompany', (req, res) => {
 	CompanyDAO.updateProfile(req).then(() => {
 		res.status(200).send();
 	}).catch((err) => {
@@ -29,8 +27,14 @@ CompanyRouter.post('/createAll', (req, res) => {
 	}).catch((err) => {
 		res.status(500).json("Erro interno");
 	});
-
 });
 
+CompanyRouter.post('/comments', (req, res) => {
+	CompanyDAO.comments(req).then((result) => {
+		res.status(200).send();
+	}).catch((err) => {
+		res.status(err.status).json(err.message);
+	});
+});
 
 module.exports = CompanyRouter;

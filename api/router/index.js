@@ -13,7 +13,7 @@ let navigationRouter = require('./navigationRouter');
 app.use('/auth',authRouter);
 app.use('/user', userRouter);
 app.use('/search',searchRouter);
-app.use('/company',companyRouter);
+app.use('/company',authentication ,companyRouter);
 app.use('/event', authentication, eventRouter);
 app.use('/navigation', authentication, navigationRouter);
 

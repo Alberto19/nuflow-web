@@ -12,6 +12,7 @@
       templateUrl: 'components/html/balada.component.html',
       controller: BaladaController,
       bindings: {
+        id: '=',
         name: '=',
         adress: '=',
         phone: '=',
@@ -26,11 +27,19 @@
       },
     }).directive('starRating', starRating);
 
-  //NavigationController.$inject = ['dependency1'];
-  function BaladaController() {
+  BaladaController.$inject = ['ProfileCompany'];
+  function BaladaController(ProfileCompany) {
     var $ctrl = this;
     $ctrl.isReadonly = true;
     $ctrl.distance = 0;
+    $ctrl.comment = null;
+
+    $ctrl.sendComment = function() {
+      ProfileCompany.sendComment($ctrl.id, $ctrl.comment)
+      .then(result => {
+        console.log(result);
+      });
+    };
 
     // alert($ctrl.locationuser);
     // let lat1 = $ctrl.locationuser[0];

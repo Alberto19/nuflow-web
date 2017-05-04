@@ -11,7 +11,8 @@
         var service = {
             getProfileCompany: getProfileCompany,
             updateProfileCompany: updateProfileCompany,
-            uploadPhoto: uploadPhoto
+            uploadPhoto: uploadPhoto,
+            sendComment: sendComment
         };
 
         return service;
@@ -31,5 +32,10 @@
                 data: { file: photo }
             });
         }
+
+        function sendComment(id, comment){
+            debugger
+            return $http.post(`${config.baseApiUrl}/company/comments`, {id ,comment});
+        };
     }
 })();

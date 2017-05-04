@@ -411,15 +411,6 @@
                 data: { file: photo }
             });
         }
-        // function getProfile(Profile) {
-        //     return $http.get(config.baseApiUrl + '/Profile/edit/' + Profile);
-        // }
-        // function editar(Profile) {
-        //     return $http.post(config.baseApiUrl + '/Profile/editar/', Profile);
-        // }
-        // function deletar(Profile) {
-        //     return $http.post(config.baseApiUrl + '/Profile/delete/' + Profile);
-        // }
     }
 })();
 (function () {
@@ -435,7 +426,8 @@
         var service = {
             getProfileCompany: getProfileCompany,
             updateProfileCompany: updateProfileCompany,
-            uploadPhoto: uploadPhoto
+            uploadPhoto: uploadPhoto,
+            sendComment: sendComment
         };
 
         return service;
@@ -455,6 +447,11 @@
                 data: { file: photo }
             });
         }
+
+        function sendComment(id, comment){
+            debugger
+            return $http.post(`${config.baseApiUrl}/company/comments`, {id ,comment});
+        };
     }
 })();
 (function () {
@@ -468,7 +465,7 @@
 
     function Search($http, config) {
         var service = {
-            searchLocations: searchLocations,
+            searchLocations: searchLocations
         };
         return service;
 
@@ -494,6 +491,7 @@
       templateUrl: 'components/html/balada.component.html',
       controller: BaladaController,
       bindings: {
+        id: '=',
         name: '=',
         adress: '=',
         phone: '=',
@@ -508,11 +506,19 @@
       },
     }).directive('starRating', starRating);
 
-  //NavigationController.$inject = ['dependency1'];
-  function BaladaController() {
+  BaladaController.$inject = ['ProfileCompany'];
+  function BaladaController(ProfileCompany) {
     var $ctrl = this;
     $ctrl.isReadonly = true;
     $ctrl.distance = 0;
+    $ctrl.comment = null;
+
+    $ctrl.sendComment = function() {
+      ProfileCompany.sendComment($ctrl.id, $ctrl.comment)
+      .then(result => {
+        console.log(result);
+      });
+    };
 
     // alert($ctrl.locationuser);
     // let lat1 = $ctrl.locationuser[0];
@@ -661,7 +667,7 @@
     function FeedController($state, Search) {
         var vm = this;
         vm.locations = null;
-        vm.radius = 90000;
+        vm.radius = 900000;
         vm.location = null;
 
         if (navigator.geolocation) {
@@ -847,7 +853,7 @@
 			email: null,
 			photos: null,
 			adress: null,
-			location: null,
+			location: [-23.6159617,-46.66452300000003],
 			rating: null,
 			mapsUrl: null,
 			country: null,

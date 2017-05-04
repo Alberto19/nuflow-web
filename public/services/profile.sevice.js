@@ -32,14 +32,5 @@
                 data: { file: photo }
             });
         }
-        // function getProfile(Profile) {
-        //     return $http.get(config.baseApiUrl + '/Profile/edit/' + Profile);
-        // }
-        // function editar(Profile) {
-        //     return $http.post(config.baseApiUrl + '/Profile/editar/', Profile);
-        // }
-        // function deletar(Profile) {
-        //     return $http.post(config.baseApiUrl + '/Profile/delete/' + Profile);
-        // }
     }
 })();

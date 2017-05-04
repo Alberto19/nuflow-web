@@ -37,6 +37,20 @@ class CompanyDAO {
 		return defer.promise;
 	}
 
+	comments(req) {
+		var defer = q.defer();
+		CompanyModel.update({
+			_id: req.body.id
+		}, {
+			$set: {
+				reviews: req.body.comment
+			}
+		}).then(company => {
+			defer.resolve();
+		})
+		return defer.promise;
+	}
+
 	updateProfile(req) {
 		var defer = q.defer();
 		CompanyModel.findById(req.decoded.id)
