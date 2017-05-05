@@ -1,6 +1,7 @@
 'use strict'
 let q = require('q');
 let CompanyModel = require('../model/companyModel');
+let UserModel = require('../model/userModel');
 let AuthModel = require('../model/authModel');
 
 class CompanyDAO {
@@ -39,15 +40,24 @@ class CompanyDAO {
 
 	comments(req) {
 		var defer = q.defer();
-		CompanyModel.update({
-			_id: req.body.id
-		}, {
-			$set: {
-				reviews: req.body.comment
-			}
-		}).then(company => {
-			defer.resolve();
-		})
+		UserModel.findById({
+			_id: req.decoded.id
+		}).then(user => {
+			let name = user._doc.name;
+			CompanyModel.update({
+				_id: req.body.id
+			}, {
+				$set: {
+					reviews: [{
+						author_name: name,
+						message: req.body.comment,
+						rating: req.body.rating
+					}]
+				}
+			}).then(company => {
+				defer.resolve();
+			});
+		});
 		return defer.promise;
 	}
 

@@ -33,9 +33,10 @@
     $ctrl.isReadonly = true;
     $ctrl.distance = 0;
     $ctrl.comment = null;
+    $ctrl.sendRating = 1;
 
     $ctrl.sendComment = function() {
-      ProfileCompany.sendComment($ctrl.id, $ctrl.comment)
+      ProfileCompany.sendComment($ctrl.id, $ctrl.comment, $ctrl.sendRating)
       .then(result => {
         console.log(result);
       });
@@ -76,7 +77,7 @@
       restrict: 'EA',
       template: `<ul class="star-rating" ng-class="{readonly: readonly}">
           <li ng-repeat="star in stars" class="star" ng-class="{filled: star.filled}" ng-click="toggle($index)">
-            <i class="material-icons">stars</i>
+            <i class="material-icons">star</i>
           </li>
         </ul>`,
       scope: {
@@ -101,7 +102,7 @@
         scope.toggle = function (index) {
           if (scope.readonly == undefined || scope.readonly === false) {
             scope.ratingValue = index + 1;
-            scope.onRatingSelect({
+            scope.onRatingSelect = () =>({
               rating: index + 1
             });
           }

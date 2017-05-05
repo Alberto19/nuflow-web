@@ -22,7 +22,6 @@
         };
 
         function updateProfile(profile) {
-            debugger
             return $http.post(`${config.baseApiUrl}/user/updateProfile`, profile);
         };
 

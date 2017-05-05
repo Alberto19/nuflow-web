@@ -4,9 +4,9 @@
         .module('app')
         .controller('EventEditController', EventEditController);
 
-    EventEditController.$inject = ['$state', 'Events', '$stateParams'];
+    EventEditController.$inject = ['$state', 'Events', '$stateParams', '$timeout'];
 
-    function EventEditController($state, Events, $stateParams) {
+    function EventEditController($state, Events, $stateParams, $timeout) {
         var vm = this;
         vm.event = {
             name: null,
@@ -48,10 +48,8 @@
         getById();
 
         function getById() {
-            debugger
             var eventId = $stateParams.eventId;
             Events.getById(eventId).then(event => {
-                debugger
                 vm.event.name = event.data.name;
                 vm.event.type = event.data.type;
                 vm.event.dateEvent = event.data.dateEvent;
@@ -70,8 +68,9 @@
                 vm.event.file = null;
             }
             Events.put($stateParams.eventId, vm.event).then((result) => {
-                    Materialize.toast(result.message, 3000);
-                    getById();
+                    Materialize.toast('Evento Atualizado com sucesso', 3000);
+                    $timeout($state.go('main.event.list'), 4000);
+                    // getById();
                 },
                 (err) => {
                     Materialize.toast(err.message, 3000);
@@ -84,6 +83,7 @@
                     vm.event.banner = banner.data;
                 });
                 Materialize.toast('Banner Atualizado com sucesso', 3000);
+                $timeout($state.go('main.event.list'), 4000);
             });
         }
     }

@@ -9,10 +9,10 @@
 
     function ProfileCompany($http, config, Upload) {
         var service = {
-            getProfileCompany: getProfileCompany,
-            updateProfileCompany: updateProfileCompany,
-            uploadPhoto: uploadPhoto,
-            sendComment: sendComment
+            getProfileCompany,
+            updateProfileCompany,
+            uploadPhoto,
+            sendComment
         };
 
         return service;
@@ -33,9 +33,8 @@
             });
         }
 
-        function sendComment(id, comment){
-            debugger
-            return $http.post(`${config.baseApiUrl}/company/comments`, {id ,comment});
+        function sendComment(id, comment, rating){
+            return $http.post(`${config.baseApiUrl}/company/comments`, {id, comment, rating});
         };
     }
 })();

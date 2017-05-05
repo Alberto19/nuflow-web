@@ -51,6 +51,26 @@ AuthRouter.get('/photo', authentication, (req, res) => {
 		res.status(err.status).json(err.message);
 	});
 });
+AuthRouter.post('/photoCompany', authentication, (req, res) => {
+	AuthDAO.findPhoto(req.body).then((result) => {
+		if (result === null) {
+			res.status(404).send();
+		}
+		res.status(200).send(result);
+	}).catch((err) => {
+		res.status(err.status).json(err.message);
+	});
+});
 
+AuthRouter.post('/getById', authentication, (req, res) => {
+	AuthDAO.getById(req.body.id).then((result) => {
+		if (result === null) {
+			res.status(404).send();
+		}
+		res.status(200).send(result.picture);
+	}).catch((err) => {
+		res.status(err.status).json(err.message);
+	});
+});
 
 module.exports = AuthRouter;

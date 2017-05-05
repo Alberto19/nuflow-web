@@ -9,10 +9,12 @@
 
     function auth($http, authData, config) {
         var service = {
-            login: login,
-            register: register,
-            getPhoto: getPhoto,
-            logout: logout
+            login,
+            register,
+            getPhoto,
+            getById,
+            getPhotoCompany,
+            logout
         };
 
         return service;
@@ -56,6 +58,23 @@
                 });
         };
 
+         function getById(id) {
+            return $http.post(`${config.baseApiUrl}/auth/getById`, {id})
+                .then((result) => {
+                    return result.data;
+                }, (error) => {
+                    return error;
+                });
+        };
+
+        function getPhotoCompany(id) {
+            return $http.post(`${config.baseApiUrl}/auth/photoCompany`, {id})
+                .then((result) => {
+                    return result.data;
+                }, (error) => {
+                    return error;
+                });
+        };
 
         function logout() {
             authData.clearData();

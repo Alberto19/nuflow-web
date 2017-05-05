@@ -130,5 +130,14 @@ class authDAO {
 			});
 		return defer.promise;
 	}
+
+	getById(id){
+		var defer = q.defer();
+		AuthModel.findById({ _id: id })
+			.then(user => {
+				defer.resolve(user);
+			});
+		return defer.promise;
+	}
 }
 module.exports = new authDAO();

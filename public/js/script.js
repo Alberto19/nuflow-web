@@ -149,10 +149,12 @@
 
     function auth($http, authData, config) {
         var service = {
-            login: login,
-            register: register,
-            getPhoto: getPhoto,
-            logout: logout
+            login,
+            register,
+            getPhoto,
+            getById,
+            getPhotoCompany,
+            logout
         };
 
         return service;
@@ -196,6 +198,23 @@
                 });
         };
 
+         function getById(id) {
+            return $http.post(`${config.baseApiUrl}/auth/getById`, {id})
+                .then((result) => {
+                    return result.data;
+                }, (error) => {
+                    return error;
+                });
+        };
+
+        function getPhotoCompany(id) {
+            return $http.post(`${config.baseApiUrl}/auth/photoCompany`, {id})
+                .then((result) => {
+                    return result.data;
+                }, (error) => {
+                    return error;
+                });
+        };
 
         function logout() {
             authData.clearData();
@@ -401,7 +420,6 @@
         };
 
         function updateProfile(profile) {
-            debugger
             return $http.post(`${config.baseApiUrl}/user/updateProfile`, profile);
         };
 
@@ -424,10 +442,10 @@
 
     function ProfileCompany($http, config, Upload) {
         var service = {
-            getProfileCompany: getProfileCompany,
-            updateProfileCompany: updateProfileCompany,
-            uploadPhoto: uploadPhoto,
-            sendComment: sendComment
+            getProfileCompany,
+            updateProfileCompany,
+            uploadPhoto,
+            sendComment
         };
 
         return service;
@@ -448,9 +466,8 @@
             });
         }
 
-        function sendComment(id, comment){
-            debugger
-            return $http.post(`${config.baseApiUrl}/company/comments`, {id ,comment});
+        function sendComment(id, comment, rating){
+            return $http.post(`${config.baseApiUrl}/company/comments`, {id, comment, rating});
         };
     }
 })();
@@ -512,9 +529,10 @@
     $ctrl.isReadonly = true;
     $ctrl.distance = 0;
     $ctrl.comment = null;
+    $ctrl.sendRating = 1;
 
     $ctrl.sendComment = function() {
-      ProfileCompany.sendComment($ctrl.id, $ctrl.comment)
+      ProfileCompany.sendComment($ctrl.id, $ctrl.comment, $ctrl.sendRating)
       .then(result => {
         console.log(result);
       });
@@ -555,7 +573,7 @@
       restrict: 'EA',
       template: `<ul class="star-rating" ng-class="{readonly: readonly}">
           <li ng-repeat="star in stars" class="star" ng-class="{filled: star.filled}" ng-click="toggle($index)">
-            <i class="material-icons">stars</i>
+            <i class="material-icons">star</i>
           </li>
         </ul>`,
       scope: {
@@ -580,7 +598,7 @@
         scope.toggle = function (index) {
           if (scope.readonly == undefined || scope.readonly === false) {
             scope.ratingValue = index + 1;
-            scope.onRatingSelect({
+            scope.onRatingSelect = () =>({
               rating: index + 1
             });
           }
@@ -662,9 +680,9 @@
         .module('app')
         .controller('FeedController', FeedController);
 
-    FeedController.$inject = ['$state', 'Search'];
+    FeedController.$inject = ['$state', 'Search', 'auth', '$q'];
 
-    function FeedController($state, Search) {
+    function FeedController($state, Search, auth, $q) {
         var vm = this;
         vm.locations = null;
         vm.radius = 900000;
@@ -679,17 +697,45 @@
                     let find = {
                         location: vm.location,
                         radius: vm.radius,
-                        keyword: 'C'
+                        keyword: ''
                     };
-                    Search.searchLocations(find).then(
-                        (result) => {
-                            console.log(result);
-                            vm.locations = result.data;
-                        },
-                        () => {
+                    Search.searchLocations(find)
+                        .then((result) => {
+                            return getPhotoCompany(result.data);
+                        })
+                        .then(data => {
+                            vm.locations = data;
+                        });
+                function getPhotoCompany(companies){
+                    var defer = $q.defer();
+                        companies.map(company => {
+                            auth.getPhotoCompany(company._id)
+                                .then(picture => {
+                                    company.photos[0] = picture
+                                });
+                                defer.resolve(companies);
+                        });
+                    return defer.promise;
+                } 
 
-                        }
-                    );
+        function getAll() {
+            Events.getAll().then(events => {
+               return getBanners(events.data);
+            }).then(dataEvents => vm.events = dataEvents);
+        };
+
+        function getBanners(dataEvents) {
+            var defer = $q.defer();
+            dataEvents.map(event => {
+                Events.getBanner(event.banner).then(banner => {
+                    event.banner = banner.data;
+                });
+                defer.resolve(dataEvents);
+            });
+            return defer.promise;
+        };
+
+
                 });
         } else {
             alert("Geolocation is not supported by this browser.");
@@ -1056,9 +1102,9 @@
         .module('app')
         .controller('EventController', EventController);
 
-    EventController.$inject = ['$state', 'Events'];
+    EventController.$inject = ['$state', 'Events', '$timeout'];
 
-    function EventController($state, Events) {
+    function EventController($state, Events, $timeout) {
         var vm = this;
         vm.event = {
             name: null,
@@ -1114,6 +1160,7 @@
         function uploadBanner() {
             Events.uploadBanner(vm.event.id, vm.event.file).then(() => {
                 Materialize.toast('Banner Enviado com sucesso', 3000);
+                $timeout($state.go('main.event.list'), 4000);
             });
         }
     }
@@ -1124,9 +1171,9 @@
         .module('app')
         .controller('EventEditController', EventEditController);
 
-    EventEditController.$inject = ['$state', 'Events', '$stateParams'];
+    EventEditController.$inject = ['$state', 'Events', '$stateParams', '$timeout'];
 
-    function EventEditController($state, Events, $stateParams) {
+    function EventEditController($state, Events, $stateParams, $timeout) {
         var vm = this;
         vm.event = {
             name: null,
@@ -1168,10 +1215,8 @@
         getById();
 
         function getById() {
-            debugger
             var eventId = $stateParams.eventId;
             Events.getById(eventId).then(event => {
-                debugger
                 vm.event.name = event.data.name;
                 vm.event.type = event.data.type;
                 vm.event.dateEvent = event.data.dateEvent;
@@ -1190,8 +1235,9 @@
                 vm.event.file = null;
             }
             Events.put($stateParams.eventId, vm.event).then((result) => {
-                    Materialize.toast(result.message, 3000);
-                    getById();
+                    Materialize.toast('Evento Atualizado com sucesso', 3000);
+                    $timeout($state.go('main.event.list'), 4000);
+                    // getById();
                 },
                 (err) => {
                     Materialize.toast(err.message, 3000);
@@ -1204,6 +1250,7 @@
                     vm.event.banner = banner.data;
                 });
                 Materialize.toast('Banner Atualizado com sucesso', 3000);
+                $timeout($state.go('main.event.list'), 4000);
             });
         }
     }

@@ -4,9 +4,9 @@
         .module('app')
         .controller('EventController', EventController);
 
-    EventController.$inject = ['$state', 'Events'];
+    EventController.$inject = ['$state', 'Events', '$timeout'];
 
-    function EventController($state, Events) {
+    function EventController($state, Events, $timeout) {
         var vm = this;
         vm.event = {
             name: null,
@@ -62,6 +62,7 @@
         function uploadBanner() {
             Events.uploadBanner(vm.event.id, vm.event.file).then(() => {
                 Materialize.toast('Banner Enviado com sucesso', 3000);
+                $timeout($state.go('main.event.list'), 4000);
             });
         }
     }
