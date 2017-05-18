@@ -1,6 +1,6 @@
 @import '../../../bower_components/materialize/sass/materialize';
 @import '../../../bower_components/material-design-icons/iconfont/material-icons.css';
-
+@import '../../../bower_components/angular-material/angular-material.scss';
 
  html {
     font-family: GillSans, Calibri, Trebuchet, sans-serif;
@@ -39,3 +39,33 @@
   background-color: #0288d1;
   color: white;
 }
+
+
+@media  screen and (max-width: 1200px) {
+  .image-responsive {
+    height: 200px;
+    width: 100%;
+    display: flex;
+    flex: 0 0 100%;
+  }
+}
+
+@media screen and (max-width: 1000px) {
+  .image-responsive {
+    height: 150px;
+    width: 100%;
+    display: flex;
+    flex: 0 0 100%;
+  }
+}
+
+
+
+// @media only screen and (min-width: 600px) {
+//   .image-responsive {
+//     height: 100px;
+//     width: 50%;
+//     display: flex;
+//     flex: 0 0 100%;
+//   }
+// }

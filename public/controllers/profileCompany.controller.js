@@ -14,7 +14,7 @@
 			email: null,
 			photos: null,
 			adress: null,
-			location: [-23.6159617,-46.66452300000003],
+			location: [-23.5868979,-46.9796286],
 			rating: null,
 			mapsUrl: null,
 			country: null,

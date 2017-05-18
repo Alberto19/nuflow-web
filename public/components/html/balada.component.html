@@ -1,22 +1,17 @@
-<div class="card horizontal">
-	<div class="card-image" style="width: 250px; height: 270px;">
-		<img materialboxed style="width: 250px; height: 270px;" class="materialboxed responsive-img" ng-src="{{$ctrl.photos[0] || '../../libs/img/location.jpg' }}">
+<div class="card row">
+	<div class="col l7 s7 m7">
+		<img class="image-responsive"  ng-src="{{$ctrl.photos[0] || '../../libs/img/location.jpg' }}">
 	</div>
-	<div class="card-stacked">
-		<div class="card-content">
-			<span class="card-title light-blue-text">{{$ctrl.name}}</span>
-			<p>{{$ctrl.mapsUrl}}</p>
-			<p style="font-family: monospace;"><span style="font-size: larger;font-family: monospace;">Endereço:</span> {{$ctrl.adress}}</p>
-			<p style="font-family: monospace;"><span style="font-size: larger;font-family: monospace;">Telefone:</span> {{$ctrl.phone}}</p>
-			<p style="font-family: monospace;"><span style="font-size: larger;font-family: monospace;">Site:</span> {{$ctrl.site}}</p>
-			<p style="font-family: monospace;"><span style="font-size: larger;font-family: monospace;">Distância:</span> {{$ctrl.distance}} KM</p>
-			<p star-rating ng-model="$ctrl.rating" max="5"></p>
-		</div>
-		<div class="card-action">
-			<a ng-href="{{$ctrl.mapsUrl}}"> <i class="material-icons">maps</i></a>
-			<a data-target='demoModal' modal><i class=" material-icons">comment</i></a>
-
-		</div>
+	<div class="card-content">
+		<span class="card-title light-blue-text">{{$ctrl.name}}</span>
+		<p>{{$ctrl.mapsUrl}}</p>
+		<p><span>Endereço:</span> {{$ctrl.adress}}</p>
+		<p><span>Telefone:</span> {{$ctrl.phone}}</p>
+		<p><span>Site:</span> {{$ctrl.site}}</p>
+		<p><span>Distância:</span> {{$ctrl.distance}} KM</p>
+		<p star-rating ng-model="$ctrl.rating" max="5"></p>
+		<a data-target='demoModal' modal><i class=" material-icons">comment</i></a>
+		<a ng-href="{{$ctrl.mapsUrl}}"> <i class="material-icons">maps</i></a>
 	</div>
 </div>
 

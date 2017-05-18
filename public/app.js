@@ -6,7 +6,8 @@
         'ui.router',
         'ngResource',
         'satellizer',
-        'ngFileUpload'
+        'ngFileUpload',
+        'ngMaterial'
         ])
         .config(['$httpProvider',($httpProvider)=>{
             // Add http interceptors

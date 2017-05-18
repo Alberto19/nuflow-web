@@ -47,12 +47,12 @@ class CompanyDAO {
 			CompanyModel.update({
 				_id: req.body.id
 			}, {
-				$set: {
-					reviews: [{
+				$push: {
+					reviews: {
 						author_name: name,
 						message: req.body.comment,
 						rating: req.body.rating
-					}]
+					}
 				}
 			}).then(company => {
 				defer.resolve();
