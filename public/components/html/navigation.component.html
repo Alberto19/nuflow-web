@@ -52,15 +52,15 @@
 	</li>
 	<li>
 		<div>
-			<a ui-sref="top" class=" btn-large  waves-effect waves-light light-blue darken-2 ">
-				<i class="material-icons left">grade</i> Favoritos
+			<a ng-click="$ctrl.path()" class=" btn-large  waves-effect waves-light light-blue darken-2 ">
+				<i class="material-icons left">grade</i> {{$ctrl.nav.button}}
 			</a>
 		</div>
 	</li>
 	<li>
 		<div>
-			<a ui-sref="main.profile" class=" btn-large  waves-effect waves-light light-blue darken-2 ">
-				<i class="material-icons left">person</i> Profile
+			<a ng-click="$ctrl.profile()" class=" btn-large  waves-effect waves-light light-blue darken-2 ">
+				<i class="material-icons left">person</i> Perfil
 			</a>
 		</div>
 	</li>

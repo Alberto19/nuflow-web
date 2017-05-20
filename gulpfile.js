@@ -61,7 +61,7 @@ gulp.task('js', function(cb) {
             'public/config/*.js',
             'public/services/*.js',
             'public/components/js/*.js',
-            'public/controllers/**/*.js'
+            'public/controllers/*.js'
         ]),
         concat('script.js'),
         sourcemaps.init(),

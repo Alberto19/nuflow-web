@@ -7,7 +7,8 @@
         'ngResource',
         'satellizer',
         'ngFileUpload',
-        'ngMaterial'
+        'ngMaterial',
+        'ngAnimate'
         ])
         .config(['$httpProvider',($httpProvider)=>{
             // Add http interceptors
