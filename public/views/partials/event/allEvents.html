@@ -12,32 +12,30 @@
 <div class="row">
     <div class="col offset-l2 offset-m1  l7 m10 s12">
         <div ng-repeat="item in vm.events | filter: vm.events.item.name track by $index">
-            <div class="card horizontal">
-                <div class="card-image">
-                    <img materialboxed class="materialboxed responsive-img" width="650" height="180px" ng-src="{{item.banner || '../../libs/img/padrao.png' }}">
+            <div class="card row animated zoomIn">
+                <div class="col l6 s7 m6" style="padding: 0px 0px ">
+                    <img class="image-responsive" ng-src="{{item.banner || '../../libs/img/location.jpg' }}">
                 </div>
-                <div class="card-stacked">
-                    <div class="card-content" style="padding: 0">
-                        <div class="col l8 m10 s12">
-                            <span class="card-title light-blue-text">{{item.name}}</span>
-                            <p>Tipo de Evento:
-                                <span ng-repeat="type in item.type">
-                                {{type}}
-                            </span>
-                            </p>
-                            <p>Data do evento: {{item.dateEvent}}</p>
-                            <p>Descrição: {{item.description}}</p>
-                            <p>Artistas:
-                                <span ng-repeat="artist in item.artists">
-                                {{artist}}
-                            </span>
-                            </p>
-                        </div>
-                        <div class="col l4" style="display:block;padding: 0px;padding-top: 42px;">
-                            <a class="eventButton" ui-sref="main.event.edit({ eventId: '{{item._id}}' })">Editar</a>
-                            <a class="eventButton" ui-sref="main.event.delete({ eventId: '{{item._id}}' })">Deletar</a>
-                        </div>
+                <div class="card-content col l6 s5 m6" style="padding: 0px">
+                    <P class="event-title">{{item.name}}</P>
+                    <div class="event-content">   
+                        <p>Tipos de Evento:
+                            <span style="color: blue" ng-repeat="type in item.type">
+                            {{type}}
+                        </span>
+                        </p>
+                        <p>Data: {{item.dateEvent}}</p>
+                        <p class="event-none">Descrição: {{item.description}}</p>
+                        <p class="event-none">Artistas:
+                            <span style="color: blue" ng-repeat="artist in item.artists">
+                                    {{artist}}
+                                </span>
+                        </p>
                     </div>
+                <div style="display:block;padding: 0px;">
+                    <a class="eventButton col l6 s6 m6" ui-sref="main.event.edit({ eventId: '{{item._id}}' })">Editar</a>
+                    <a class="eventButton col l6 s6 m6" ui-sref="main.event.delete({ eventId: '{{item._id}}' })">Deletar</a>
+                </div>
                 </div>
             </div>
         </div>

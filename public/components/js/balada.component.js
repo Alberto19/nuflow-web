@@ -1,11 +1,6 @@
 (function () {
   'use strict';
 
-  // Usage:
-  // 
-  // Creates:
-  // 
-
   angular
     .module('app')
     .component('balada', {
@@ -42,13 +37,6 @@
         console.log(result);
       });
     };
-
-    // alert($ctrl.locationuser);
-    // let lat1 = $ctrl.locationuser[0];
-    // let lon1 = $ctrl.locationuser[1];
-    // let lat2 = $ctrl.location[0];
-    // let lon2 = $ctrl.location[1];
-    
 
     function distancia() {
       var R = 6371;

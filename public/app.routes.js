@@ -47,6 +47,11 @@
                     controller: 'FeedController as vm',
                     templateUrl: 'views/partials/feed.html',
                 })
+                .state('main.feed.place', {
+                    url: '/place/:placeId',
+                    controller: 'FeedPlaceController as vm',
+                    templateUrl: 'views/partials/feedPlace.html',
+                })
                 //Rota perfil usuario
                 .state('main.profile', {
                     url: '/profile',

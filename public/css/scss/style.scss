@@ -19,7 +19,7 @@
     list-style-type: none;
     display: inline-block;
     cursor: pointer;
-
+     
     &.filled {
       color: #fd0;
     }
@@ -34,7 +34,7 @@
 .eventButton {
   text-align: center;
   display: block;
-  font-size: 20px;
+  font-size: 12px;
   border: solid beige;
   background-color: #0288d1;
   color: white;
@@ -49,6 +49,12 @@
   display: block;
   text-align: center;
 }
+
+.event-title {
+  text-align: center;
+  font-size: 30px;
+}
+
 @media  screen and (max-width: 1700px) {
   .image-responsive {
     height: 200px;
@@ -72,7 +78,10 @@
   .icon-balada-bottom {
     padding: 0px 10px;
   }
- 
+  .event-content {
+    text-align: center;
+    height: 130px;
+  }
 }
 
 @media screen and (max-width: 1000px) {
@@ -100,6 +109,13 @@
   .card-description {
     display: none
   }
+  .event-content {
+    text-align: center;
+    height: 80px;
+  }
+   .event-none {
+    display: none
+  }
 }
 
 @media screen and (max-width: 500px) {
@@ -122,13 +138,15 @@
   .card-description {
     display: none
   }
-}
+  .event-none {
+    display: none
+  }
 
-// @media only screen and (min-width: 600px) {
-//   .image-responsive {
-//     height: 100px;
-//     width: 50%;
-//     display: flex;
-//     flex: 0 0 100%;
-//   }
-// }
+  .star {
+     i {
+        &.material-icons {
+          font-size: 16px;
+        }
+      }
+  }
+}

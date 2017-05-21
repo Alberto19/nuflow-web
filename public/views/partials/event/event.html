@@ -5,8 +5,8 @@
                 <span class="card-title activator flow-text center blue-text text-darken-2">Eventos</span>
                 <form ng-submit="vm.post()" enctype="multipart/form-data">
                     <div class="input-field col l6 m6 s6">
-                        <label class="control-label ">Nome</label>
-                        <input type="text" ng-model="vm.event.name" />
+                        <label for="name" class="control-label ">Nome</label>
+                        <input id="name" type="text" ng-model="vm.event.name" />
                     </div>
                     <div class="input-field col l6 m6 s6">
                         <select ng-model="vm.event.type" material-select multiple watch>
@@ -14,6 +14,11 @@
                             <option value="rock">Rock</option>
                             <option value="pop">Pop</option>
                             <option value="funk">Funk</option>
+                            <option value="Electronica">Electronica</option>
+                            <option value="MPB">MPB</option>
+                            <option value="Jazz">Jazz</option>
+                            <option value="Rap">Rap</option>
+                            <option value="Hip hop">Hip hop</option>
                         </select>
                         <label>Tipo de evento</label>
                     </div>
@@ -27,16 +32,16 @@
                             on-open="vm.onOpen()" on-close="vm.onClose()" on-set="vm.onSet()" on-stop="vm.onStop()" />
                     </div>
                     <div class="input-field col l6 m6 s6">
-                        <label class="control-label">Artistas</label>
-                        <input type="text" ng-model="vm.event.artists" />
+                        <label for="artists" class="control-label">Artistas</label>
+                        <input id="artists" type="text" ng-model="vm.event.artists" />
                     </div>
                     <div class="input-field col l6 m6 s6">
-                        <label class="control-label">descrição do evento</label>
-                        <input type="text" ng-model="vm.event.description" />
+                        <label for="description" class="control-label">descrição do evento</label>
+                        <input id="description" type="text" ng-model="vm.event.description" maxlength="105" />
                     </div>
                     <div class="input-field col l6 m6 s6">
-                        <label class="control-label ">Preço do evento</label>
-                        <input type="number" ng-model="vm.event.price" />
+                        <label for="price" class="control-label ">Preço do evento</label>
+                        <input id="price" type="number" ng-model="vm.event.price" />
                     </div>
 
                     <div class="center">

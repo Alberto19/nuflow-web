@@ -14,28 +14,33 @@
               <button data-target='photoModal' modal class="btn waves-effect waves-light light-blue darken-2">Atualizar foto</button>
             </div>
           </div>
-          <div class="input-field ">
+          <div class="input-field col l6 m6 s6 ">
             <label for="email" class="control-label">Email</label>
             <input id="email "type="text" style="color: black" ng-disabled="true" ng-model="vm.user.email" />
           </div>
-          <div class="input-field ">
+          <div class="input-field col l6 m6 s6">
             <label for="genre" class="control-label">Sexo</label>
             <input id="genre" type="text" ng-disabled="true" ng-model="vm.user.genre" />
           </div>
-          <div class="input-field ">
+          <div class="input-field col l6 m6 s6">
             <label for="name" class="control-label">Nome</label>
             <input id="name" type="text" ng-model="vm.user.name" />
           </div>
-          <div class="input-field ">
+          <div class="input-field col l6 m6 s6">
             <label for="age" class="control-label">Idade</label>
             <input id="age" type="number" ng-model="vm.user.age" />
           </div>
-          <div input-field>
+          <div class="input-field col l12 m12 s12">
             <select ng-model="vm.user.preference" material-select multiple watch>
                 <option value="" disabled selected>Exemplo: Rock</option>
                 <option value="rock">Rock</option>
                 <option value="pop">Pop</option>
                 <option value="funk">Funk</option>
+                <option value="Electronica">Electronica</option>
+                <option value="MPB">MPB</option>
+                <option value="Jazz">Jazz</option>
+                <option value="Rap">Rap</option>
+                <option value="Hip hop">Hip hop</option>
             </select>
             <label>Gostos Musicais</label>
           </div>
