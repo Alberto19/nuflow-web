@@ -38,7 +38,7 @@
                 // Home routes
                 .state('main', {
                     abstract: true,
-                    url: '',
+                    url: '^',
                     controller: 'LayoutController as vm',
                     templateUrl: 'views/layouts/main.html',
                 })
@@ -47,8 +47,8 @@
                     controller: 'FeedController as vm',
                     templateUrl: 'views/partials/feed.html',
                 })
-                .state('main.feed.place', {
-                    url: '/place/:placeId',
+                .state('main.place', {
+                    url: '/:placeId',
                     controller: 'FeedPlaceController as vm',
                     templateUrl: 'views/partials/feedPlace.html',
                 })

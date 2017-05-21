@@ -26,6 +26,18 @@ class SearchDAO {
 			});
 		return defer.promise;
 	}
+
+	findById(id) {
+        var defer = q.defer();
+        CompanyModel.findById({
+            _id: id
+        }).then(company => {
+            defer.resolve(company);
+        }).catch(error => {
+            defer.reject(error);
+        })
+        return defer.promise;
+    };
 }
 
 module.exports = new SearchDAO();

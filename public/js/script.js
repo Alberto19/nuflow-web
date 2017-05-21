@@ -76,7 +76,7 @@
                 // Home routes
                 .state('main', {
                     abstract: true,
-                    url: '',
+                    url: '^',
                     controller: 'LayoutController as vm',
                     templateUrl: 'views/layouts/main.html',
                 })
@@ -85,8 +85,8 @@
                     controller: 'FeedController as vm',
                     templateUrl: 'views/partials/feed.html',
                 })
-                .state('main.feed.place', {
-                    url: '/place/:placeId',
+                .state('main.place', {
+                    url: '/:placeId',
                     controller: 'FeedPlaceController as vm',
                     templateUrl: 'views/partials/feedPlace.html',
                 })
@@ -488,15 +488,20 @@
 
     function Search($http, config) {
         var service = {
-            searchLocations: searchLocations
+            searchLocations: searchLocations,
+            getById: getById
         };
         return service;
 
         ////////////////
 
         function searchLocations(location){
-            return $http.post(config.baseApiUrl + '/search/places', location);
+            return $http.post(`${config.baseApiUrl}/search/places`, location);
         };
+
+        function getById(placeId) {
+            return $http.get(`${config.baseApiUrl}/search/places/${placeId}`);
+        }
     }
 })();
 
@@ -928,9 +933,57 @@
                         });
                     return defer.promise;
                 } 
+    });
+    }
+    }
+})(jQuery);
+(function ($) {
+    'use strict';
 
-        function getAll() {
+    angular
+        .module('app')
+        .controller('FeedPlaceController', FeedPlaceController);
+
+    FeedPlaceController.$inject = ['$stateParams', 'Search', 'auth', '$q', 'Events'];
+
+    function FeedPlaceController($stateParams, Search, auth, $q, Events) {
+        var vm = this;
+        vm.place = null;
+        vm.events = null;
+
+        getById();
+
+        function getById() {
+            var placeId = $stateParams.placeId;
+            Search.getById(placeId)
+              .then(place => {
+                return getPhotoCompany(place.data);
+            })
+            .then(data => {
+                if (data.days.length === 7) {
+                    location.days = ['domingo à domingo'];
+                }
+                vm.place = data;
+                getAllEvents();
+            });
+        
+        };
+
+         function getPhotoCompany(company) {
+            var defer = $q.defer();
+            auth.getPhotoCompany(company._id)
+                .then(picture => {
+                    company.photos[0] = picture;
+                    defer.resolve(company);
+                });
+            return defer.promise;
+        }
+
+
+        function getAllEvents() {
+            debugger
             Events.getAll().then(events => {
+                debugger
                return getBanners(events.data);
             }).then(dataEvents => vm.events = dataEvents);
         };
@@ -945,8 +998,7 @@
             });
             return defer.promise;
         };
-    });
-    }
+
     }
 })(jQuery);
 (function () {

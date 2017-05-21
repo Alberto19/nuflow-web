@@ -9,14 +9,19 @@
 
     function Search($http, config) {
         var service = {
-            searchLocations: searchLocations
+            searchLocations: searchLocations,
+            getById: getById
         };
         return service;
 
         ////////////////
 
         function searchLocations(location){
-            return $http.post(config.baseApiUrl + '/search/places', location);
+            return $http.post(`${config.baseApiUrl}/search/places`, location);
         };
+
+        function getById(placeId) {
+            return $http.get(`${config.baseApiUrl}/search/places/${placeId}`);
+        }
     }
 })();

@@ -16,5 +16,20 @@ SearchRouter.post('/places', (req, res) => {
 		})
 });
 
+SearchRouter.get('/places/:placeId', (req, res) => {
+	searchDAO.findById(req.params.placeId).then((result) => {
+		if (result === null) {
+			res.status(404).send({
+				message: 'local não Encontrado'
+			});
+		}
+		res.status(200).send(result);
+	}).catch((err) => {
+		res.status(500).json({
+			message: 'Erro ao buscar local'
+		});
+	});
+});
+
 module.exports = SearchRouter;
 

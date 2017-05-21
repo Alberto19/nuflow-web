@@ -1,0 +1,64 @@
+(function ($) {
+    'use strict';
+
+    angular
+        .module('app')
+        .controller('FeedPlaceController', FeedPlaceController);
+
+    FeedPlaceController.$inject = ['$stateParams', 'Search', 'auth', '$q', 'Events'];
+
+    function FeedPlaceController($stateParams, Search, auth, $q, Events) {
+        var vm = this;
+        vm.place = null;
+        vm.events = null;
+
+        getById();
+
+        function getById() {
+            var placeId = $stateParams.placeId;
+            Search.getById(placeId)
+              .then(place => {
+                return getPhotoCompany(place.data);
+            })
+            .then(data => {
+                if (data.days.length === 7) {
+                    location.days = ['domingo à domingo'];
+                }
+                vm.place = data;
+                getAllEvents();
+            });
+        
+        };
+
+         function getPhotoCompany(company) {
+            var defer = $q.defer();
+            auth.getPhotoCompany(company._id)
+                .then(picture => {
+                    company.photos[0] = picture;
+                    defer.resolve(company);
+                });
+            return defer.promise;
+        }
+
+
+        function getAllEvents() {
+            debugger
+            Events.getAll().then(events => {
+                debugger
+               return getBanners(events.data);
+            }).then(dataEvents => vm.events = dataEvents);
+        };
+
+        function getBanners(dataEvents) {
+            var defer = $q.defer();
+            dataEvents.map(event => {
+                Events.getBanner(event.banner).then(banner => {
+                    event.banner = banner.data;
+                });
+                defer.resolve(dataEvents);
+            });
+            return defer.promise;
+        };
+
+    }
+})(jQuery);
