@@ -24,6 +24,7 @@
         photos: '=',
         locationuser: '=',
         location: '=',
+        description: '=',
       },
     }).directive('starRating', starRating);
 

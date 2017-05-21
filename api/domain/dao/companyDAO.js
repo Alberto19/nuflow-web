@@ -31,6 +31,7 @@ class CompanyDAO {
 						company.uf = user._doc.uf;
 						company.country = user._doc.country;
 						company.drinkPrice = user._doc.drinkPrice;
+						company.description = user._doc.description
 					}
 					defer.resolve(company);
 				});
@@ -80,13 +81,14 @@ class CompanyDAO {
 							adress: req.body.adress,
 							phone: req.body.phone,
 							location: req.body.location,
-							rating: req.body.rating,
+							rating: 1,
 							site: req.body.site,
 							days: req.body.days,
 							mapsUrl: req.body.mapsUrl,
 							uf: req.body.uf,
 							country: req.body.country,
 							drinkPrice: req.body.drinkPrice,
+							description: req.body.description
 						});
 
 						saveCompany
@@ -112,7 +114,8 @@ class CompanyDAO {
 							mapsUrl: req.body.mapsUrl,
 							uf: req.body.uf,
 							country: req.body.country,
-							drinkPrice: req.body.drinkPrice
+							drinkPrice: req.body.drinkPrice,
+							description: req.body.description
 						}
 					}).then(company => {
 						defer.resolve();

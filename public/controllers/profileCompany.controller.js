@@ -26,6 +26,7 @@
 			site: null,
 			file: null,
 			picture: null,
+			description: null,
 		};
 
 		vm.uf = ['AC', 'AL', 'AP', 'AM', 'BA', 'CE', 'DF', 'ES', 'GO', 'MA', 'MT', 'MS', 'MG', 'PA',
@@ -52,6 +53,7 @@
 				vm.company.days = company.data.days;
 				vm.company.drinkPrice = company.data.drinkPrice;
 				vm.company.site = company.data.site;
+				vm.company.description = company.data.description;
 
 				auth.getPhoto().then(photo => {
 					if (photo.status != 404) {

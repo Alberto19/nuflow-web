@@ -21,7 +21,6 @@
 
         ////////////////
         function login(auth) {
-            debugger
             return $http.post(`${config.baseApiUrl}/auth/login`, auth)
                 .then(result => {
                         var loginData = result.data;

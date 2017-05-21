@@ -1,17 +1,24 @@
 <div class="card row animated zoomIn">
-	<div class="col l6 s7 m7" style="padding: 0px 0px ">
+	<div class="col l6 s7 m6" style="padding: 0px 0px ">
 		<img class="image-responsive"  ng-src="{{$ctrl.photos[0] || '../../libs/img/location.jpg' }}">
 	</div>
-	<div class="card-content" style="padding: 0px">
-		<span class="card-title light-blue-text">{{$ctrl.name}}</span>
-		<p>{{$ctrl.mapsUrl}}</p>
-		<p><span>Endereço:</span> {{$ctrl.adress}}</p>
-		<p><span>Telefone:</span> {{$ctrl.phone}}</p>
-		<p><span>Site:</span> {{$ctrl.site}}</p>
-		<p><span>Distância:</span> {{$ctrl.distance}} KM</p>
-		<p star-rating ng-model="$ctrl.rating" max="5"></p>
-		<a data-target='demoModal' modal><i class=" material-icons">comment</i></a>
-		<a ng-href="{{$ctrl.mapsUrl}}"> <i class="material-icons">maps</i></a>
+	<div class="card-content col l6 s5 m6" style="padding: 0px">
+		<div>	
+			<p class="title-card">{{$ctrl.name}}</p>
+		</div>
+		<div class="card-balada">
+			<p class="card-description">{{$ctrl.description}}</p>
+		</div>
+		<div class="card-balada-bottom">	
+			Aberto de:<span style="color: blue" ng-repeat="day in $ctrl.days">
+				{{day}}
+			</span>à apenas: {{$ctrl.distance}} KM
+			<p class="start-hidden" star-rating ng-model="$ctrl.rating" max="5"></p>
+			<a class="icon-balada-bottom" tooltipped data-position="right" data-delay="550" data-tooltip="{{$ctrl.phone}}"><i class="material-icons">phone</i></a>
+			<a class="icon-balada-bottom" data-target='demoModal' modal><i class=" material-icons">comment</i></a>
+			<a class="icon-balada-bottom" ng-href="{{$ctrl.mapsUrl}}"> <i class="material-icons">place</i></a>
+			<a class="icon-balada-bottom" ng-href="{{$ctrl.site}}"> <i class="material-icons">public</i></a>
+		</div>
 	</div>
 </div>
 

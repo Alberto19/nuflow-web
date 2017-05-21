@@ -162,7 +162,6 @@
 
         ////////////////
         function login(auth) {
-            debugger
             return $http.post(`${config.baseApiUrl}/auth/login`, auth)
                 .then(result => {
                         var loginData = result.data;
@@ -522,6 +521,7 @@
         photos: '=',
         locationuser: '=',
         location: '=',
+        description: '=',
       },
     }).directive('starRating', starRating);
 
@@ -917,6 +917,11 @@
                         return getPhotoCompany(result.data);
                     })
                     .then(data => {
+                        data.map(location => {
+                            if(location.days.length === 7) {
+                                location.days = ['domingo à domingo'];
+                            }
+                        })
                         vm.locations = data;
                     });
                 function getPhotoCompany(companies){
@@ -1118,6 +1123,7 @@
 			site: null,
 			file: null,
 			picture: null,
+			description: null,
 		};
 
 		vm.uf = ['AC', 'AL', 'AP', 'AM', 'BA', 'CE', 'DF', 'ES', 'GO', 'MA', 'MT', 'MS', 'MG', 'PA',
@@ -1144,6 +1150,7 @@
 				vm.company.days = company.data.days;
 				vm.company.drinkPrice = company.data.drinkPrice;
 				vm.company.site = company.data.site;
+				vm.company.description = company.data.description;
 
 				auth.getPhoto().then(photo => {
 					if (photo.status != 404) {

@@ -39,6 +39,11 @@
                         return getPhotoCompany(result.data);
                     })
                     .then(data => {
+                        data.map(location => {
+                            if(location.days.length === 7) {
+                                location.days = ['domingo à domingo'];
+                            }
+                        })
                         vm.locations = data;
                     });
                 function getPhotoCompany(companies){
