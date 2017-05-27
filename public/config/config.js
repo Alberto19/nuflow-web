@@ -7,7 +7,7 @@
 
     function config() {
         return {
-            baseApiUrl: "http://localhost:3003/api"
+            baseApiUrl: "http://localhost:3000/api"
         };
     }
 })();
