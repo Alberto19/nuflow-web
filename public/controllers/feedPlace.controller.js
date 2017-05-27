@@ -22,7 +22,7 @@
             })
             .then(data => {
                 if (data.days.length === 7) {
-                    location.days = ['domingo à domingo'];
+                    data.days = ['domingo à domingo'];
                 }
                 vm.place = data;
                 getAllEvents();
@@ -42,9 +42,7 @@
 
 
         function getAllEvents() {
-            debugger
             Events.getAll().then(events => {
-                debugger
                return getBanners(events.data);
             }).then(dataEvents => vm.events = dataEvents);
         };

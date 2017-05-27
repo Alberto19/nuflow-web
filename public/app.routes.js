@@ -48,7 +48,7 @@
                     templateUrl: 'views/partials/feed.html',
                 })
                 .state('main.place', {
-                    url: '/:placeId',
+                    url: '/feed/:placeId',
                     controller: 'FeedPlaceController as vm',
                     templateUrl: 'views/partials/feedPlace.html',
                 })

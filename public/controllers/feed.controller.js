@@ -15,7 +15,6 @@
         vm.location = null;
         vm.changeRadius = function changeRadius() {
             makeLocation();
-            console.log(vm.radius);
         }
 
         if (navigator.geolocation) {
