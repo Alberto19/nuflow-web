@@ -140,7 +140,7 @@
     function config() {
         return {
             // baseApiUrl: "http://localhost:3000/api"
-            baseApiUrl: "https://nuflow.herokuapp.com/:3000/api"
+            baseApiUrl: "https://nuflow.herokuapp.com:3000/api"
         };
     }
 })();
