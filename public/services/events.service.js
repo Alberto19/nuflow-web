@@ -15,6 +15,7 @@
             put:put,
             uploadBanner: uploadBanner,
             getBanner: getBanner,
+            getAllParam: getAllParam
         };
 
         return service;
@@ -25,6 +26,10 @@
 
         function getAll() {
             return $http.get(`${config.baseApiUrl}/event`);
+        };
+
+         function getAllParam(id) {
+            return $http.post(`${config.baseApiUrl}/event/eventParams`, { id });
         };
 
         function post(event) {

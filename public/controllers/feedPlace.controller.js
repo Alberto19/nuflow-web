@@ -21,11 +21,8 @@
                 return getPhotoCompany(place.data);
             })
             .then(data => {
-                if (data.days.length === 7) {
-                    data.days = ['domingo à domingo'];
-                }
                 vm.place = data;
-                getAllEvents();
+                return getAllEvents();
             });
         
         };
@@ -42,8 +39,8 @@
 
 
         function getAllEvents() {
-            Events.getAll().then(events => {
-               return getBanners(events.data);
+            Events.getAllParam($stateParams.placeId).then(events => {
+                return getBanners(events.data);
             }).then(dataEvents => vm.events = dataEvents);
         };
 

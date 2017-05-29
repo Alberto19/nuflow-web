@@ -21,6 +21,19 @@ class EventDAO {
         return defer.promise;
     };
 
+    findAllBody(req) {
+        var defer = q.defer();
+        var event = {};
+        EventModel.find({
+            companyId: req.body.id
+        }).then(events => {
+            defer.resolve(events);
+        }).catch(error => {
+            defer.reject(error);
+        })
+        return defer.promise;
+    };
+
     findById(id) {
         var defer = q.defer();
         var event = {};
@@ -101,8 +114,6 @@ class EventDAO {
             });
 
             readstream.on('error', (err) => {
-                console.log('An error occurred!', err);
-                throw err;
                 defer.reject({
                     status: 500,
                     message: "Erro ao pegar banner da base de dados"

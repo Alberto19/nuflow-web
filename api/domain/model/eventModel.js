@@ -11,7 +11,8 @@ const  Schema = mongoose.Schema;
     description:{type: String, require: true },
     artists:[{type: String}],
     banner:{type: String},
-    checkIn:[{type: String}],
+    checkIn:[],
+    favorite:[],
     companyId: {type: String, require: true}
   });
 

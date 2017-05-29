@@ -34,6 +34,21 @@ EventRouter.get('/', (req, res) => {
 	});
 });
 
+EventRouter.post('/eventParams', (req, res) => {
+	EventDAO.findAllBody(req).then((result) => {
+		if (result === null) {
+			res.status(404).send({
+				message: 'Nenhum evento Encontrado'
+			});
+		}
+		res.status(200).send(result);
+	}).catch((err) => {
+		res.status(500).json({
+			message: 'Erro ao buscar eventos'
+		});
+	});
+});
+
 EventRouter.post('/', (req, res) => {
 	EventDAO.persist(req).then((result) => {
 		res.status(201).send({
@@ -81,6 +96,5 @@ EventRouter.post('/banner', (req, res) => {
 		});
 	});
 });
-
 
 module.exports = EventRouter;

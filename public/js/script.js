@@ -139,8 +139,8 @@
 
     function config() {
         return {
-            // baseApiUrl: "http://localhost:3000/api"
-            baseApiUrl: "https://nuflow.herokuapp.com/api"
+            baseApiUrl: "http://localhost:3000/api"
+            // baseApiUrl: "https://nuflow.herokuapp.com/api"
         };
     }
 })();
@@ -346,6 +346,7 @@
             put:put,
             uploadBanner: uploadBanner,
             getBanner: getBanner,
+            getAllParam: getAllParam
         };
 
         return service;
@@ -356,6 +357,10 @@
 
         function getAll() {
             return $http.get(`${config.baseApiUrl}/event`);
+        };
+
+         function getAllParam(id) {
+            return $http.post(`${config.baseApiUrl}/event/eventParams`, { id });
         };
 
         function post(event) {
@@ -632,7 +637,8 @@
 		$ctrl.nav = {
 			button: null,
 			path: '',
-			profile: null
+			profile: null,
+			icon: ''
 		};
 
 		$ctrl.user = {
@@ -663,6 +669,7 @@
 				$ctrl.nav.button = nav.data.button;
 				$ctrl.nav.path = nav.data.path;
 				$ctrl.nav.profile = nav.data.profile;
+				$ctrl.nav.icon = nav.data.icon;
 			});
 		}
 		$ctrl.$onInit = function() { 
@@ -960,11 +967,8 @@
                 return getPhotoCompany(place.data);
             })
             .then(data => {
-                if (data.days.length === 7) {
-                    data.days = ['domingo à domingo'];
-                }
                 vm.place = data;
-                getAllEvents();
+                return getAllEvents();
             });
         
         };
@@ -981,8 +985,8 @@
 
 
         function getAllEvents() {
-            Events.getAll().then(events => {
-               return getBanners(events.data);
+            Events.getAllParam($stateParams.placeId).then(events => {
+                return getBanners(events.data);
             }).then(dataEvents => vm.events = dataEvents);
         };
 

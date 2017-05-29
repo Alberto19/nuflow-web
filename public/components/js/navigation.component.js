@@ -17,7 +17,8 @@
 		$ctrl.nav = {
 			button: null,
 			path: '',
-			profile: null
+			profile: null,
+			icon: ''
 		};
 
 		$ctrl.user = {
@@ -48,6 +49,7 @@
 				$ctrl.nav.button = nav.data.button;
 				$ctrl.nav.path = nav.data.path;
 				$ctrl.nav.profile = nav.data.profile;
+				$ctrl.nav.icon = nav.data.icon;
 			});
 		}
 		$ctrl.$onInit = function() { 
