@@ -5,18 +5,57 @@
         .module('app')
         .controller('FeedPlaceController', FeedPlaceController);
 
-    FeedPlaceController.$inject = ['$stateParams', 'Search', 'auth', '$q', 'Events'];
+    FeedPlaceController.$inject = ['$stateParams', 'Search', 'auth', '$q', 'Events', 'Favorite'];
 
-    function FeedPlaceController($stateParams, Search, auth, $q, Events) {
+    function FeedPlaceController($stateParams, Search, auth, $q, Events, Favorite ) {
         var vm = this;
         vm.place = null;
         vm.events = null;
+        vm.like = like;
+        vm.check = false;
+        vm.favorite = false;
 
-        getById();
 
+        function like(eventId){
+            vm.favorite = !vm.favorite;
+            const data = {
+                companyId: $stateParams.placeId,
+                favorite: vm.favorite,
+                check: vm.check,
+                eventId
+            };
+            Favorite.postFavorite(data)
+                .then(() => {
+                    Materialize.toast('Evento Favoritado', 3000);
+                })
+        }
+       
+
+        function getFavorite() {
+        var tes = new Promise((res, rej) => {
+        Favorite.get()
+            .then((events) => {
+            events.data.map(favo => {
+            vm.events.map(even => {
+                if (favo.eventId === even._id) {
+                    vm.check = true;
+                    res(vm.check)
+                } 
+                })
+            });
+        });
+        });
+    tes.then(() => {
+        console.log('a')
+    })
+    }
+
+        getById()
+        .then(() => getFavorite());
+     
         function getById() {
             var placeId = $stateParams.placeId;
-            Search.getById(placeId)
+           return Search.getById(placeId)
               .then(place => {
                 return getPhotoCompany(place.data);
             })
@@ -41,7 +80,9 @@
         function getAllEvents() {
             Events.getAllParam($stateParams.placeId).then(events => {
                 return getBanners(events.data);
-            }).then(dataEvents => vm.events = dataEvents);
+            }).then(dataEvents => {
+                vm.events = dataEvents
+            });
         };
 
         function getBanners(dataEvents) {

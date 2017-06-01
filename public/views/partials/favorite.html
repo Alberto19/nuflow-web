@@ -1,0 +1,54 @@
+<div>
+	<nav class="white">
+		<div class="row" style="text-align:center">
+			 <span class="event-title" style="color:#0288d1;"> Favoritos </span>
+		</div>
+	</nav>
+</div>
+
+<div class=" row container" style="width: 95%">
+    <div class="animated lightSpeedIn" ng-repeat="item in vm.events track by $index">
+
+        <div class="card row">
+            <div class="col l12 m12 s12" style="padding: 0px 0px;">
+                <div class="col l4 s6 m4" style="padding: 0px 0px ">
+                    <img class="image-responsive" ng-src="{{item.banner || '../../libs/img/location.jpg' }}">
+                </div>
+                <div class="col l7 s4 m6" style="text-align:center">
+                    <span style="text-align: center;font-size: 22px;">{{item.name}}</span>
+                    <div class="event-content">
+                        <p>Tipos de Evento:
+                            <span style="color: blue" ng-repeat="type in item.type">
+                        {{type}}
+                    </span>
+                        </p>
+                        <p>Data: {{item.dateEvent}}</p>
+                        <p class="event-none">Descrição: {{item.description}}</p>
+                        <p class="event-none">Artistas:
+                            <span style="color: blue" ng-repeat="artist in item.artists">
+                                {{artist}}
+                            </span>
+                        </p>
+                    </div>
+                </div>
+                <div class="col l1 s2 m2" style="text-align:center">
+                    <p class="place-event-icon">
+                        <a tooltipped data-position="top" ng-class="{'colorRed': vm.favorite}" ng-click="vm.favoriteF()" data-delay="10" data-tooltip="Favorito">
+                            <i class="material-icons">favorite</i>
+                        </a>
+                    </p>
+                    <p class="place-event-icon">
+                        <a tooltipped data-position="top" data-delay="10" data-tooltip="Eu vou">
+                            <i class="material-icons">check</i>
+                        </a>
+                    </p>
+                    <p>
+                        <a tooltipped data-position="top" data-delay="10" data-tooltip="Não vou">
+                            <i class="material-icons">close</i>
+                        </a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

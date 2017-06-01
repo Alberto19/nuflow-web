@@ -6,7 +6,8 @@ const Schema = mongo.Schema;
     companyId: {type: String},
     eventId: {type:String},
     userId:{type: String},
-    checkIn: {type: Boolean}
+    checkIn: {type: Boolean},
+    favorite: {type: Boolean}
   });
 
 module.exports = mongo.model('Favorite',favoriteSchema);

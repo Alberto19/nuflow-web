@@ -64,6 +64,12 @@
                     controller: 'ProfileCompanyController as vm',
                     templateUrl: 'views/partials/profileCompany.html',
                 })
+                //Rota favorito
+                .state('main.favorite', {
+                    url: '/favorite',
+                    controller: 'FavoriteController as vm',
+                    templateUrl: 'views/partials/favorite.html',
+                })
                 //rotas de evento
                 .state('main.event', {
                     url: '^/event',

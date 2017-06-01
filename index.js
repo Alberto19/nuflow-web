@@ -40,7 +40,7 @@ app.use(express.static(__dirname+ '/public'));
 app.get('*', function (req, res) {
     res.sendFile(path.join(__dirname +'/public/views/index.html'));
 });
-let PORT = process.env.PORT || 3000
+let PORT = process.env.PORT || 3003
 app.listen(PORT, function (err) {
 	if (err) {
 		console.log(err);

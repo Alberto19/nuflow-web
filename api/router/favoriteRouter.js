@@ -19,17 +19,17 @@ FavoriteRouter.get('/company', (req, res) => {
 	});
 });
 
-FavoriteRouter.post('/persiste', (req, res) => {
-	FavoriteDAO.favorite(req).then(() => {
-		res.status(200).send();
+FavoriteRouter.get('/', (req, res) => {
+	FavoriteDAO.findPlace(req).then((result) => {
+		res.status(200).send(result);
 	}).catch((err) => {
 		res.status(err.status).json(err.message);
 	});
 });
 
-FavoriteRouter.post('/check', (req, res) => {
-	FavoriteDAO.check(req).then(() => {
-		res.status(200).send();
+FavoriteRouter.post('/persiste', (req, res) => {
+	FavoriteDAO.persist(req).then((result) => {
+		res.status(200).send(result);
 	}).catch((err) => {
 		res.status(err.status).json(err.message);
 	});

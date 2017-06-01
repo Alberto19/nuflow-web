@@ -81,7 +81,7 @@ gulp.task('js:watch', function() {
             'public/config/*.js',
             'public/services/*.js',
             'public/components/js/*.js',
-            'public/controllers/**/*.js'
+            'public/controllers/*.js'
         ], ['js']
     );
 });
@@ -159,7 +159,7 @@ gulp.task('jsPrd', function(cb) {
             'public/config/*.js',
             'public/services/*.js',
             'public/components/js/*.js',
-            'public/controllers/**/*.js'
+            'public/controllers/*.js'
         ]),
         concat('script.js'),
         sourcemaps.init(),

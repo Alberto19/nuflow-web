@@ -102,6 +102,12 @@
                     controller: 'ProfileCompanyController as vm',
                     templateUrl: 'views/partials/profileCompany.html',
                 })
+                //Rota favorito
+                .state('main.favorite', {
+                    url: '/favorite',
+                    controller: 'FavoriteController as vm',
+                    templateUrl: 'views/partials/favorite.html',
+                })
                 //rotas de evento
                 .state('main.event', {
                     url: '^/event',
@@ -140,6 +146,7 @@
     function config() {
         return {
             baseApiUrl: "http://localhost:3003/api"
+            // baseApiUrl: "https://nuflow.herokuapp.com/api"
         };
     }
 })();
@@ -345,6 +352,7 @@
             put:put,
             uploadBanner: uploadBanner,
             getBanner: getBanner,
+            getAllParam: getAllParam
         };
 
         return service;
@@ -355,6 +363,10 @@
 
         function getAll() {
             return $http.get(`${config.baseApiUrl}/event`);
+        };
+
+         function getAllParam(id) {
+            return $http.post(`${config.baseApiUrl}/event/eventParams`, { id });
         };
 
         function post(event) {
@@ -378,6 +390,39 @@
                 }
             });
         };
+    }
+})();
+(function () {
+    'use strict';
+
+    angular
+        .module('app')
+        .factory('Favorite', Favorite);
+
+    Favorite.$inject = ['$http', 'config'];
+
+    function Profile($http, config) {
+        var service = {
+            getUser: getUser,
+            getCompany: getCompany,
+            postFavorite: postFavorite
+        };
+
+        return service;
+
+        ////////////////
+        function getUser() {
+            return $http.get(`${config.baseApiUrl}/favorite/user`);
+        };
+
+        function getCompany() {
+            return $http.get(`${config.baseApiUrl}/favorite/company`);
+        };
+
+        function postFavorite(favorite){
+            debugger
+            return $http.post(`${config.baseApiUrl}/favorite/persiste`, favorite);
+        }
     }
 })();
 (function () {
@@ -631,7 +676,8 @@
 		$ctrl.nav = {
 			button: null,
 			path: '',
-			profile: null
+			profile: null,
+			icon: ''
 		};
 
 		$ctrl.user = {
@@ -662,6 +708,7 @@
 				$ctrl.nav.button = nav.data.button;
 				$ctrl.nav.path = nav.data.path;
 				$ctrl.nav.profile = nav.data.profile;
+				$ctrl.nav.icon = nav.data.icon;
 			});
 		}
 		$ctrl.$onInit = function() { 
@@ -874,6 +921,41 @@
         }
     }
 })();
+(function () {
+    'use strict';
+
+    angular
+        .module('app')
+        .controller('FavoriteController', FavoriteController);
+
+    FavoriteController.$inject = ['Favorite', '$q', 'Events'];
+
+    function FavoriteController(Favorite, $q, Events) {
+        var vm = this;
+        vm.events = null;
+       
+        getAllEvents();
+
+        function get() {
+            Favorite.getUser().then(events => {
+                return getBanners(events.data);
+            }).then(dataEvents => vm.events = dataEvents);
+        };
+
+        function getBanners(dataEvents) {
+            var defer = $q.defer();
+            dataEvents.map(event => {
+                Events.getBanner(event.banner).then(banner => {
+                    event.banner = banner.data;
+                });
+                defer.resolve(dataEvents);
+            });
+            return defer.promise;
+        };
+       
+    }
+})();
+
 (function ($) {
     'use strict';
 
@@ -943,12 +1025,26 @@
         .module('app')
         .controller('FeedPlaceController', FeedPlaceController);
 
-    FeedPlaceController.$inject = ['$stateParams', 'Search', 'auth', '$q', 'Events'];
+    FeedPlaceController.$inject = ['$stateParams', 'Search', 'auth', '$q', 'Events', 'Favorite'];
 
-    function FeedPlaceController($stateParams, Search, auth, $q, Events) {
+    function FeedPlaceController($stateParams, Search, auth, $q, Events, Favorite ) {
         var vm = this;
         vm.place = null;
         vm.events = null;
+
+        vm.like = like;
+
+        function like(eventId){
+            const data = {
+                companyId: $stateParams.placeId,
+                eventId
+            };
+            debugger 
+            Favorite.postFavorite(data)
+                .then(() => {
+                    Materialize.toast('Evento Favoritado', 3000);
+                })
+        }
 
         getById();
 
@@ -959,11 +1055,8 @@
                 return getPhotoCompany(place.data);
             })
             .then(data => {
-                if (data.days.length === 7) {
-                    data.days = ['domingo à domingo'];
-                }
                 vm.place = data;
-                getAllEvents();
+                return getAllEvents();
             });
         
         };
@@ -980,8 +1073,8 @@
 
 
         function getAllEvents() {
-            Events.getAll().then(events => {
-               return getBanners(events.data);
+            Events.getAllParam($stateParams.placeId).then(events => {
+                return getBanners(events.data);
             }).then(dataEvents => vm.events = dataEvents);
         };
 
