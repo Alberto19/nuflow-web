@@ -145,7 +145,7 @@
 
     function config() {
         return {
-            baseApiUrl: "http://localhost:3003/api"
+            baseApiUrl: "http://localhost:3000/api"
             // baseApiUrl: "https://nuflow.herokuapp.com/api"
         };
     }
@@ -1038,6 +1038,21 @@
         vm.like = like;
         vm.check = false;
         vm.favorite = false;
+        vm.checkIn = checkIn;
+
+        function checkIn(eventId) {
+        vm.check = !vm.check;
+        const data = {
+            companyId: $stateParams.placeId,
+            favorite: vm.favorite,
+            check: vm.check,
+            eventId
+        };
+        Favorite.postFavorite(data)
+            .then(() => {
+                Materialize.toast('CheckFeito', 3000);
+            })
+        }
 
 
         function like(eventId){
@@ -1063,6 +1078,7 @@
             vm.events.map(even => {
                 if (favo.eventId === even._id) {
                     vm.check = true;
+                    vm.favorite = true;
                     res(vm.check)
                 } 
                 })

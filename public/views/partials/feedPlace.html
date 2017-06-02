@@ -46,17 +46,17 @@
                 </div>
                 <div class="col l1 s2 m2" style="text-align:center">
                     <p class="place-event-icon">
-                        <a  tooltipped data-position="top" ng-click="vm.like(item._id)" ng-model="vm.favorite" data-delay="10" data-tooltip="Favorito">
+                        <a  tooltipped data-position="top" ng-click="vm.like(item._id)" ng-class="{'favorite-color': vm.favorite === true}" ng-model="vm.favorite" data-delay="10" data-tooltip="Favorito">
                             <i class="material-icons">favorite</i>
                         </a>
                     </p>
                     <p class="place-event-icon">
-                        <a tooltipped data-position="top" data-delay="10" data-tooltip="Eu vou">
+                        <a tooltipped data-position="top" data-delay="10" ng-click="vm.checkIn(item._id)" ng-class="{'check-color': vm.check === true}" ng-model="vm.check" data-tooltip="Eu vou">
                             <i class="material-icons">check</i>
                         </a>
                     </p>
                     <p>
-                        <a tooltipped data-position="top" data-delay="10" data-tooltip="Não vou">
+                        <a tooltipped data-position="top" data-delay="10" ng-click="vm.checkIn(item._id)" ng-class="{'favorite-color': vm.check === false}" ng-model="vm.check" data-tooltip="Não vou">
                             <i class="material-icons">close</i>
                         </a>
                     </p>

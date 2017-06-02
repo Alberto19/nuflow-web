@@ -26,7 +26,7 @@
                   <button type="submit" class="btn-large waves-effect waves-light light-blue darken-2">Login</button>
                 </div>
                 <div class="col l6 m6 s6">
-                  <button type="button" ng-click="vm.authenticate('facebook')" class=" btn-large waves-effect btn-flat">Facebook</button>
+                  <button type="button" ng-click="vm.authenticate('facebook')" ng-disabled="true" class=" btn-large waves-effect btn-flat">Facebook</button>
                 </div>
             </form>
             </div>
@@ -38,8 +38,8 @@
           <div class="card-action">
 
             <span>Ainda não é usuario?</span>
-            <a ui-sref="init.regiterUser" class="blue-text text-darken-2">Cadastre-se no Nuflow</a>
-            <a ui-sref="init.registerCompany" class="blue-text text-darken-2">Cadastre sua empresa no Nuflow</a>
+            <a ui-sref="init.regiterUser" class="blue-text text-darken-2" style="font-size:12px">Cadastre-se no Nuflow</a>
+            <a ui-sref="init.registerCompany" class="blue-text text-darken-2" style="font-size:12px">Cadastre sua empresa no Nuflow</a>
             <br />
 
           </div>
