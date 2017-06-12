@@ -5,18 +5,20 @@
         .module('app')
         .controller('FavoriteController', FavoriteController);
 
-    FavoriteController.$inject = ['Favorite', '$q', 'Events'];
+    FavoriteController.$inject = ['Favorite', '$q', 'Events', '$state'];
 
-    function FavoriteController(Favorite, $q, Events) {
+    function FavoriteController(Favorite, $q, Events, $state) {
         var vm = this;
         vm.events = null;
        
-        getAllEvents();
+        get();
 
-        function get() {
-            Favorite.getUser().then(events => {
-                return getBanners(events.data);
-            }).then(dataEvents => vm.events = dataEvents);
+     function get() {
+              Favorite.getUser().then(events => {
+               return getBanners(events.data);
+            }).then(dataEvents => { 
+                vm.events = dataEvents
+            });
         };
 
         function getBanners(dataEvents) {
@@ -29,6 +31,5 @@
             });
             return defer.promise;
         };
-       
     }
 })();

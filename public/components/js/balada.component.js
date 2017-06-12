@@ -32,10 +32,7 @@
     $ctrl.sendRating = 1;
 
     $ctrl.sendComment = function() {
-      ProfileCompany.sendComment($ctrl.id, $ctrl.comment, $ctrl.sendRating)
-      .then(result => {
-        console.log(result);
-      });
+      ProfileCompany.sendComment($ctrl.id, $ctrl.comment, $ctrl.sendRating);
     };
 
     function distancia() {

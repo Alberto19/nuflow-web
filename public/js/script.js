@@ -588,10 +588,7 @@
     $ctrl.sendRating = 1;
 
     $ctrl.sendComment = function() {
-      ProfileCompany.sendComment($ctrl.id, $ctrl.comment, $ctrl.sendRating)
-      .then(result => {
-        console.log(result);
-      });
+      ProfileCompany.sendComment($ctrl.id, $ctrl.comment, $ctrl.sendRating);
     };
 
     function distancia() {
@@ -932,18 +929,20 @@
         .module('app')
         .controller('FavoriteController', FavoriteController);
 
-    FavoriteController.$inject = ['Favorite', '$q', 'Events'];
+    FavoriteController.$inject = ['Favorite', '$q', 'Events', '$state'];
 
-    function FavoriteController(Favorite, $q, Events) {
+    function FavoriteController(Favorite, $q, Events, $state) {
         var vm = this;
         vm.events = null;
        
-        getAllEvents();
+        get();
 
-        function get() {
-            Favorite.getUser().then(events => {
-                return getBanners(events.data);
-            }).then(dataEvents => vm.events = dataEvents);
+     function get() {
+              Favorite.getUser().then(events => {
+               return getBanners(events.data);
+            }).then(dataEvents => { 
+                vm.events = dataEvents
+            });
         };
 
         function getBanners(dataEvents) {
@@ -956,7 +955,6 @@
             });
             return defer.promise;
         };
-       
     }
 })();
 
@@ -1077,17 +1075,15 @@
             events.data.map(favo => {
             vm.events.map(even => {
                 if (favo.eventId === even._id) {
-                    vm.check = true;
-                    vm.favorite = true;
+                    vm.check = favo.checkIn;
+                    vm.favorite = favo.favorite;
                     res(vm.check)
                 } 
                 })
             });
         });
         });
-    tes.then(() => {
-        console.log('a')
-    })
+    tes.then(() => {})
     }
 
         getById()

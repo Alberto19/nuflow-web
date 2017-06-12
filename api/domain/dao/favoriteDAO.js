@@ -8,24 +8,22 @@ class FavoriteDAO {
 
 	findUser(req) {
 		var defer = q.defer();
-		const favorite = {};
-		FavoriteModel.find({
-			userId: req.decoded.id
-		}).then(result => {
-			return favorite = result._doc.eventId;
-		})
-			.then((id) => {
-				return EventModel
-					.findById({
-						_id: id
-					})
-			}).then(events => {
-				defer.resolve(events);
-			}).catch(error => {
-				defer.reject(error);
+		let eventos = [];
+		FavoriteModel.find({ userId: req.decoded.id })
+		.then(result => {
+		result.map(event => {
+			EventModel
+			.findById({
+				_id: event._doc.eventId
+			}).then(event => {
+				return eventos.push(event);
+			}).then(() => {
+				defer.resolve(eventos);		
 			})
+		})
+	})
 		return defer.promise;
-	}
+}
 
 	findCompany(req) {
 		var defer = q.defer();
@@ -50,65 +48,38 @@ class FavoriteDAO {
 	persist(req) {
 		const { body } = req;
 		var defer = q.defer();
-		FavoriteModel.find({
-			userId: req.decoded.id
-		})
-			.then((result) => {
-				if (result.length) {
-					if (body.check && body.favorite) {
-						FavoriteModel
-							.update({
-								userId: req.decoded.id
-							},
-							{
-								$set: {
-									checkIn: body.check,
-									favorite: body.favorite,
-								}
-							}).then((result) => defer.resolve(result));
-					}
-					else if (body.check && !body.favorite) {
-						FavoriteModel
-							.update({
-								userId: req.decoded.id
-							},
-							{
-								$set: {
-									checkIn: body.check
-								}
-							}).then((result) => defer.resolve(result));
-					}
-					else if (body.favorite && !body.check) {
-						FavoriteModel
-							.update({
-								userId: req.decoded.id
-							},
-							{
-								$set: {
-									favorite: body.favorite
-								}
-							}).then((result) => defer.resolve(result));
-					}
-
-				}
-				else {
-					let saveFavorite = new FavoriteModel({
-						companyId: body.companyId,
-						eventId: body.eventId,
-						favorite: body.favorite,
-						checkIn: body.check,
-						userId: req.decoded.id,
+		FavoriteModel.find({ userId: req.decoded.id })
+		.then((result) => {
+			console.log(result);
+			if (result[0].eventId === body.eventId) {
+				FavoriteModel
+					.update({
+						userId: req.decoded.id
+					},
+					{
+						$set: {
+							checkIn: body.check,
+							favorite: body.favorite,
+						}
+					}).then((result) => defer.resolve(result));
+			}
+			else {
+				let saveFavorite = new FavoriteModel({
+					companyId: body.companyId,
+					eventId: body.eventId,
+					favorite: body.favorite,
+					checkIn: body.check,
+					userId: req.decoded.id,
+				});
+				saveFavorite
+					.save()
+					.then((result) => {
+						defer.resolve(result);
+					})
+					.catch((err) => {
+						defer.reject(err);
 					});
-					saveFavorite
-						.save()
-						.then((result) => {
-							defer.resolve(result);
-						})
-						.catch((err) => {
-							defer.reject(err);
-						});
-				}
-
+			}
 			});
 		return defer.promise;
 	}

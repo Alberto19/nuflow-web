@@ -53,17 +53,15 @@
             events.data.map(favo => {
             vm.events.map(even => {
                 if (favo.eventId === even._id) {
-                    vm.check = true;
-                    vm.favorite = true;
+                    vm.check = favo.checkIn;
+                    vm.favorite = favo.favorite;
                     res(vm.check)
                 } 
                 })
             });
         });
         });
-    tes.then(() => {
-        console.log('a')
-    })
+    tes.then(() => {})
     }
 
         getById()
