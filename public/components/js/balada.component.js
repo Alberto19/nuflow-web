@@ -13,13 +13,13 @@
         phone: '=',
         rating: '=',
         site: '=',
-        mapsUrl: '=',
         days: '=',
         reviews: '=',
         photos: '=',
         locationuser: '=',
         location: '=',
         description: '=',
+        mapa: '=',
       },
     }).directive('starRating', starRating);
 
